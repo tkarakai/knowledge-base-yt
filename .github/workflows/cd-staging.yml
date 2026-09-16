@@ -1,0 +1,450 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Deploy all apps regardless of change detection'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  actions: read
+  statuses: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  # ─── CI Phase (reusable workflows, parallel) ───────────────────
+  ci-shared:
+    uses: ./.github/workflows/ci-shared.yml
+
+  ci-web:
+    uses: ./.github/workflows/ci-web.yml
+
+  ci-admin:
+    uses: ./.github/workflows/ci-admin.yml
+
+  ci-landing:
+    uses: ./.github/workflows/ci-landing.yml
+
+  # ─── CI Gate ────────────────────────────────────────────────────
+  ci-gate:
+    name: CI Gate
+    needs: [ci-shared, ci-web, ci-admin, ci-landing]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Evaluate CI and set commit status
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const results = {
+              shared: '${{ needs.ci-shared.result }}',
+              web: '${{ needs.ci-web.result }}',
+              admin: '${{ needs.ci-admin.result }}',
+              landing: '${{ needs.ci-landing.result }}',
+            };
+
+            console.log('CI Results:', JSON.stringify(results, null, 2));
+
+            const allPassed = Object.values(results).every(r => r === 'success');
+
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: allPassed ? 'success' : 'failure',
+              context: 'ci/gate-passed',
+              description: allPassed
+                ? 'All CI workflows passed'
+                : `CI failed: ${Object.entries(results).filter(([,r]) => r !== 'success').map(([k,r]) => `${k}=${r}`).join(', ')}`,
+              target_url: `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            });
+
+            if (!allPassed) {
+              core.setFailed('One or more CI workflows failed');
+            }
+
+  # ─── Change detection (selective build/deploy) ─────────────────
+  changes:
+    name: Detect Changes
+    needs: ci-gate
+    runs-on: ubuntu-latest
+    outputs:
+      web: ${{ steps.eval.outputs.web }}
+      admin: ${{ steps.eval.outputs.admin }}
+      landing: ${{ steps.eval.outputs.landing }}
+      backend: ${{ steps.eval.outputs.backend }}
+      any_app: ${{ steps.eval.outputs.any_app }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect file changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            web:
+              - 'apps/web/**'
+              - 'packages/backend/**'
+              - 'packages/design-system/**'
+              - 'packages/auth/**'
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+            admin:
+              - 'apps/admin/**'
+              - 'packages/backend/**'
+              - 'packages/design-system/**'
+              - 'packages/auth/**'
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+            landing:
+              - 'apps/landing/**'
+              - 'packages/design-system/**'
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+            backend:
+              - 'packages/backend/**'
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+
+      - name: Evaluate changes
+        id: eval
+        run: |
+          FORCE="${{ inputs.force_deploy }}"
+
+          if [[ "$FORCE" == "true" ]]; then
+            echo "Force deploy requested — deploying all apps"
+            echo "web=true" >> "$GITHUB_OUTPUT"
+            echo "admin=true" >> "$GITHUB_OUTPUT"
+            echo "landing=true" >> "$GITHUB_OUTPUT"
+            echo "backend=true" >> "$GITHUB_OUTPUT"
+            echo "any_app=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "web=${{ steps.filter.outputs.web }}" >> "$GITHUB_OUTPUT"
+            echo "admin=${{ steps.filter.outputs.admin }}" >> "$GITHUB_OUTPUT"
+            echo "landing=${{ steps.filter.outputs.landing }}" >> "$GITHUB_OUTPUT"
+            echo "backend=${{ steps.filter.outputs.backend }}" >> "$GITHUB_OUTPUT"
+
+            if [[ "${{ steps.filter.outputs.web }}" == "true" ]] || \
+               [[ "${{ steps.filter.outputs.admin }}" == "true" ]] || \
+               [[ "${{ steps.filter.outputs.landing }}" == "true" ]] || \
+               [[ "${{ steps.filter.outputs.backend }}" == "true" ]]; then
+              echo "any_app=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "any_app=false" >> "$GITHUB_OUTPUT"
+              echo "No app or backend changes detected — skipping build and deploy"
+            fi
+          fi
+
+  # ─── Build changed apps in parallel ────────────────────────────
+  build-web:
+    name: Build Web (Staging)
+    needs: changes
+    if: needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/build-app
+        id: build
+        with:
+          app: web
+          environment: production
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_STAGING }}
+
+  build-admin:
+    name: Build Admin (Staging)
+    needs: changes
+    if: needs.changes.outputs.admin == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/build-app
+        id: build
+        with:
+          app: admin
+          environment: production
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_STAGING }}
+
+  build-landing:
+    name: Build Landing (Staging)
+    needs: changes
+    if: needs.changes.outputs.landing == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/build-app
+        id: build
+        with:
+          app: landing
+          environment: production
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_LANDING_STAGING }}
+
+  # ─── Attest build provenance (only for built artifacts) ────────
+  attest:
+    name: Attest Build Provenance
+    needs: [changes, build-web, build-admin, build-landing]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      (needs.changes.outputs.web == 'true' || needs.changes.outputs.admin == 'true' || needs.changes.outputs.landing == 'true')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download web artifact
+        if: needs.changes.outputs.web == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: web-production-${{ github.sha }}
+          path: artifacts/web-production-${{ github.sha }}
+
+      - name: Download admin artifact
+        if: needs.changes.outputs.admin == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: admin-production-${{ github.sha }}
+          path: artifacts/admin-production-${{ github.sha }}
+
+      - name: Download landing artifact
+        if: needs.changes.outputs.landing == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: landing-production-${{ github.sha }}
+          path: artifacts/landing-production-${{ github.sha }}
+
+      - name: Attest web artifact
+        if: needs.changes.outputs.web == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/web-production-${{ github.sha }}/web-production.tar.gz
+
+      - name: Attest admin artifact
+        if: needs.changes.outputs.admin == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/admin-production-${{ github.sha }}/admin-production.tar.gz
+
+      - name: Attest landing artifact
+        if: needs.changes.outputs.landing == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/landing-production-${{ github.sha }}/landing-production.tar.gz
+
+  # ─── Deploy Convex backend (if changed) ────────────────────────
+  deploy-convex:
+    name: Deploy Convex (Staging)
+    needs: [changes, build-web, build-admin, build-landing]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-convex
+        with:
+          deploy-key: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          environment: staging
+
+  # ─── Deploy changed apps to Vercel ─────────────────────────────
+  deploy-web:
+    name: Deploy Web (Staging)
+    needs: [changes, build-web, build-admin, build-landing, deploy-convex]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      needs.changes.outputs.web == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-vercel
+        id: deploy
+        with:
+          app: web
+          environment: production
+          artifact-name: web-production-${{ github.sha }}
+          tarball: web-production.tar.gz
+          checksum-file: web-production.tar.gz.sha256
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB_STAGING }}
+
+  deploy-admin:
+    name: Deploy Admin (Staging)
+    needs: [changes, build-web, build-admin, build-landing, deploy-convex]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      needs.changes.outputs.admin == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-vercel
+        id: deploy
+        with:
+          app: admin
+          environment: production
+          artifact-name: admin-production-${{ github.sha }}
+          tarball: admin-production.tar.gz
+          checksum-file: admin-production.tar.gz.sha256
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_STAGING }}
+
+  deploy-landing:
+    name: Deploy Landing (Staging)
+    needs: [changes, build-web, build-admin, build-landing, deploy-convex]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      needs.changes.outputs.landing == 'true'
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+    environment:
+      name: staging
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-vercel
+        id: deploy
+        with:
+          app: landing
+          environment: production
+          artifact-name: landing-production-${{ github.sha }}
+          tarball: landing-production.tar.gz
+          checksum-file: landing-production.tar.gz.sha256
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_LANDING_STAGING }}
+
+  # ─── Smoke tests (only for deployed apps) ──────────────────────
+  smoke-test:
+    name: Smoke Tests
+    needs: [changes, deploy-web, deploy-admin, deploy-landing]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      (needs.changes.outputs.web == 'true' || needs.changes.outputs.admin == 'true' || needs.changes.outputs.landing == 'true')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Health check deployed apps
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const apps = [];
+
+            if ('${{ needs.changes.outputs.web }}' === 'true') {
+              apps.push({ name: 'web', url: '${{ needs.deploy-web.outputs.deployment-url }}' });
+            }
+            if ('${{ needs.changes.outputs.admin }}' === 'true') {
+              apps.push({ name: 'admin', url: '${{ needs.deploy-admin.outputs.deployment-url }}' });
+            }
+            if ('${{ needs.changes.outputs.landing }}' === 'true') {
+              apps.push({ name: 'landing', url: '${{ needs.deploy-landing.outputs.deployment-url }}' });
+            }
+
+            if (apps.length === 0) {
+              console.log('No frontend apps deployed — skipping smoke tests');
+              return;
+            }
+
+            const results = [];
+            for (const app of apps) {
+              if (!app.url) {
+                results.push(`❌ ${app.name}: No deployment URL`);
+                continue;
+              }
+              try {
+                const response = await fetch(app.url, {
+                  method: 'GET',
+                  redirect: 'follow',
+                  signal: AbortSignal.timeout(30000),
+                });
+                if (response.ok) {
+                  results.push(`✅ ${app.name}: ${response.status} (${app.url})`);
+                } else {
+                  results.push(`⚠️ ${app.name}: ${response.status} (${app.url})`);
+                }
+              } catch (error) {
+                results.push(`❌ ${app.name}: ${error.message}`);
+              }
+            }
+
+            const summary = results.join('\n');
+            console.log(summary);
+
+            core.summary.addHeading('Staging Smoke Tests', 3);
+            core.summary.addCodeBlock(summary);
+            await core.summary.write();
+
+            const failed = results.filter(r => r.startsWith('❌'));
+            if (failed.length > 0) {
+              core.setFailed(`${failed.length} smoke test(s) failed`);
+            }
+
+  # ─── Record deployment ─────────────────────────────────────────
+  record:
+    name: Record Staging Deployment
+    needs: [changes, smoke-test, deploy-convex]
+    if: >-
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      needs.changes.outputs.any_app == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Create deployment tag
+        run: |
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"
+
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H-%M-%SZ)
+          TAG="deploy/staging/${TIMESTAMP}/${{ github.sha }}"
+          git tag -a "${TAG}" "${{ github.sha }}" \
+            -m "Staging deployment at ${TIMESTAMP}" \
+            -m "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git push origin "${TAG}"
+          echo "Tagged: ${TAG}" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,14 @@
+{
+  "name": "@repo/edge-rate-limit",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "peerDependencies": {
+    "next": "^16.0.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3"
+  }
+}

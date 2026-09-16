@@ -1,0 +1,119 @@
+name: CI Shared
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+concurrency:
+  group: ci-shared-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+# =============================================================================
+# Shared CI checks that span ALL packages (not app-specific).
+# - Lint & typecheck (turbo runs across all workspaces)
+# - Convex backend tests (package-level, not per-app)
+# =============================================================================
+
+jobs:
+  # ============================================================
+  # CHANGE DETECTION
+  # ============================================================
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.act-all.outputs.backend || steps.filter.outputs.backend }}
+      root: ${{ steps.act-all.outputs.root || steps.filter.outputs.root }}
+    steps:
+      # In act (local CI), git worktrees use a .git file pointing to the main
+      # repo which doesn't exist inside the container. Skip change detection
+      # and run all jobs instead.
+      - name: Run all jobs in act
+        if: ${{ env.ACT }}
+        id: act-all
+        run: |
+          echo "Running in act — skipping change detection, all jobs will run"
+          echo "backend=true" >> $GITHUB_OUTPUT
+          echo "root=true" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        if: ${{ !env.ACT }}
+        uses: actions/checkout@v4
+
+      - name: Detect file changes
+        if: ${{ !env.ACT }}
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'packages/backend/**'
+            root:
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+              - 'eslint.config.mjs'
+              - 'scripts/**'
+
+  # ============================================================
+  # LINT & TYPECHECK (always runs)
+  # ============================================================
+  lint:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+
+      - name: Run TypeScript check
+        run: bunx turbo typecheck
+
+      - name: Run ESLint
+        run: bunx turbo lint
+
+  # ============================================================
+  # BACKEND TESTS (if backend changed)
+  # ============================================================
+  test-convex:
+    name: Backend Tests (Convex)
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.backend == 'true' || needs.changes.outputs.root == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+
+      - name: Run Convex tests
+        run: bunx turbo test:convex
+
+  # ============================================================
+  # SUMMARY
+  # ============================================================
+  ci-shared-complete:
+    name: CI Shared Complete
+    runs-on: ubuntu-latest
+    needs: [lint, test-convex]
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          echo "Lint: ${{ needs.lint.result }}"
+          echo "Convex: ${{ needs.test-convex.result }}"
+
+          if [[ "${{ needs.lint.result }}" != "success" ]]; then
+            echo "Lint failed"
+            exit 1
+          fi
+
+          CONVEX="${{ needs.test-convex.result }}"
+          if [[ "$CONVEX" != "success" && "$CONVEX" != "skipped" ]]; then
+            echo "test-convex failed with: $CONVEX"
+            exit 1
+          fi
+
+          echo "All shared CI jobs passed"

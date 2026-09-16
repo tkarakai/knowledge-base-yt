@@ -1,0 +1,25 @@
+name: "Setup Playwright"
+description: "Install Playwright Chromium browser with caching"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Cache Playwright browsers
+      if: ${{ !env.ACT }}
+      uses: actions/cache@v4
+      id: playwright-cache
+      with:
+        path: ~/.cache/ms-playwright
+        key: ${{ runner.os }}-playwright-chromium-${{ hashFiles('**/bun.lockb') }}
+        restore-keys: |
+          ${{ runner.os }}-playwright-chromium-
+
+    - name: Install Playwright browsers
+      if: ${{ steps.playwright-cache.outputs.cache-hit != 'true' || env.ACT }}
+      shell: bash
+      run: bunx playwright install --with-deps chromium
+
+    - name: Install Playwright deps (if cached)
+      if: ${{ steps.playwright-cache.outputs.cache-hit == 'true' && !env.ACT }}
+      shell: bash
+      run: bunx playwright install-deps chromium

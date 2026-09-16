@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "جارٍ التحميل...",
+    "cancel": "إلغاء",
+    "save": "حفظ التغييرات",
+    "saving": "جارٍ الحفظ...",
+    "create": "إنشاء",
+    "creating": "جارٍ الإنشاء...",
+    "delete": "حذف",
+    "signOut": "تسجيل الخروج",
+    "error": "حدث خطأ",
+    "backToHome": "العودة إلى الصفحة الرئيسية",
+    "note": "ملاحظة"
+  },
+  "theme": {
+    "light": "مظهر فاتح",
+    "system": "مظهر النظام",
+    "dark": "مظهر داكن",
+    "ariaLabel": "المظهر: {label}. انقر للتبديل."
+  },
+  "language": {
+    "label": "اللغة",
+    "ariaLabel": "اختر اللغة"
+  },
+  "auth": {
+    "signIn": {
+      "title": "مرحباً بعودتك",
+      "description": "سجّل الدخول للمتابعة إلى لوحة التحكم.",
+      "cta": "تسجيل الدخول",
+      "switchPrompt": "جديد هنا؟",
+      "switchLink": "إنشاء حساب",
+      "pageHeading": "مرحباً بعودتك. تابع من حيث توقفت.",
+      "pageDescription": "يدير Better Auth تدفقات الجلسات، بينما يحافظ Convex على البيانات محدّثة. سجّل الدخول للوصول إلى مشاريعك ومهامك."
+    },
+    "signUp": {
+      "title": "أنشئ مساحة العمل الخاصة بك",
+      "description": "ابدأ في أقل من دقيقة.",
+      "cta": "إنشاء حساب",
+      "switchPrompt": "لديك حساب بالفعل؟",
+      "switchLink": "تسجيل الدخول",
+      "pageHeading": "أنشئ حسابك وابدأ البناء.",
+      "pageDescription": "Convex + Better Auth مُعدّان مسبقاً، لذا حسابك جاهز للإنتاج فوراً."
+    },
+    "badge": "الحساب",
+    "fields": {
+      "name": "الاسم",
+      "namePlaceholder": "أحمد محمد",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "password": "كلمة المرور",
+      "passwordPlaceholder": "كلمة المرور الخاصة بك",
+      "passwordSignUpPlaceholder": "12 أحرف على الأقل",
+      "confirmPassword": "تأكيد كلمة المرور",
+      "confirmPasswordPlaceholder": "أكّد كلمة المرور"
+    },
+    "errors": {
+      "passwordMismatch": "كلمتا المرور غير متطابقتين",
+      "passwordCompromised": "كلمة المرور التي أدخلتها مخترقة. يرجى اختيار كلمة مرور مختلفة.",
+      "rateLimited": "محاولات كثيرة جدًا. يرجى الانتظار لحظة قبل المحاولة مرة أخرى.",
+      "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
+      "generic": "حدث خطأ"
+    },
+    "twoFactorVerify": {
+      "title": "المصادقة الثنائية",
+      "description": "أدخل الرمز المكوّن من 6 أرقام من تطبيق المصادقة.",
+      "cta": "تحقق",
+      "invalidCode": "رمز غير صالح. يرجى المحاولة مرة أخرى.",
+      "useBackupCode": "استخدم رمز استرداد بدلاً من ذلك",
+      "backupCodeTitle": "رمز الاسترداد",
+      "backupCodeDescription": "أدخل أحد رموز الاسترداد لتسجيل الدخول.",
+      "backupCodePlaceholder": "أدخل رمز الاسترداد",
+      "useAuthenticator": "استخدم تطبيق المصادقة بدلاً من ذلك"
+    },
+    "footer": "بريد إلكتروني + كلمة مرور آمنة",
+    "working": "جارٍ المعالجة...",
+    "legal": {
+      "prefix": "بالمتابعة، فإنك توافق على",
+      "termsOfService": "شروط الخدمة",
+      "and": "و",
+      "privacyPolicy": "سياسة الخصوصية"
+    },
+    "invitation": {
+      "badge": "دعوة",
+      "title": "أكمل التسجيل",
+      "description": "لقد تمت دعوتك! أنشئ حسابك أدناه.",
+      "cta": "إنشاء حساب",
+      "pageHeading": "مرحباً. لقد تمت دعوتك.",
+      "pageDescription": "أكمل التسجيل للبدء.",
+      "invalidTitle": "حول هذه الدعوة",
+      "noToken": "لم يتم تقديم رمز الدعوة. يرجى استخدام الرابط من بريد الدعوة الإلكتروني.",
+      "tokenExpired": "انتهت صلاحية هذه الدعوة. يرجى التواصل مع الفريق للحصول على دعوة جديدة.",
+      "tokenUsed": "تمت المطالبة بهذه الدعوة بالفعل.",
+      "tokenInvalid": "رابط الدعوة هذا غير صالح.",
+      "signupBlocked": "التسجيل متاح حالياً بالدعوة فقط.",
+      "signupBlockedDescription": "انضم إلى قائمة الانتظار على صفحتنا الرئيسية لطلب الوصول.",
+      "goToWaitlist": "انضم إلى قائمة الانتظار",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "استعادة كلمة المرور",
+      "title": "نسيت كلمة المرور؟",
+      "description": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.",
+      "cta": "إرسال رابط الاستعادة",
+      "emailSent": "تحقق من بريدك الإلكتروني",
+      "emailSentDescription": "إذا كان هناك حساب مرتبط بـ {email}، فقد أرسلنا رابط إعادة تعيين كلمة المرور. تحقق من صندوق الوارد ومجلد الرسائل غير المرغوب فيها.",
+      "backToSignIn": "العودة إلى تسجيل الدخول",
+      "pageHeading": "أعد تعيين كلمة مرورك. عد إلى المسار الصحيح.",
+      "pageDescription": "أدخل عنوان البريد الإلكتروني المرتبط بحسابك وسنرسل لك رابطاً لإنشاء كلمة مرور جديدة."
+    },
+    "resetPassword": {
+      "badge": "استعادة كلمة المرور",
+      "title": "تعيين كلمة مرور جديدة",
+      "description": "اختر كلمة مرور قوية لحسابك.",
+      "newPassword": "كلمة المرور الجديدة",
+      "cta": "إعادة تعيين كلمة المرور",
+      "invalidTitle": "رابط إعادة تعيين غير صالح",
+      "tokenExpired": "انتهت صلاحية رابط إعادة تعيين كلمة المرور. يرجى طلب رابط جديد.",
+      "tokenInvalid": "رابط إعادة تعيين كلمة المرور غير صالح أو تم استخدامه بالفعل.",
+      "requestNewLink": "طلب رابط جديد",
+      "backToSignIn": "العودة إلى تسجيل الدخول",
+      "successTitle": "تم تحديث كلمة المرور",
+      "successDescription": "تم إعادة تعيين كلمة المرور بنجاح. يمكنك الآن تسجيل الدخول بكلمة المرور الجديدة.",
+      "signInNow": "تسجيل الدخول الآن",
+      "pageHeading": "أوشكت على الانتهاء. اختر كلمة مرور جديدة.",
+      "pageDescription": "اختر كلمة مرور قوية لم تستخدمها من قبل. يجب أن تتكون كلمة المرور الجديدة من 12 أحرف على الأقل."
+    },
+    "verifyEmail": {
+      "badge": "التحقق من البريد الإلكتروني",
+      "title": "تحقق من بريدك الإلكتروني",
+      "description": "لقد أرسلنا رابط تحقق إلى عنوان بريدك الإلكتروني. انقر على الرابط للتحقق من حسابك.",
+      "descriptionWithEmail": "لقد أرسلنا رابط تحقق إلى {email}. انقر على الرابط للتحقق من حسابك.",
+      "resend": "إعادة إرسال بريد التحقق",
+      "resent": "تم إرسال بريد التحقق! تحقق من صندوق الوارد.",
+      "recentlySentJustNow": "تم إرسال بريد تحقق للتو. يرجى التحقق من صندوق الوارد ومجلد البريد العشوائي.",
+      "recentlySentSecondsAgo": "تم إرسال بريد تحقق قبل ثوانٍ. يرجى التحقق من صندوق الوارد ومجلد البريد العشوائي.",
+      "recentlySentMinutesAgo": "تم إرسال بريد تحقق قبل {minutes} {minutes, plural, one {دقيقة} other {دقائق}}. يرجى التحقق من صندوق الوارد ومجلد البريد العشوائي.",
+      "backToSignIn": "العودة إلى تسجيل الدخول",
+      "pageHeading": "خطوة أخيرة. تحقق من بريدك الإلكتروني.",
+      "pageDescription": "لقد أرسلنا لك رابط تحقق. انقر عليه لتفعيل حسابك والبدء في استخدام التطبيق.",
+      "verificationSuccessTitle": "شكرًا لتأكيد بريدك الإلكتروني.",
+      "verificationSuccessDescription": "تم تأكيد بريدك الإلكتروني بنجاح.",
+      "verificationErrorTitle": "فشل التحقق من البريد الإلكتروني",
+      "verificationErrorUnknown": "تعذر التحقق من رابط البريد الإلكتروني هذا. يرجى طلب رسالة تحقق جديدة.",
+      "verificationErrorTokenExpired": "انتهت صلاحية رابط التحقق هذا. يرجى طلب رابط جديد.",
+      "verificationErrorInvalidToken": "رابط التحقق هذا غير صالح أو تم استخدامه بالفعل.",
+      "verificationErrorUserNotFound": "لم نتمكن من العثور على حساب لهذا الرابط.",
+      "verificationErrorUnauthorized": "تعذر إكمال طلب التحقق لهذا الحساب.",
+      "sessionStatusChecking": "جارٍ التحقق من حالة جلستك...",
+      "sessionStatusSignedInOnDevice": "أنت الآن مسجل الدخول على {device}.",
+      "sessionStatusNoSession": "يرجى تسجيل الدخول لاستخدام التطبيق.",
+      "goToSignIn": "الانتقال إلى صفحة تسجيل الدخول",
+      "closeWindow": "إغلاق هذه النافذة"
+    },
+    "forgotPasswordLink": "نسيت كلمة المرور؟"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "نقطة انطلاقك.",
+    "headingLine2": "ابنِ من هنا.",
+    "description": "المصادقة، قاعدة البيانات، المزامنة الفورية، ورفع الملفات — كل شيء مُعدّ وجاهز.",
+    "getStarted": "ابدأ الآن",
+    "signIn": "تسجيل الدخول",
+    "footer": {
+      "about": "حول",
+      "privacyPolicy": "سياسة الخصوصية",
+      "termsOfService": "شروط الخدمة"
+    },
+    "waitlist": {
+      "title": "انضم إلى قائمة الانتظار",
+      "description": "اطلب الوصول من خلال الانضمام إلى قائمة الانتظار.",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "superpowersLabel": "ما هي قوتك الخارقة؟",
+      "superpowersPlaceholder": "اختر قواك الخارقة",
+      "excitementLabel": "ما مدى حماسك؟",
+      "excitementPlaceholder": "أخبرنا بما تشعر",
+      "selectedCount": "{count} مختار",
+      "submit": "انضم إلى القائمة",
+      "submitting": "جارٍ التسجيل...",
+      "successTitle": "أنت في القائمة!",
+      "successDescription": "سنرسل لك دعوة عندما يحين دورك.",
+      "alreadySignedUp": "لديك حساب بالفعل؟",
+      "signIn": "تسجيل الدخول",
+      "superpowers": {
+        "coffee-to-code": "تحويل القهوة إلى أكواد",
+        "pixel-perfect": "إتقان كل بكسل",
+        "bug-whisperer": "ترويض الأخطاء البرمجية",
+        "spreadsheet-wizard": "ساحر الجداول",
+        "inbox-zero": "صندوق بريد فارغ كل يوم",
+        "parallel-parking": "ركن موازٍ من أول محاولة",
+        "remembering-names": "تذكّر أسماء الجميع",
+        "never-burning-toast": "لا أحرق الخبز المحمّص أبداً",
+        "explaining-tech": "شرح التقنية للوالدين",
+        "finding-restaurants": "العثور على أفضل المطاعم",
+        "staying-calm": "الحفاظ على الهدوء في الاجتماعات الطويلة",
+        "other": "شيء مختلف تماماً"
+      },
+      "excitement": {
+        "take-my-money": "خذ أموالي!",
+        "cant-wait": "لا أستطيع الانتظار لتجربته",
+        "cautiously-optimistic": "متفائل بحذر",
+        "just-browsing": "أتصفح فقط",
+        "friend-made-me": "صديقي أجبرني على التسجيل"
+      },
+      "errors": {
+        "waitlistNotEnabled": "قائمة الانتظار لا تقبل التسجيلات حالياً. يرجى المحاولة لاحقاً.",
+        "invalidEmail": "يرجى إدخال عنوان بريد إلكتروني صالح.",
+        "rateLimited": "طلبات كثيرة جداً. يرجى الانتظار لحظة والمحاولة مرة أخرى.",
+        "generic": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "المشاريع",
+    "noProjects": "لا توجد مشاريع بعد",
+    "noProjectsDescription": "أنشئ مشروعاً للبدء.",
+    "projectNotFound": "المشروع غير موجود",
+    "projectNotFoundDescription": "ربما تم حذف هذا المشروع.",
+    "tabs": {
+      "tasks": "المهام",
+      "attachments": "المرفقات"
+    },
+    "security": "الأمان",
+    "sessions": {
+      "title": "الجلسات النشطة",
+      "description": "أدِر جلساتك النشطة عبر جميع الأجهزة. يمكنك تسجيل الخروج من أي جلسة لم تعد تتعرف عليها.",
+      "currentSession": "هذا الجهاز",
+      "otherSessions": "أجهزة أخرى",
+      "current": "الحالي",
+      "lastActive": "نشط {time}",
+      "noOtherSessions": "لا توجد جلسات نشطة أخرى. أنت مسجّل الدخول على هذا الجهاز فقط.",
+      "revokeAll": "تسجيل الخروج من الأجهزة الأخرى",
+      "revokeAllTitle": "تسجيل الخروج من جميع الأجهزة الأخرى؟",
+      "revokeAllDescription": "سيتم تسجيل خروجك من جميع الأجهزة والمتصفحات الأخرى. ستبقى جلستك الحالية فقط نشطة.",
+      "revokeAllConfirm": "تسجيل الخروج من الكل",
+      "revokeTitle": "تسجيل الخروج من هذا الجهاز؟",
+      "revokeDescription": "سيتم إنهاء الجلسة لـ {device}. سيحتاجون إلى تسجيل الدخول مرة أخرى للوصول إلى الحساب.",
+      "backToDashboard": "العودة إلى لوحة التحكم"
+    },
+    "account": "الإعدادات",
+    "profile": {
+      "title": "الملف الشخصي",
+      "description": "أدِر معلومات ملفك الشخصي وتفضيلاتك.",
+      "name": "الاسم المعروض",
+      "namePlaceholder": "اسمك",
+      "email": "البريد الإلكتروني",
+      "emailReadonly": "تواصل مع الدعم لتغيير بريدك الإلكتروني.",
+      "avatarColor": "لون الصورة الرمزية",
+      "saved": "تم تحديث الملف الشخصي.",
+      "language": "اللغة",
+      "timezone": "المنطقة الزمنية",
+      "timezonePlaceholder": "اختر منطقتك الزمنية",
+      "timezoneSearch": "البحث في المناطق الزمنية...",
+      "timezoneDetected": "تم الكشف",
+      "noTimezoneResults": "لم يتم العثور على منطقة زمنية.",
+      "theme": "المظهر"
+    },
+    "changePassword": {
+      "title": "تغيير كلمة المرور",
+      "currentPassword": "كلمة المرور الحالية",
+      "newPassword": "كلمة المرور الجديدة",
+      "confirmPassword": "تأكيد كلمة المرور الجديدة",
+      "revokeOtherSessions": "تسجيل الخروج من جميع الأجهزة الأخرى",
+      "cta": "تحديث كلمة المرور",
+      "success": "تم تحديث كلمة المرور بنجاح.",
+      "errorCurrentPassword": "كلمة المرور الحالية غير صحيحة."
+    },
+    "twoFactor": {
+      "title": "المصادقة الثنائية",
+      "description": "أضف طبقة أمان إضافية لحسابك.",
+      "enabled": "المصادقة الثنائية مفعّلة",
+      "disabled": "المصادقة الثنائية غير مفعّلة",
+      "enable": "تفعيل المصادقة الثنائية",
+      "disable": "تعطيل المصادقة الثنائية",
+      "enterPassword": "أدخل كلمة المرور للمتابعة.",
+      "scanQrCode": "امسح رمز QR هذا بتطبيق المصادقة (مثل Google Authenticator أو Authy).",
+      "manualEntry": "لا تستطيع المسح؟ أدخل هذا المفتاح يدوياً",
+      "manualEntryDescription": "افتح تطبيق المصادقة، اختر \"إضافة حساب\"، ثم اختر \"إدخال مفتاح الإعداد\" والصق المفتاح أدناه.",
+      "secretKey": "المفتاح السري",
+      "copied": "تم النسخ إلى الحافظة",
+      "enterCode": "أدخل الرمز المكون من 6 أرقام من تطبيق المصادقة للتحقق من الإعداد.",
+      "verify": "تحقق",
+      "backupCodes": "رموز الاسترداد",
+      "backupCodesDescription": "احفظ هذه الرموز في مكان آمن. يمكن استخدام كل رمز مرة واحدة فقط.",
+      "viewBackupCodes": "عرض رموز الاسترداد",
+      "regenerateBackupCodes": "إعادة إنشاء رموز الاسترداد",
+      "disableConfirm": "هل أنت متأكد من رغبتك في تعطيل المصادقة الثنائية؟",
+      "regenerateConfirm": "سيؤدي هذا إلى استبدال رموز الاسترداد الحالية. لن تعمل أي رموز غير مستخدمة بعد الآن.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "مشروع جديد",
+    "createProject": "إنشاء مشروع",
+    "createFirst": "أنشئ مشروعك الأول",
+    "noProjects": "لا توجد مشاريع",
+    "editProject": "تعديل المشروع",
+    "deleteProject": "حذف المشروع",
+    "deleteConfirmTitle": "حذف المشروع؟",
+    "deleteConfirmDescription": "سيتم حذف “{name}” وجميع مهامه نهائياً. لا يمكن التراجع عن هذا الإجراء.",
+    "fields": {
+      "name": "الاسم",
+      "namePlaceholder": "اسم المشروع",
+      "description": "الوصف",
+      "descriptionPlaceholder": "عن ماذا يتحدث هذا المشروع؟"
+    }
+  },
+  "tasks": {
+    "title": "المهام",
+    "addTask": "إضافة مهمة",
+    "newTask": "مهمة جديدة",
+    "editTask": "تعديل المهمة",
+    "deleteTask": "حذف المهمة",
+    "confirmDelete": "تأكيد الحذف",
+    "createTask": "إنشاء مهمة",
+    "noTasks": "لا توجد مهام بعد. أضف واحدة للبدء.",
+    "noTasksSummary": "لا توجد مهام بعد",
+    "progress": "{doneCount} من {totalCount} مهام مكتملة",
+    "progressPercent": "{percent}٪",
+    "status": {
+      "label": "الحالة",
+      "todo": "قيد الانتظار",
+      "inProgress": "قيد التنفيذ",
+      "done": "مكتمل",
+      "all": "الكل"
+    },
+    "fields": {
+      "title": "العنوان",
+      "titlePlaceholder": "ما الذي يجب إنجازه؟",
+      "description": "الوصف",
+      "descriptionPlaceholder": "أضف تفاصيل...",
+      "deadline": "الموعد النهائي",
+      "deadlinePlaceholder": "بدون موعد نهائي",
+      "clearDeadline": "إزالة الموعد النهائي"
+    },
+    "deadline": {
+      "overdue": "متأخرة",
+      "dueToday": "مستحقة اليوم"
+    },
+    "aria": {
+      "changeStatus": "تغيير الحالة من {status}"
+    },
+    "count": "{count, plural, =0 {لا توجد مهام بعد} one {مهمة واحدة} two {مهمتان} few {# مهام} many {# مهمة} other {# مهمة}}"
+  },
+  "uploads": {
+    "title": "المرفقات",
+    "addFile": "إضافة ملف",
+    "uploading": "جارٍ الرفع...",
+    "processing": "جارٍ المعالجة",
+    "view": "عرض",
+    "deleteFile": "حذف الملف",
+    "emptyState": "ارفع ملفات لعرض تدفق تخزين Convex.",
+    "errors": {
+      "tooLarge": "الملف كبير جداً (الحد الأقصى 1 ميغابايت)",
+      "uploadFailed": "فشل الرفع. يرجى المحاولة مرة أخرى.",
+      "generic": "فشل الرفع."
+    },
+    "count": "{count, plural, =0 {لا توجد مرفقات} one {مرفق واحد} two {مرفقان} few {# مرفقات} many {# مرفقاً} other {# مرفق}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "غير مُصادق عليه",
+    "PROJECT_NOT_FOUND": "المشروع غير موجود",
+    "TASK_NOT_FOUND": "المهمة غير موجودة",
+    "FILE_NOT_FOUND": "الملف غير موجود في التخزين",
+    "FILE_TOO_LARGE": "الملف كبير جداً (الحد الأقصى 1 ميغابايت)",
+    "UPLOAD_NOT_FOUND": "الرفع غير موجود",
+    "convex": {
+      "rateLimited": "طلبات كثيرة جداً. يرجى الانتظار {seconds} ثانية.",
+      "notAuthenticated": "انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
+      "connectionLost": "تعذر الاتصال بالخادم. يرجى التحقق من اتصالك.",
+      "serverError": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
+      "projectNotFound": "المشروع غير موجود.",
+      "taskNotFound": "المهمة غير موجودة.",
+      "fileNotFound": "الملف غير موجود في التخزين.",
+      "fileTooLarge": "الملف كبير جداً (الحد الأقصى 1 ميغابايت).",
+      "uploadNotFound": "الرفع غير موجود."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "قالب Next.js مع Convex و Better Auth و Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "حول",
+      "description": "تعرّف على Web App Starter وعلى مهمتنا.",
+      "notice": "هذا محتوى حول. استبدله بمحتواك الخاص قبل الإطلاق.",
+      "heading": "حول",
+      "mission": "مهمتنا",
+      "missionText": "نحن نؤمن بأن المطورين يجب أن يقضوا وقتهم في بناء الميزات، وليس في تكوين البنية التحتية. Web App Starter يوفر نقطة انطلاق جاهزة للإنتاج مع مزامنة البيانات الفورية، ورفع الملفات، والمصادقة المستندة إلى الجلسات، كل شيء متصل وجاهز.",
+      "whatIncluded": "ما المتضمن",
+      "whatIncludedText": "تتضمن مجموعة البدء صفحة هبوط، تطبيق ويب مصرح به بالكامل، لوحة تحكم إدارية، وكتاب مكونات. يشارك كل تطبيق نظام تصميم موحد مبني على بدائيات Radix UI مع Tailwind CSS.",
+      "openSource": "مفتوح المصدر",
+      "openSourceText": "هذا المشروع مفتوح المصدر وتم تصميمه ليتم نسخه وتخصيصه.",
+      "intro": "Web App Starter هو أساس كامل المكدس لبناء تطبيقات ويب حديثة. يجمع بين Next.js للواجهة الأمامية، و Convex للخادم، و Better Auth للمصادقة الآمنة — كل شيء متصل وجاهز للإرسال."
+    },
+    "privacy": {
+      "title": "سياسة الخصوصية",
+      "description": "كيف نجمع ونستخدم ونحمي بيانات الاتصال الخاصة بك.",
+      "notice": "هذه نموذج سياسة خصوصية. قم بتخصيصه لتطبيقك المحدد والاختصاص القضائي الخاص بك قبل الإطلاق.",
+      "heading": "سياسة الخصوصية",
+      "lastUpdated": "آخر تحديث: {date}"
+    },
+    "terms": {
+      "title": "شروط الخدمة",
+      "description": "القواعد والمبادئ التوجيهية لاستخدام خدمتنا.",
+      "notice": "هذه نموذج شروط الخدمة. قم بتخصيصه لتطبيقك المحدد والاختصاص القضائي الخاص بك قبل الإطلاق.",
+      "heading": "شروط الخدمة",
+      "lastUpdated": "آخر تحديث: {date}"
+    }
+  },
+  "offline": {
+    "message": "يبدو أنك غير متصل بالإنترنت. يلزم وجود اتصال نشط للمتابعة."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "ضعيفة جداً",
+      "weak": "ضعيفة",
+      "fair": "مقبولة",
+      "good": "جيدة",
+      "strong": "قوية"
+    },
+    "crackTimeLabel": "الوقت المقدر للاختراق: {time}",
+    "minLength": "يجب أن تتكون من {count} حرفاً على الأقل.",
+    "strengthRequirement": "كلمة المرور لا تستوفي متطلبات القوة.",
+    "warnings": {
+      "straightRow": "الصفوف المتتالية من المفاتيح على لوحة المفاتيح يسهل تخمينها.",
+      "keyPattern": "أنماط لوحة المفاتيح القصيرة يسهل تخمينها.",
+      "simpleRepeat": "الأحرف المتكررة مثل \"aaa\" يسهل تخمينها.",
+      "extendedRepeat": "أنماط الأحرف المتكررة مثل \"abcabcabc\" يسهل تخمينها.",
+      "sequences": "التسلسلات الشائعة مثل \"abc\" يسهل تخمينها.",
+      "recentYears": "السنوات الأخيرة يسهل تخمينها.",
+      "dates": "التواريخ يسهل تخمينها.",
+      "topTen": "هذه كلمة مرور مستخدمة بكثرة.",
+      "topHundred": "هذه كلمة مرور مستخدمة بشكل متكرر.",
+      "common": "هذه كلمة مرور شائعة الاستخدام.",
+      "similarToCommon": "هذه مشابهة لكلمة مرور شائعة الاستخدام.",
+      "wordByItself": "الكلمات المفردة يسهل تخمينها.",
+      "namesByThemselves": "الأسماء المفردة أو الألقاب يسهل تخمينها.",
+      "commonNames": "الأسماء والألقاب الشائعة يسهل تخمينها.",
+      "userInputs": "يجب ألا تتضمن أي بيانات شخصية أو متعلقة بالصفحة.",
+      "pwned": "تم كشف كلمة المرور الخاصة بك في خرق بيانات على الإنترنت."
+    },
+    "suggestions": {
+      "l33t": "تجنب الاستبدالات المتوقعة للأحرف مثل \"@\" بدلاً من \"a\".",
+      "reverseWords": "تجنب التهجئة المعكوسة للكلمات الشائعة.",
+      "allUppercase": "اجعل بعض الأحرف كبيرة، وليس كلها.",
+      "capitalization": "اجعل أكثر من الحرف الأول كبيراً.",
+      "dates": "تجنب التواريخ والسنوات المرتبطة بك.",
+      "recentYears": "تجنب السنوات الأخيرة.",
+      "associatedYears": "تجنب السنوات المرتبطة بك.",
+      "sequences": "تجنب التسلسلات الشائعة للأحرف.",
+      "repeated": "تجنب الكلمات والأحرف المتكررة.",
+      "longerKeyboardPattern": "استخدم أنماطاً أطول على لوحة المفاتيح وغيّر اتجاه الكتابة عدة مرات.",
+      "anotherWord": "أضف كلمات أقل شيوعاً.",
+      "useWords": "استخدم كلمات متعددة، لكن تجنب العبارات الشائعة.",
+      "noNeed": "يمكنك إنشاء كلمات مرور قوية دون استخدام رموز أو أرقام أو أحرف كبيرة.",
+      "pwned": "إذا كنت تستخدم كلمة المرور هذه في مكان آخر، فيجب عليك تغييرها."
+    },
+    "timeEstimation": {
+      "ltSecond": "أقل من ثانية",
+      "second": "{base} ثانية",
+      "seconds": "{base} ثوانٍ",
+      "minute": "{base} دقيقة",
+      "minutes": "{base} دقائق",
+      "hour": "{base} ساعة",
+      "hours": "{base} ساعات",
+      "day": "{base} يوم",
+      "days": "{base} أيام",
+      "month": "{base} شهر",
+      "months": "{base} أشهر",
+      "year": "{base} سنة",
+      "years": "{base} سنوات",
+      "centuries": "قرون"
+    }
+  },
+  "forbidden": {
+    "title": "تم رفض الوصول",
+    "signedInAs": "أنت مسجّل الدخول بحساب {email}.",
+    "description": "ليس لديك إذن للوصول إلى هذا المورد. إذا كنت تعتقد أن هذا خطأ، يرجى التواصل مع مسؤول مؤسستك.",
+    "backToSignIn": "العودة إلى تسجيل الدخول"
+  }
+}

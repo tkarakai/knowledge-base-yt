@@ -1,0 +1,112 @@
+import js from "@eslint/js";
+import typescript from "@typescript-eslint/eslint-plugin";
+import typescriptParser from "@typescript-eslint/parser";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+
+export default [
+  js.configs.recommended,
+  {
+    files: ["apps/companion/**/*.ts", "packages/{kb,ingestion,search,agent,shared}/**/*.ts", "scripts/{dev-kb,build-kb,kb-e2e}.ts"],
+    // TypeScript validates runtime and type names for Bun server code.
+    rules: { "no-undef": "off" },
+  },
+  {
+    ignores: [
+      "node_modules/**",
+      "**/node_modules/**",
+      "**/.next/**",
+      "**/.turbo/**",
+      "**/convex/_generated/**",
+      "**/qa/coverage/**",
+      "**/qa/playwright-report/**",
+      "**/qa/test-results/**",
+      "**/qa/e2e/__screenshots__/**",
+      "**/out/**",
+      ".auto-claude/**",
+    ],
+  },
+  {
+    files: ["**/*.{ts,tsx}"],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: "latest",
+        sourceType: "module",
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        React: "readonly",
+        AbortController: "readonly",
+        AbortSignal: "readonly",
+        structuredClone: "readonly",
+        TextDecoder: "readonly",
+        TextEncoder: "readonly",
+        JSX: "readonly",
+        console: "readonly",
+        process: "readonly",
+        module: "readonly",
+        require: "readonly",
+        __dirname: "readonly",
+        Buffer: "readonly",
+        fetch: "readonly",
+        URL: "readonly",
+        URLSearchParams: "readonly",
+        Headers: "readonly",
+        btoa: "readonly",
+        atob: "readonly",
+        crypto: "readonly",
+        globalThis: "readonly",
+        Request: "readonly",
+        Response: "readonly",
+        setTimeout: "readonly",
+        clearTimeout: "readonly",
+        setInterval: "readonly",
+        clearInterval: "readonly",
+        HTMLElement: "readonly",
+        HTMLDivElement: "readonly",
+        HTMLFormElement: "readonly",
+        HTMLInputElement: "readonly",
+        HTMLButtonElement: "readonly",
+        HTMLHeadingElement: "readonly",
+        HTMLParagraphElement: "readonly",
+        HTMLSpanElement: "readonly",
+        HTMLTextAreaElement: "readonly",
+        HTMLAnchorElement: "readonly",
+        HTMLOListElement: "readonly",
+        HTMLUListElement: "readonly",
+        HTMLLIElement: "readonly",
+        HTMLHRElement: "readonly",
+        KeyboardEvent: "readonly",
+        Event: "readonly",
+        Blob: "readonly",
+        BroadcastChannel: "readonly",
+        MessageEvent: "readonly",
+        document: "readonly",
+        window: "readonly",
+      },
+    },
+    plugins: {
+      "@typescript-eslint": typescript,
+      react,
+      "react-hooks": reactHooks,
+    },
+    rules: {
+      ...typescript.configs.recommended.rules,
+      "react/react-in-jsx-scope": "off",
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "warn",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-explicit-any": "warn",
+      "no-unused-vars": "off",
+      "no-redeclare": "off",
+    },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
+  },
+];

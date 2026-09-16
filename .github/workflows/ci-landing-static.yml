@@ -1,0 +1,229 @@
+name: CI Landing Static
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_call:
+
+concurrency:
+  group: ci-landing-static-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+jobs:
+  # ============================================================
+  # CHANGE DETECTION
+  # ============================================================
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.act-all.outputs.should_run || steps.evaluate.outputs.should_run }}
+    steps:
+      - name: Run all jobs in act
+        if: ${{ env.ACT }}
+        id: act-all
+        run: |
+          echo "Running in act — skipping change detection"
+          echo "should_run=true" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        if: ${{ !env.ACT }}
+        uses: actions/checkout@v4
+
+      - name: Detect file changes
+        if: ${{ !env.ACT }}
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            landing-static:
+              - 'apps/landing-static/**'
+            design-system:
+              - 'packages/design-system/**'
+            i18n:
+              - 'packages/i18n/**'
+            root:
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+              - 'eslint.config.mjs'
+              - 'scripts/**'
+
+      - name: Evaluate changes
+        if: ${{ !env.ACT }}
+        id: evaluate
+        run: |
+          if [[ "${{ steps.filter.outputs.landing-static }}" == "true" ]] || \
+             [[ "${{ steps.filter.outputs.design-system }}" == "true" ]] || \
+             [[ "${{ steps.filter.outputs.i18n }}" == "true" ]] || \
+             [[ "${{ steps.filter.outputs.root }}" == "true" ]]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "Skipping landing-static — no relevant changes"
+          fi
+
+  # ============================================================
+  # UNIT & COMPONENT TESTS
+  # ============================================================
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.should_run == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+
+      - name: Run Bun tests
+        run: cd apps/landing-static && bun run test
+
+      - name: Run Vitest with coverage
+        run: cd apps/landing-static && bun run test:coverage
+
+      - name: Display coverage summary
+        if: always()
+        run: |
+          JOB_DIR="/act-artifacts/landing-static/test"
+          if [ -n "$ACT" ]; then
+            mkdir -p "$JOB_DIR"
+            SUMMARY_FILE="$JOB_DIR/step-summary.md"
+          else
+            SUMMARY_FILE="$GITHUB_STEP_SUMMARY"
+          fi
+          COVERAGE_FILE="apps/landing-static/qa/coverage/coverage-summary.json"
+          if [ -f "$COVERAGE_FILE" ]; then
+            echo "## Coverage Summary (landing-static)" >> "$SUMMARY_FILE"
+            echo "" >> "$SUMMARY_FILE"
+            echo "| Metric | Coverage |" >> "$SUMMARY_FILE"
+            echo "|--------|----------|" >> "$SUMMARY_FILE"
+            echo "| Lines | $(jq -r '.total.lines.pct' "$COVERAGE_FILE")% |" >> "$SUMMARY_FILE"
+            echo "| Branches | $(jq -r '.total.branches.pct' "$COVERAGE_FILE")% |" >> "$SUMMARY_FILE"
+            echo "| Functions | $(jq -r '.total.functions.pct' "$COVERAGE_FILE")% |" >> "$SUMMARY_FILE"
+            echo "| Statements | $(jq -r '.total.statements.pct' "$COVERAGE_FILE")% |" >> "$SUMMARY_FILE"
+          fi
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        if: ${{ always() && !env.ACT }}
+        continue-on-error: true
+        with:
+          name: coverage-report-landing-static
+          path: apps/landing-static/qa/coverage/
+          retention-days: 7
+
+      - name: Save job outputs (act)
+        if: ${{ always() && env.ACT }}
+        run: |
+          JOB_DIR="/act-artifacts/landing-static/test"
+          mkdir -p "$JOB_DIR/artifacts"
+          [ -d "apps/landing-static/qa/coverage" ] && cp -r "apps/landing-static/qa/coverage" "$JOB_DIR/artifacts/coverage-landing-static" 2>/dev/null || true
+
+  # ============================================================
+  # BUILD & BUNDLE SIZE
+  # ============================================================
+  build:
+    name: Build & Bundle Size
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.should_run == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+
+      # robots.ts, sitemap.ts and [locale]/layout.tsx throw when
+      # NEXT_PUBLIC_SITE_URL is unset, so the build needs it supplied here.
+      - name: Build
+        run: bunx turbo build --filter=@repo/landing-static...
+        env:
+          NEXT_PUBLIC_SITE_URL: "http://localhost:3004"
+          NEXT_PUBLIC_WEB_APP_URL: "http://localhost:3001"
+
+      - name: Check bundle size
+        run: cd apps/landing-static && bun run size
+
+  # ============================================================
+  # E2E TESTS
+  # ============================================================
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [changes, build]
+    if: vars.SKIP_E2E != 'true' && needs.changes.outputs.should_run == 'true' && github.event.pull_request.draft == false
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/setup-playwright
+
+      - name: Run Playwright tests
+        run: cd apps/landing-static && bunx playwright test --project=chromium
+        env:
+          CI: true
+          NEXT_PUBLIC_SITE_URL: "http://localhost:3004"
+          NEXT_PUBLIC_WEB_APP_URL: "http://localhost:3001"
+
+      - name: Show dev logs on failure
+        if: failure()
+        run: |
+          echo "=== Next.js Dev Log (landing-static) ==="
+          cat .next-landing-static.log 2>/dev/null || echo "No Next.js log found"
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ always() && !env.ACT }}
+        continue-on-error: true
+        with:
+          name: playwright-report-landing-static
+          path: apps/landing-static/qa/playwright-report/
+          retention-days: 7
+
+      - name: Save job outputs (act)
+        if: ${{ always() && env.ACT }}
+        run: |
+          JOB_DIR="/act-artifacts/landing-static/e2e"
+          mkdir -p "$JOB_DIR/artifacts"
+          [ -d "apps/landing-static/qa/playwright-report" ] && cp -r "apps/landing-static/qa/playwright-report" "$JOB_DIR/artifacts/playwright-report-landing-static" 2>/dev/null || true
+
+  # ============================================================
+  # SUMMARY
+  # ============================================================
+  ci-landing-static-complete:
+    name: CI Landing Static Complete
+    runs-on: ubuntu-latest
+    needs: [changes, test, build, e2e]
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          echo "Changes should_run: ${{ needs.changes.outputs.should_run }}"
+          echo "Test: ${{ needs.test.result }}"
+          echo "Build: ${{ needs.build.result }}"
+          echo "E2E: ${{ needs.e2e.result }}"
+
+          if [[ "${{ needs.changes.outputs.should_run }}" != "true" ]]; then
+            echo "No relevant changes — skipping landing-static CI"
+            exit 0
+          fi
+
+          if [[ "${{ needs.test.result }}" != "success" ]]; then
+            echo "Test failed: ${{ needs.test.result }}"
+            exit 1
+          fi
+
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "Build failed: ${{ needs.build.result }}"
+            exit 1
+          fi
+
+          E2E="${{ needs.e2e.result }}"
+          if [[ "$E2E" != "success" && "$E2E" != "skipped" ]]; then
+            echo "E2E failed: $E2E"
+            exit 1
+          fi
+
+          echo "All landing-static CI jobs passed"
