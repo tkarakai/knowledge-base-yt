@@ -1,7 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { MetadataProgressPanel } from "./metadata-progress";
+import { VideoChannel, VideoReleaseDate, VideoThumbnail } from "./video-media";
 import { useRouter } from "next/navigation";
 import {
   ArrowRight,
@@ -18,6 +20,7 @@ import {
 import type {
   Source,
   SourceDetail,
+  SourcePage,
   Reflection,
   SelectedPassage,
   SynthesisProposal,
@@ -31,7 +34,6 @@ import {
   Empty,
   PageTitle,
   Badge,
-  date,
   stamp,
   sourceHref,
   noteHref,
@@ -48,28 +50,45 @@ const blankReflection = {
 };
 
 export function InboxView() {
-  const sources = useResource<Source[]>("sources");
+  const [filter, setFilter] = useState("inbox");
+  const [query, setQuery] = useState("");
+  const [search, setSearch] = useState("");
+  const [grouped, setGrouped] = useState(false);
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(query);
+      setPage(1);
+    }, 180);
+    return () => clearTimeout(timer);
+  }, [query]);
+  const params = new URLSearchParams({
+    tab: filter,
+    q: search,
+    page: String(page),
+    group: grouped ? "channel" : "none",
+  });
+  const sources = useResource<SourcePage>(`sources/page?${params}`);
+  const reloadSources = sources.reload;
+  useEffect(() => {
+    const refresh = () => {
+      if (!document.hidden) reloadSources();
+    };
+    window.addEventListener("focus", refresh);
+    document.addEventListener("visibilitychange", refresh);
+    const timer = setInterval(refresh, 15000);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener("focus", refresh);
+      document.removeEventListener("visibilitychange", refresh);
+    };
+  }, [reloadSources]);
   const action = useAction();
   const router = useRouter();
   const [url, setUrl] = useState("");
-  const [filter, setFilter] = useState("inbox");
-  const counts = {
-    inbox:
-      sources.data?.filter((source) => source.status === "ready_for_reflection")
-        .length ?? 0,
-    later:
-      sources.data?.filter((source) => source.status === "deferred").length ??
-      0,
-    all: sources.data?.length ?? 0,
-  };
-  const visible =
-    sources.data?.filter(
-      (source) =>
-        filter === "all" ||
-        (filter === "later"
-          ? source.status === "deferred"
-          : source.status === "ready_for_reflection"),
-    ) ?? [];
+  const counts = sources.data?.counts ?? { inbox: 0, later: 0, all: 0 };
+  const groups = sources.data?.groups ?? [];
+  const visibleCount = sources.data?.total ?? 0;
   async function decide(source: Source, decision: Reflection["decision"]) {
     await action.run(
       async () => {
@@ -131,7 +150,12 @@ export function InboxView() {
             {action.busy ? "Working…" : "Add to inbox"}
           </button>
         </div>
-        <p>Capture the source. Keep the context. Decide what matters.</p>
+        <p>
+          Capture the source. Keep the context. Decide what matters.{" "}
+          <Link href="/kb/settings#youtube-history">
+            Import your YouTube history
+          </Link>
+        </p>
       </form>
       <Feedback {...action} />
       <div className="kb-list-toolbar">
@@ -147,7 +171,10 @@ export function InboxView() {
               key={key}
               aria-pressed={filter === key}
               className={filter === key ? "is-active" : ""}
-              onClick={() => setFilter(key)}
+              onClick={() => {
+                setFilter(key);
+                setPage(1);
+              }}
             >
               {title}
               <span>{counts[key]}</span>
@@ -157,89 +184,173 @@ export function InboxView() {
         <button
           className="kb-icon-button"
           aria-label="Refresh sources"
-          onClick={sources.reload}
+          disabled={sources.loading}
+          onClick={() =>
+            void action.run(async () => {
+              await api(`sources/page?${params}&refresh=1`);
+              sources.reload();
+            })
+          }
         >
           <RefreshCw size={16} />
         </button>
       </div>
-      <LoadState {...sources} retry={sources.reload} />
-      {!sources.loading &&
+      <div className="kb-video-controls">
+        <label className="kb-video-search">
+          Find a video
+          <input
+            type="search"
+            placeholder="Filter titles or channels…"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </label>
+        <label className="kb-video-group">
+          <input
+            type="checkbox"
+            checked={grouped}
+            onChange={(event) => {
+              setGrouped(event.target.checked);
+              setPage(1);
+            }}
+          />
+          Group by channel
+        </label>
+      </div>
+      <MetadataProgressPanel onUpdated={reloadSources} />
+      <div className="kb-video-pagination">
+        <span aria-live="polite">
+          {sources.loading
+            ? "Updating videos…"
+            : `Page ${sources.data?.page ?? 1} of ${sources.data?.pages ?? 1}`}
+        </span>
+        <button
+          className="kb-button kb-small"
+          disabled={sources.loading || !sources.data || sources.data.page <= 1}
+          onClick={() => setPage((sources.data?.page ?? 1) - 1)}
+        >
+          Previous
+        </button>
+        <button
+          className="kb-button kb-small"
+          disabled={
+            sources.loading ||
+            !sources.data ||
+            sources.data.page >= sources.data.pages
+          }
+          onClick={() => setPage((sources.data?.page ?? 1) + 1)}
+        >
+          Next
+        </button>
+      </div>
+      <p className="kb-video-result-count" aria-live="polite">
+        {visibleCount} {visibleCount === 1 ? "video" : "videos"} · Newest
+        release first{grouped ? " within each channel" : ""}
+      </p>
+      <LoadState
+        {...sources}
+        loading={sources.loading && !sources.data}
+        retry={sources.reload}
+      />
+      {(!sources.loading || sources.data) &&
         !sources.error &&
-        (visible.length ? (
+        (visibleCount ? (
           <div className="kb-source-list">
-            {visible.map((source, index) => (
-              <article className="kb-source-row" key={source.id}>
-                <span className="kb-row-number">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <div className="kb-source-symbol">
-                  <Youtube size={25} strokeWidth={1.25} />
-                </div>
-                <div className="kb-source-summary">
-                  <div className="kb-item-meta">
-                    <span>{source.channel || "YouTube source"}</span>
-                    <span>·</span>
-                    <span>{date(source.lastSeenAt)}</span>
-                  </div>
-                  <h2>
-                    <Link href={sourceHref(source.id)}>{source.title}</Link>
-                  </h2>
-                  <div className="kb-source-status">
-                    <Badge value={source.status} />
+            {groups.map((group) => (
+              <section key={group.key} className="kb-video-group-section">
+                {grouped && (
+                  <h2 className="kb-channel-group-title">
+                    <VideoChannel source={group.videos[0]} />
                     <span>
-                      {source.transcriptStatus === "available" ||
-                      source.transcriptStatus === "partial"
-                        ? "Timestamped transcript"
-                        : "Transcript needs attention"}
+                      {group.total} {group.total === 1 ? "video" : "videos"}
                     </span>
-                  </div>
-                </div>
-                <div className="kb-row-actions">
-                  <button
-                    className="kb-button kb-small kb-keep"
-                    onClick={() => void decide(source, "keep")}
-                    disabled={action.busy}
-                  >
-                    <Check size={15} />
-                    Keep
-                  </button>
-                  <button
-                    className="kb-icon-button"
-                    aria-label={`Save ${source.title} for later`}
-                    title="For later"
-                    onClick={() => void decide(source, "later")}
-                    disabled={action.busy}
-                  >
-                    <Clock3 size={17} />
-                  </button>
-                  <button
-                    className="kb-icon-button"
-                    aria-label={`Ignore ${source.title}`}
-                    title="Ignore"
-                    onClick={() => void decide(source, "ignore")}
-                    disabled={action.busy}
-                  >
-                    <X size={17} />
-                  </button>
-                </div>
-              </article>
+                  </h2>
+                )}
+                {group.videos.map((source, index) => (
+                  <article className="kb-source-row" key={source.id}>
+                    <span className="kb-row-number">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <Link
+                      href={sourceHref(source.id)}
+                      prefetch={false}
+                      aria-label={`Open ${source.title}`}
+                      className="kb-video-thumbnail-link"
+                    >
+                      <VideoThumbnail source={source} />
+                    </Link>
+                    <div className="kb-source-summary">
+                      <div className="kb-item-meta">
+                        <VideoChannel source={source} />
+                        <VideoReleaseDate source={source} />
+                      </div>
+                      <h2>
+                        <Link href={sourceHref(source.id)} prefetch={false}>
+                          {source.title}
+                        </Link>
+                      </h2>
+                      <div className="kb-source-status">
+                        <Badge value={source.status} />
+                        <span>
+                          {source.transcriptStatus === "available" ||
+                          source.transcriptStatus === "partial"
+                            ? "Timestamped transcript"
+                            : "Transcript needs attention"}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="kb-row-actions">
+                      <button
+                        className="kb-button kb-small kb-keep"
+                        onClick={() => void decide(source, "keep")}
+                        disabled={action.busy}
+                      >
+                        <Check size={15} />
+                        Keep
+                      </button>
+                      <button
+                        className="kb-icon-button"
+                        aria-label={`Save ${source.title} for later`}
+                        title="For later"
+                        onClick={() => void decide(source, "later")}
+                        disabled={action.busy}
+                      >
+                        <Clock3 size={17} />
+                      </button>
+                      <button
+                        className="kb-icon-button"
+                        aria-label={`Ignore ${source.title}`}
+                        title="Ignore"
+                        onClick={() => void decide(source, "ignore")}
+                        disabled={action.busy}
+                      >
+                        <X size={17} />
+                      </button>
+                    </div>
+                  </article>
+                ))}
+              </section>
             ))}
           </div>
         ) : (
           <Empty
             icon={<Inbox size={30} strokeWidth={1.2} />}
             title={
-              filter === "later"
-                ? "A little space for later."
-                : filter === "all"
-                  ? "Your commonplace starts here."
-                  : "A clear desk. An open mind."
+              query.trim()
+                ? "No matching videos."
+                : filter === "later"
+                  ? "A little space for later."
+                  : filter === "all"
+                    ? "Your commonplace starts here."
+                    : "A clear desk. An open mind."
             }
           >
             <p>
-              {filter === "later"
-                ? "Sources you set aside will be waiting here when you’re ready."
-                : "Add a video above, then tell your future self why it mattered."}
+              {query.trim()
+                ? "Try a different title or channel name."
+                : filter === "later"
+                  ? "Sources you set aside will be waiting here when you’re ready."
+                  : "Add a video above, then tell your future self why it mattered."}
             </p>
             <span className="kb-empty-footnote">
               Encounter → reflect → understand
@@ -264,7 +375,11 @@ export function SourceView({ id }: { id: string }) {
   return (
     <>
       <BackLink href="/kb">Back to inbox</BackLink>
-      <LoadState {...detail} retry={detail.reload} />
+      <LoadState
+        {...detail}
+        loading={detail.loading && !detail.data}
+        retry={detail.reload}
+      />
       {detail.data && !detail.error && (
         <SourceContent
           key={`${id}-${detail.data.reflection?.updatedAt ?? "new"}`}
@@ -300,6 +415,17 @@ function SourceContent({
   const action = useAction();
   const router = useRouter();
   const path = `sources/${encodeURIComponent(source.id)}`;
+  useEffect(() => {
+    if (source.metadataCheckedAt || source.publishedOn || source.publishedAt)
+      return;
+    const timer = setInterval(reload, 3000);
+    return () => clearInterval(timer);
+  }, [
+    reload,
+    source.metadataCheckedAt,
+    source.publishedOn,
+    source.publishedAt,
+  ]);
   const currentReflection = {
     decision,
     why,
@@ -330,23 +456,22 @@ function SourceContent({
   }
   return (
     <>
-      <PageTitle
-        eyebrow="SOURCE / YOUTUBE"
-        title={source.title}
-        description={source.channel || "YouTube source"}
-      >
+      <PageTitle eyebrow="SOURCE / YOUTUBE" title={source.title} description="">
         <ExternalLink href={source.url}>Open original</ExternalLink>
       </PageTitle>
+      <div className="kb-video-detail-meta">
+        <VideoThumbnail source={source} />
+        <div>
+          <VideoChannel source={source} />
+          <VideoReleaseDate source={source} />
+        </div>
+      </div>
       <div className="kb-source-facts">
         <Badge value={source.status} />
-        <span>First encountered {date(source.firstSeenAt)}</span>
         <span>
           {source.encounters.length}{" "}
           {source.encounters.length === 1 ? "encounter" : "encounters"}
         </span>
-        {source.publishedAt && (
-          <span>Published {date(source.publishedAt)}</span>
-        )}
       </div>
       <Feedback {...action} />
       <div className="kb-reading-layout">

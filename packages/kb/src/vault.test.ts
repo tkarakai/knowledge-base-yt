@@ -554,3 +554,82 @@ describe("batch comparisons and atomic replacement", () => {
     ).toHaveLength(0);
   });
 });
+
+describe("indexed companion catalog", () => {
+  test("warm reads avoid rescans, isolate returned data, and still observe direct edits and renames", async () => {
+    const cached = new Vault(vault.root, { cache: true, refreshMs: 60000 });
+    await cached.init();
+    await cached.saveSource(source);
+    await cached.saveKnowledge(note());
+    await cached.listSources();
+    const before = cached.diagnostics();
+    const list = await cached.listSources();
+    list[0].tags.push("must-not-leak");
+    expect((await cached.getSource(source.id))!.tags).not.toContain(
+      "must-not-leak",
+    );
+    await cached.saveSource({ ...source, title: "Updated" });
+    expect((await cached.listSources())[0].title).toBe("Updated");
+    expect(cached.diagnostics().scans).toBe(before.scans);
+    expect(cached.diagnostics().filesRead - before.filesRead).toBeLessThan(6);
+    const originalPath = path.join(vault.root, "knowledge/knowledge_test.md");
+    const renamed = path.join(vault.root, "knowledge/renamed.md");
+    await fs.rename(originalPath, renamed);
+    const edited = { ...note(), markdown: "# External edit\n" };
+    await fs.writeFile(renamed, serializeMarkdown("knowledge", edited));
+    expect((await cached.getKnowledge(edited.id))!.markdown).toBe(
+      edited.markdown,
+    );
+    expect(
+      await cached.saveKnowledge({ ...edited, title: "Saved after rename" }),
+    ).toBe("knowledge/renamed.md");
+    await fs.unlink(renamed);
+    expect(await cached.getKnowledge(edited.id)).toBeNull();
+  });
+  test("explicit refresh discovers editor-created records and catches duplicates and unsafe cached targets", async () => {
+    const cached = new Vault(vault.root, { cache: true, refreshMs: 60000 });
+    await cached.init();
+    await cached.listKnowledge();
+    await vault.saveKnowledge(note());
+    await cached.refresh();
+    expect(await cached.listKnowledge()).toHaveLength(1);
+    const before = cached.diagnostics().filesRead;
+    await Promise.all([
+      cached.refresh(),
+      cached.listKnowledge(),
+      cached.listSources(),
+    ]);
+    expect(cached.diagnostics().filesRead).toBe(before);
+    const file = path.join(vault.root, "knowledge/knowledge_test.md");
+    await fs.copyFile(file, path.join(vault.root, "knowledge/duplicate.md"));
+    await expect(cached.refresh()).rejects.toThrow("Duplicate");
+    await fs.unlink(path.join(vault.root, "knowledge/duplicate.md"));
+    await cached.refresh();
+    await fs.unlink(file);
+    await fs.symlink(path.join(temp, "outside.md"), file);
+    await fs.writeFile(
+      path.join(temp, "outside.md"),
+      serializeMarkdown("knowledge", note()),
+    );
+    await expect(cached.getKnowledge("knowledge:test")).rejects.toThrow();
+  });
+  test("cached compare-and-swap still rejects an external edit", async () => {
+    const cached = new Vault(vault.root, { cache: true, refreshMs: 60000 });
+    await cached.init();
+    const original = note();
+    await cached.saveKnowledge(original);
+    await fs.writeFile(
+      path.join(vault.root, "knowledge/knowledge_test.md"),
+      serializeMarkdown("knowledge", { ...original, markdown: "External" }),
+    );
+    await expect(
+      cached.applyKnowledgeBatch([
+        {
+          note: { ...original, markdown: "Proposed" },
+          expectedBefore: original.markdown,
+        },
+      ]),
+    ).rejects.toThrow("changed");
+    expect((await cached.getKnowledge(original.id))!.markdown).toBe("External");
+  });
+});

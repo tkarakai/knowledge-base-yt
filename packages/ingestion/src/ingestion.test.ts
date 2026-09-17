@@ -5,6 +5,8 @@ import {
   fetchYouTubeMetadata,
   YouTubeCaptionProvider,
   extractPlayerResponse,
+  fetchYouTubePublication,
+  fetchYouTubeChannelAvatar,
 } from "./index";
 const id = "dQw4w9WgXcQ";
 const sourceId = `youtube:${id}`;
@@ -33,6 +35,50 @@ const html = (data: unknown) =>
   new Response(
     `<html><script>var ytInitialPlayerResponse = ${JSON.stringify(data)};</script></html>`,
   );
+
+test("release dates come from publication metadata and channel images from safe public metadata", async () => {
+  const published = await fetchYouTubePublication(id, {
+    fetch: mockFetch(() =>
+      html({
+        microformat: {
+          playerMicroformatRenderer: { publishDate: "2020-05-06" },
+        },
+      }),
+    ),
+  });
+  expect(published).toBe("2020-05-06");
+  expect(
+    await fetchYouTubePublication(id, {
+      fetch: mockFetch(() =>
+        html({
+          microformat: {
+            playerMicroformatRenderer: { publishDate: "2020-02-30" },
+          },
+        }),
+      ),
+    }),
+  ).toBeUndefined();
+  expect(
+    await fetchYouTubeChannelAvatar("https://www.youtube.com/@channel", {
+      fetch: mockFetch(
+        () =>
+          new Response(
+            '<meta content="https://yt3.ggpht.com/avatar?a=1&amp;b=2" property="og:image">',
+          ),
+      ),
+    }),
+  ).toBe("https://yt3.ggpht.com/avatar?a=1&b=2");
+  expect(
+    await fetchYouTubeChannelAvatar("https://www.youtube.com/@channel", {
+      fetch: mockFetch(
+        () =>
+          new Response(
+            '<meta property="og:image" content="https://evil.test/tracker">',
+          ),
+      ),
+    }),
+  ).toBeUndefined();
+});
 
 describe("YouTube identity normalization", () => {
   test("watch, short links, mobile, shorts, live, embed and raw IDs normalize to one identity", () => {

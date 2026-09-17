@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { PerformanceSettings } from "./performance-settings";
+import { HistoryConnectionSettings } from "./history-connection";
 import {
   Check,
   Database,
@@ -76,6 +78,8 @@ export function SettingsView({ onSaved }: { onSaved: () => void }) {
           }}
         />
       )}
+      <HistoryConnectionSettings />
+      <PerformanceSettings />
       <section className="kb-settings-section">
         <div className="kb-settings-description">
           <Database size={22} strokeWidth={1.4} />

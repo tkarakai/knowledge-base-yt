@@ -33,11 +33,33 @@ Use a real directory, not a symlink. The launcher creates an ephemeral companion
 
 YouTube and configured model calls are controlled in Settings. No inference model is selected automatically. API keys remain in local companion settings and are not returned to the browser. Caption availability depends on YouTube and the video's caption access; manual import remains available.
 
+## Import your YouTube history
+
+The Chrome/Edge extension imports videos from your signed-in YouTube history into the local inbox, using a **12-calendar-month date window**, with no total video-count limit. It scrolls/paginates until it reaches an older date or the end of the available history.
+
+1. Run `bun run build:extension` and keep `bun run dev:kb` running.
+2. Open `chrome://extensions` (or `edge://extensions`), enable **Developer mode**, choose **Load unpacked**, and select `apps/extension/dist`.
+3. In Commonplace **Settings → YouTube history**, generate a pairing code.
+4. Click the extension in your browser toolbar. Paste the code and connect. The default companion address is `http://127.0.0.1:4317`; use your configured companion port if different.
+5. Choose **Open YouTube history**, sign in directly on YouTube if needed, and check that the correct account's videos appear. The importer requests the English interface so date headings can be interpreted safely.
+6. Return to the extension tab and select **Import last 12 months**. Keep the YouTube history tab open while it loads older pages. Progress, the oldest date reached, and **Pause / Resume** are in the extension tab.
+
+Existing videos retain all decisions and encounter timestamps. New videos appear in the inbox; captions are fetched on demand using **Retry captions** on a source. The watch date displayed by YouTube is stored separately from the import timestamp. A repeated sync never treats the scan itself as another watch.
+
+Video listings show the **release date**, newest first, across To reflect on, For later, and All sources. Enable **Group by channel** to keep that order within each channel, and use **Find a video** for case-insensitive substring matching on titles or channel names. Missing release dates are fetched from public YouTube publication metadata in the background; unknown dates sort last and never fall back to the watch/import date. The video-details panel shows live checked/queued counts, a spinner, and an estimated time remaining once several lookups finish. **Retry missing details** only retries incomplete videos, reuses existing fields, and skips complete or already queued videos. Progress counts metadata checks, including unavailable results; image downloads happen separately as videos come into view.
+
+The extension also harvests thumbnail, channel-link, and channel-avatar URLs. The companion fills missing channel details from public metadata and saves displayed JPEG/PNG/WebP images in `vault/assets/`, referenced from source frontmatter. Saved images work offline. Images load as videos come into view, so importing a year's history does not block on downloading every image. Refresh the unpacked extension in Chrome/Edge after rebuilding it; a new history sync can enrich previously imported videos without changing their decisions.
+
+Imports are incremental and retryable. Resume retains the original cutoff and safely replays any unacknowledged batch. If a tab is closed or suspended, reopen history and resume; earlier saved videos remain in the vault. Unknown date headings, sign-in problems, and stalled pagination produce a **partial / paused** result rather than a false success. History disabled/deleted in YouTube cannot be recovered by this importer.
+
+Google passwords and cookies stay in the browser. A single-use, five-minute pairing code issues a revocable credential that can only submit history batches. **Disconnect** in Settings revokes it; the extension's **Forget** button only removes the local connection. No general browser-history or cookie permission is requested. See [extension details](apps/extension/README.md).
+
 ## Vault and rebuild
 
 ```text
 vault/
   sources/youtube/<video-id>/{source,transcript,reflection}.md
+  assets/<content-hash>.{jpg,png,webp}
   knowledge/*.md
   documents/*.md
   proposals/*.md
@@ -62,14 +84,21 @@ bun run typecheck:kb
 bun run lint:kb
 bun run build:kb         # production Next build with local starter URL defaults
 bun run test:kb:e2e      # real browser + companion + Pi, local fixture providers
+bun run test:kb:perf     # HTTP latency/payload/file-read budgets at 2,500 and 10,000 videos
+bun run test:kb:perf:browser # real browser pagination/search scale budgets
+bun run test:history:e2e # real MV3 extension + paginated YouTube fixtures + companion
 bun run test:unit        # React UI and starter regression tests
 bun run test:convex      # inherited backend tests
 ```
 
 The browser test requires a Playwright Chromium installation (`bunx playwright install chromium`). Its model/caption fixtures are test-only; production never substitutes fake synthesis or transcript content.
 
+## Performance
+
+Video lists use 50-item pages; search, release-date sorting, and channel grouping apply across the entire library. **Settings → Performance** shows local request/queue timings, memory, and vault scan metrics. Repeatable scale tests, budgets, and cache behavior are documented in [Performance checks](docs/implementation/performance.md). Reports are saved under `.kb-local/performance/`.
+
 ## Scope
 
-This is the first implementation slice, not completion of every PRD milestone. Browser-history capture, browser extensions, non-Markdown document conversion, targeted external research, and a Convex workflow-state mirror are deferred. The local companion currently owns workflow state while canonical artifacts stay portable. Review writes validate all changes before publication and atomically replace individual files; multiple files are not one filesystem transaction. An approval journal lets an interrupted accepted review resume on restart.
+This is the first implementation slice, not completion of every PRD milestone. User-triggered YouTube history import is available through the local extension; continuous watch/playback capture, non-Markdown document conversion, targeted external research, and a Convex workflow-state mirror are deferred. The local companion currently owns workflow state while canonical artifacts stay portable. Cloud history ingestion is not implemented. Review writes validate all changes before publication and atomically replace individual files; multiple files are not one filesystem transaction. An approval journal lets an interrupted accepted review resume on restart.
 
 See [the PRD](docs/personal-knowledge-base-prd.md), [implementation contracts](docs/implementation/contracts.md), [vault API](docs/implementation/vault-api.md), and [the original starter documentation](docs/starter-readme.md).

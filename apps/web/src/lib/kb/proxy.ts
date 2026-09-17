@@ -23,9 +23,17 @@ function allowedRoute(method: string, parts: string[]) {
   const [resource, , operation, action] = parts;
   if (method === "GET")
     return (
+      (parts.length === 2 &&
+        resource === "metadata" &&
+        parts[1] === "status") ||
+      (parts.length === 4 &&
+        resource === "sources" &&
+        operation === "media" &&
+        ["thumbnail", "avatar"].includes(action)) ||
       (parts.length === 1 &&
         [
           "health",
+          "metrics",
           "sources",
           "proposals",
           "knowledge",
@@ -35,7 +43,10 @@ function allowedRoute(method: string, parts: string[]) {
           "settings",
         ].includes(resource)) ||
       (parts.length === 2 &&
-        ["sources", "knowledge", "documents"].includes(resource))
+        ["sources", "knowledge", "documents"].includes(resource)) ||
+      (parts.length === 2 &&
+        resource === "history" &&
+        parts[1] === "connection")
     );
   if (method === "PUT")
     return (
@@ -47,7 +58,13 @@ function allowedRoute(method: string, parts: string[]) {
     );
   if (method === "POST")
     return (
+      (parts.length === 2 &&
+        resource === "metadata" &&
+        parts[1] === "refresh") ||
       (parts.length === 1 && ["sources", "documents"].includes(resource)) ||
+      (parts.length === 2 &&
+        resource === "history" &&
+        ["pair-code", "disconnect"].includes(parts[1])) ||
       (parts.length === 2 && resource === "index" && parts[1] === "rebuild") ||
       (parts.length === 3 &&
         resource === "proposals" &&
@@ -190,6 +207,40 @@ export async function proxyCompanion(
         "The local companion refused authentication. Check the server token configuration.",
         502,
       );
+    if (parts[2] === "media" && response.ok) {
+      const type = response.headers.get("content-type");
+      if (!type || !["image/jpeg", "image/png", "image/webp"].includes(type))
+        return error("Invalid image response.", 502);
+      const reader = response.body?.getReader();
+      if (!reader) return error("Image unavailable.", 502);
+      const chunks: Uint8Array[] = [];
+      let size = 0;
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          size += value.length;
+          if (size > 1024 * 1024)
+            return error("Image exceeds size limit.", 413);
+          chunks.push(value);
+        }
+      } finally {
+        await reader.cancel().catch(() => {});
+      }
+      const bytes = new Uint8Array(size);
+      let offset = 0;
+      for (const chunk of chunks) {
+        bytes.set(chunk, offset);
+        offset += chunk.length;
+      }
+      return new Response(bytes, {
+        headers: {
+          "Content-Type": type,
+          "Cache-Control": "private, max-age=86400",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+    }
     // Reconstruct JSON: no upstream cookies/headers or credentials reach the browser.
     const payload: unknown = await response.json();
     const safePayload = JSON.parse(
@@ -203,7 +254,11 @@ export async function proxyCompanion(
       "Cache-Control": "no-store",
       "X-Content-Type-Options": "nosniff",
     });
-    for (const name of ["X-KB-Retrieval-Mode", "X-KB-Retrieval-Reason"]) {
+    for (const name of [
+      "X-KB-Retrieval-Mode",
+      "X-KB-Retrieval-Reason",
+      "Server-Timing",
+    ]) {
       const value = response.headers.get(name);
       if (value) headers.set(name, value.split(token).join("[redacted]"));
     }

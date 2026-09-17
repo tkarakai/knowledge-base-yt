@@ -1,4 +1,5 @@
 import { parseDocument, stringify } from "yaml";
+import { youtubeChannelUrl, youtubeImageUrl } from "@repo/kb-shared";
 
 export class VaultError extends Error {
   constructor(
@@ -116,14 +117,52 @@ export function validate(kind: Kind, v: RecordData) {
       fail("Source identity and canonical URL must agree");
     string(v.title, "title", true);
     string(v.channel, "channel");
+    if (
+      v.channelUrl !== undefined &&
+      youtubeChannelUrl(v.channelUrl) !== v.channelUrl
+    )
+      fail("Invalid channel URL");
+    for (const [field, kind] of [
+      ["thumbnailUrl", "thumbnail"],
+      ["channelAvatarUrl", "avatar"],
+    ] as const)
+      if (
+        v[field] !== undefined &&
+        youtubeImageUrl(v[field], kind) !== v[field]
+      )
+        fail("Invalid image URL");
+    for (const field of ["thumbnailPath", "channelAvatarPath"])
+      if (
+        v[field] !== undefined &&
+        !/^assets\/[a-f0-9]{64}\.(?:jpg|png|webp)$/.test(v[field])
+      )
+        fail("Invalid image path");
     date(v.firstSeenAt, "firstSeenAt");
     date(v.lastSeenAt, "lastSeenAt");
     if (Date.parse(v.lastSeenAt) < Date.parse(v.firstSeenAt))
       fail("Encounter dates are reversed");
     if (v.publishedAt !== undefined) date(v.publishedAt, "publishedAt");
+    if (v.metadataCheckedAt !== undefined)
+      date(v.metadataCheckedAt, "metadataCheckedAt");
+    if (v.metadataError !== undefined) string(v.metadataError, "metadataError");
+    if (v.publishedOn !== undefined) {
+      if (
+        typeof v.publishedOn !== "string" ||
+        !/^\d{4}-\d\d-\d\d$/.test(v.publishedOn)
+      )
+        fail("Invalid publication date");
+      date(`${v.publishedOn}T00:00:00Z`, "publication date");
+    }
     array(v.encounters, "encounters");
     v.encounters.forEach((d: unknown) => date(d, "encounter"));
     strings(v.tags, "tags");
+    if (v.history !== undefined) {
+      object(v.history, "history");
+      oneOf(v.history.provider, ["youtube-history"], "history provider");
+      if (!/^\d{4}-\d\d-\d\d$/.test(v.history.watchedOn))
+        fail("Invalid history date");
+      date(`${v.history.watchedOn}T00:00:00Z`, "history date");
+    }
     oneOf(
       v.status,
       [
@@ -397,13 +436,22 @@ export function serializeMarkdown(
     "url",
     "title",
     "channel",
+    "channel_url",
+    "thumbnail_url",
+    "channel_avatar_url",
+    "thumbnail_path",
+    "channel_avatar_path",
     "published_at",
+    "published_on",
+    "metadata_checked_at",
+    "metadata_error",
     "first_seen_at",
     "last_seen_at",
     "status",
     "transcript_status",
     "encounters",
     "tags",
+    "history",
     "language",
     "provider",
     "generated",

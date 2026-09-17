@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>History · Commonplace</title>
+    <link rel="stylesheet" href="panel.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="brand">Commonplace<span class="dot">.</span></span
+        ><span class="eyebrow">A PERSONAL RECORD</span>
+      </header>
+      <section class="intro">
+        <p class="eyebrow">YOUTUBE / HISTORY IMPORT</p>
+        <h1>Pick up the threads<br />of the past year.</h1>
+        <p class="lede">
+          Bring the last 12 months of your watching into your reflection inbox.
+          Decide what matters when you get there.
+        </p>
+      </section>
+      <section id="pairing" class="card">
+        <span class="number">01</span>
+        <div>
+          <h2>Connect your workspace</h2>
+          <p>
+            In Commonplace, open Settings → YouTube history and generate a
+            pairing code. Keep the local app running.
+          </p>
+          <form id="pair-form">
+            <label for="endpoint">Companion address</label
+            ><input
+              id="endpoint"
+              type="url"
+              value="http://127.0.0.1:4317"
+              required
+            /><label for="code">One-time pairing code</label
+            ><input
+              id="code"
+              required
+              autocomplete="off"
+              spellcheck="false"
+            /><button type="submit">Connect Commonplace</button>
+          </form>
+        </div>
+      </section>
+      <section id="connected" class="card" hidden>
+        <span class="number">01</span>
+        <div>
+          <h2>Workspace connected</h2>
+          <p id="address"></p>
+          <button id="forget" class="secondary">Forget this connection</button>
+        </div>
+      </section>
+      <section class="card">
+        <span class="number">02</span>
+        <div>
+          <h2>Sign in on YouTube</h2>
+          <p>
+            Open your history and sign in to the account you want to import.
+            Check that your watched videos are visible. Your Google session
+            stays in your browser.
+          </p>
+          <button id="open-history" class="secondary">
+            Open YouTube history ↗
+          </button>
+        </div>
+      </section>
+      <section class="card">
+        <span class="number">03</span>
+        <div>
+          <h2>Bring the past year along</h2>
+          <p>
+            The importer loads older pages until it reaches the date cutoff or
+            the end of your available history. Keep the history tab open. You
+            can pause and resume.
+          </p>
+          <p class="range" id="range"></p>
+          <div class="actions">
+            <button id="start" disabled>Import last 12 months</button
+            ><button id="resume" hidden>Resume import</button
+            ><button id="pause" class="secondary" hidden>Pause</button>
+          </div>
+          <div id="progress" role="status" aria-live="polite" hidden>
+            <p id="run-status" class="eyebrow"></p>
+            <p id="counts" class="counts"></p>
+            <p id="oldest"></p>
+            <p id="reason"></p>
+          </div>
+        </div>
+      </section>
+      <p id="error" role="alert" hidden></p>
+      <footer>
+        Existing Keep, Ignore and Later decisions stay yours. Captions can be
+        fetched from each source when you need them.
+      </footer>
+    </main>
+    <script type="module" src="panel.js"></script>
+  </body>
+</html>

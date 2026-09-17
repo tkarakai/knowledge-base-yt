@@ -32,13 +32,108 @@ export interface Source {
   url: string;
   title: string;
   channel: string;
+  channelUrl?: string;
+  thumbnailUrl?: string;
+  channelAvatarUrl?: string;
+  thumbnailPath?: string;
+  channelAvatarPath?: string;
   publishedAt?: string;
+  publishedOn?: string;
+  metadataCheckedAt?: string;
+  metadataError?: string;
   firstSeenAt: string;
   lastSeenAt: string;
   status: SourceStatus;
   transcriptStatus: TranscriptStatus;
   encounters: string[];
   tags: string[];
+  /** Calendar date shown by YouTube; never an invented watch timestamp. */
+  history?: { provider: "youtube-history"; watchedOn: string };
+}
+
+export interface HistoryEntry {
+  videoId: string;
+  title: string;
+  channel: string;
+  watchedOn: string;
+  channelUrl?: string;
+  thumbnailUrl?: string;
+  channelAvatarUrl?: string;
+}
+
+export type VideoImageKind = "thumbnail" | "avatar";
+/** Narrow remote URL validation shared by collection, persistence, and fetching. */
+export function youtubeImageUrl(
+  value: unknown,
+  kind: VideoImageKind,
+): string | undefined {
+  if (typeof value !== "string" || value.length > 4096 || /[\s\\]/.test(value))
+    return undefined;
+  try {
+    const url = new URL(value);
+    const hosts =
+      kind === "thumbnail"
+        ? [
+            "i.ytimg.com",
+            "i1.ytimg.com",
+            "i2.ytimg.com",
+            "i3.ytimg.com",
+            "i4.ytimg.com",
+            "img.youtube.com",
+          ]
+        : ["yt3.ggpht.com", "yt3.googleusercontent.com"];
+    if (
+      url.protocol !== "https:" ||
+      url.username ||
+      url.password ||
+      url.port ||
+      !hosts.includes(url.hostname)
+    )
+      return undefined;
+    url.hash = "";
+    return url.href;
+  } catch {
+    return undefined;
+  }
+}
+export function youtubeChannelUrl(value: unknown): string | undefined {
+  if (typeof value !== "string" || value.length > 2048 || /[\s\\]/.test(value))
+    return undefined;
+  try {
+    const url = new URL(value, "https://www.youtube.com");
+    if (
+      url.protocol !== "https:" ||
+      url.username ||
+      url.password ||
+      url.port ||
+      !["www.youtube.com", "youtube.com"].includes(url.hostname) ||
+      !/^\/(?:@[^/]+|channel\/[A-Za-z0-9_-]+|(?:c|user)\/[^/]+)\/?$/.test(
+        url.pathname,
+      )
+    )
+      return undefined;
+    return `https://www.youtube.com${url.pathname.replace(/\/$/, "")}`;
+  } catch {
+    return undefined;
+  }
+}
+export interface HistoryBatch {
+  runId: string;
+  batchId: string;
+  cutoff: string;
+  through: string;
+  entries: HistoryEntry[];
+}
+export interface HistoryBatchResult {
+  added: number;
+  known: number;
+  outsideWindow: number;
+}
+export interface HistoryConnection {
+  connected: boolean;
+  connectedAt?: string;
+  lastImportAt?: string;
+  lastBatch?: HistoryBatchResult;
 }
 export interface SelectedPassage {
   start: number;
@@ -187,4 +282,30 @@ export interface DocumentDetail {
   title: string;
   markdown: string;
   path: string;
+}
+
+/** Progress for the current metadata backfill, excluding on-demand image downloads. */
+export interface MetadataProgress {
+  enabled: boolean;
+  total: number;
+  completed: number;
+  incomplete: number;
+  queued: number;
+  active: number;
+  estimatedRemainingSeconds: number | null;
+}
+
+export { releaseDay, videoGroups } from "./video-list";
+export interface SourcePage {
+  groups: Array<{
+    key: string;
+    label: string;
+    total: number;
+    videos: Source[];
+  }>;
+  counts: { inbox: number; later: number; all: number };
+  total: number;
+  page: number;
+  pages: number;
+  pageSize: number;
 }

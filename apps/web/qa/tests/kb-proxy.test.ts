@@ -5,8 +5,9 @@ import { markdownDiff } from "../../src/lib/kb/diff";
 const originalFetch = globalThis.fetch;
 const originalToken = process.env.KB_COMPANION_TOKEN;
 const originalUrl = process.env.KB_COMPANION_URL;
-const upstream = mock(async (_url: unknown, _options?: Parameters<typeof globalThis.fetch>[1]) =>
-  Response.json({ ok: true }),
+const upstream = mock(
+  async (_url: unknown, _options?: Parameters<typeof globalThis.fetch>[1]) =>
+    Response.json({ ok: true }),
 );
 
 beforeEach(() => {
@@ -115,8 +116,20 @@ describe("KB companion proxy", () => {
       ["knowledge", ".."],
       ["sources", "a\\b"],
       ["sources", "id?token=x"],
+      ["history", "pair"],
+      ["history", "batches"],
     ])
       expect((await proxyCompanion(request(), path)).status).toBe(404);
+    expect(upstream).not.toHaveBeenCalled();
+  });
+  it("never exposes extension pairing or ingestion through the master-token web proxy", async () => {
+    for (const path of [
+      ["history", "pair"],
+      ["history", "batches"],
+    ])
+      expect(
+        (await proxyCompanion(request("POST", {}, "{}"), path)).status,
+      ).toBe(404);
     expect(upstream).not.toHaveBeenCalled();
   });
   it("enforces the 2 MiB bound even without Content-Length", async () => {
@@ -206,6 +219,59 @@ describe("KB companion proxy", () => {
       ).status,
     ).toBe(200);
     expect(upstream.mock.calls[0][1]?.body).toBe(body);
+  });
+  it("proxies only bounded image responses and strips upstream cookies", async () => {
+    const bytes = new Uint8Array([137, 80, 78, 71]);
+    upstream.mockImplementation(
+      async () =>
+        new Response(bytes, {
+          headers: {
+            "Content-Type": "image/png",
+            "Set-Cookie": "secret=value",
+          },
+        }),
+    );
+    const image = await proxyCompanion(request(), [
+      "sources",
+      "youtube:dQw4w9WgXcQ",
+      "media",
+      "thumbnail",
+    ]);
+    expect(new Uint8Array(await image.arrayBuffer())).toEqual(bytes);
+    expect(image.headers.get("content-type")).toBe("image/png");
+    expect(image.headers.get("set-cookie")).toBeNull();
+    upstream.mockImplementation(
+      async () =>
+        new Response("<svg/>", {
+          headers: { "Content-Type": "image/svg+xml" },
+        }),
+    );
+    expect(
+      (
+        await proxyCompanion(request(), [
+          "sources",
+          "youtube:dQw4w9WgXcQ",
+          "media",
+          "avatar",
+        ])
+      ).status,
+    ).toBe(502);
+    upstream.mockImplementation(
+      async () =>
+        new Response(new Uint8Array(1024 * 1024 + 1), {
+          headers: { "Content-Type": "image/png" },
+        }),
+    );
+    expect(
+      (
+        await proxyCompanion(request(), [
+          "sources",
+          "youtube:dQw4w9WgXcQ",
+          "media",
+          "thumbnail",
+        ])
+      ).status,
+    ).toBe(413);
   });
 });
 

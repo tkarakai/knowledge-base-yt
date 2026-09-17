@@ -4,6 +4,7 @@ import { chromium, expect } from "@playwright/test";
 import { mkdtemp, mkdir, rm } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
+import { serializeMarkdown } from "../packages/kb/src/index";
 import { createCompanion } from "../apps/companion/src/index";
 
 const root = resolve(import.meta.dir, "..");
@@ -100,11 +101,24 @@ const options = {
   vaultPath: join(directory, "vault"),
   token,
   port: 0,
+  media: {
+    publication: async () => "2024-03-12",
+    channelAvatar: async () => "https://yt3.ggpht.com/fixture-avatar",
+    fetch: (async () =>
+      new Response(
+        await Bun.file(
+          join(root, "packages/design-system/assets/apple-touch-icon.png"),
+        ).arrayBuffer(),
+        { headers: { "Content-Type": "image/png" } },
+      )) as typeof fetch,
+  },
   metadata: async (videoId: string) => ({
     videoId,
     url: `https://www.youtube.com/watch?v=${videoId}`,
     title: "Building a memory that lasts",
     channel: "Local fixture",
+    channelUrl: "https://www.youtube.com/@fixture",
+    thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`,
   }),
   transcriptProvider: {
     fetch: async () => ({
@@ -127,7 +141,7 @@ await app.state.update({
     baseUrl: `http://127.0.0.1:${model.port}/v1`,
     model: "fixture-model",
   },
-  network: { youtube: false, inference: true, embeddings: false },
+  network: { youtube: true, inference: true, embeddings: false },
 });
 const reserve = Bun.serve({
   hostname: "127.0.0.1",
@@ -317,7 +331,63 @@ try {
     await page.request.get(`${base}/api/kb/health`)
   ).text();
   expect(healthText).not.toContain(token);
+  await page.goto(`${base}/kb/settings#youtube-history`);
+  await page
+    .getByRole("button", { name: "Generate pairing code", exact: true })
+    .click();
+  await expect(page.getByLabel("One-time pairing code")).toHaveValue(
+    /^[a-f0-9]{36}$/,
+  );
+  const code = await page.getByLabel("One-time pairing code").inputValue();
+  const paired = await fetch(`http://127.0.0.1:${server.port}/history/pair`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-KB-Extension-Id": "a".repeat(32),
+    },
+    body: JSON.stringify({ code }),
+  });
+  expect(paired.ok).toBe(true);
+  await page
+    .locator("#youtube-history")
+    .getByRole("button", { name: "Check connection" })
+    .click();
+  await expect(
+    page.getByText("History extension connected", { exact: true }),
+  ).toBeVisible();
+  await page
+    .locator("#youtube-history")
+    .screenshot({ path: join(screenshots, "history-settings.png") });
+  await page.getByRole("button", { name: "Disconnect", exact: true }).click();
+  await expect(
+    page.getByText("Connect the Commonplace history extension", {
+      exact: true,
+    }),
+  ).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
+  await page
+    .locator("#youtube-history")
+    .screenshot({ path: join(screenshots, "history-settings-mobile.png") });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.getByText("Show performance metrics", { exact: true }).click();
+  await expect(
+    page.getByRole("columnheader", { name: "p95", exact: true }),
+  ).toBeVisible();
+  await page
+    .locator(".kb-settings-section")
+    .filter({
+      has: page.getByRole("heading", { name: "Performance", exact: true }),
+    })
+    .screenshot({ path: join(screenshots, "performance-settings-mobile.png") });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
   await page.goto(`${base}/kb`);
   await page.screenshot({
     path: join(screenshots, "mobile.png"),
@@ -329,6 +399,259 @@ try {
     ),
   ).toBe(true);
   expect(browserErrors).toEqual([]);
+  // Every video tab shares release sorting, channel grouping, and substring filtering.
+  const original = (await app.vault.getSource(sourceId))!;
+  for (const [videoId, title, channel, publishedOn, status] of [
+    [
+      "AAAAAAAAAAA",
+      "Archive methods",
+      "Alpha lab",
+      "2020-01-10",
+      "ready_for_reflection",
+    ],
+    [
+      "BBBBBBBBBBB",
+      "Modern methods",
+      "Alpha lab",
+      "2024-05-20",
+      "ready_for_reflection",
+    ],
+    [
+      "CCCCCCCCCCC",
+      "Fresh perspective",
+      "Beta lab",
+      "2026-08-15",
+      "ready_for_reflection",
+    ],
+    ["DDDDDDDDDDD", "For a quieter day", "Beta lab", "2019-06-01", "deferred"],
+  ] as const)
+    await app.vault.saveSource({
+      ...original,
+      id: `youtube:${videoId}`,
+      videoId,
+      url: `https://www.youtube.com/watch?v=${videoId}`,
+      title,
+      channel,
+      channelUrl: `https://www.youtube.com/@${channel.startsWith("Alpha") ? "alpha" : "beta"}`,
+      publishedOn,
+      status,
+      thumbnailUrl: `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`,
+      thumbnailPath: undefined,
+      channelAvatarPath: undefined,
+    });
+  await page.setViewportSize({ width: 1440, height: 1050 });
+  await page.goto(`${base}/kb`);
+  await expect(page.locator(".kb-source-summary h2")).toHaveText([
+    "Fresh perspective",
+    "Modern methods",
+    "Archive methods",
+  ]);
+  await expect(page.locator(".kb-release-date").first()).toHaveText(
+    "Released Aug 15, 2026",
+  );
+  await page.getByLabel("Group by channel").check();
+  await expect(
+    page
+      .locator(".kb-video-group-section")
+      .first()
+      .locator(".kb-source-summary h2"),
+  ).toHaveText(["Modern methods", "Archive methods"]);
+  await page.getByLabel("Find a video").fill("aLpHa");
+  await expect(page.locator(".kb-source-summary h2")).toHaveText([
+    "Modern methods",
+    "Archive methods",
+  ]);
+  await page.getByLabel("Find a video").fill("chive met");
+  await expect(page.locator(".kb-source-summary h2")).toHaveText([
+    "Archive methods",
+  ]);
+  await page.getByLabel("Find a video").fill("");
+  await page
+    .getByRole("group", { name: "Filter sources" })
+    .getByRole("button", { name: "For later", exact: false })
+    .click();
+  await expect(page.locator(".kb-source-summary h2")).toHaveText([
+    "For a quieter day",
+  ]);
+  await page.getByRole("button", { name: "All sources", exact: false }).click();
+  await expect(page.locator(".kb-source-row")).toHaveCount(5);
+  await expect(page.locator(".kb-video-thumbnail img")).toHaveCount(5);
+  await expect(
+    page.locator(".kb-source-row .kb-channel-avatar img"),
+  ).toHaveCount(5);
+  await expect
+    .poll(() =>
+      page
+        .locator(".kb-video-thumbnail img")
+        .evaluateAll((images) =>
+          images.every((image) => (image as HTMLImageElement).naturalWidth > 0),
+        ),
+    )
+    .toBe(true);
+  await expect
+    .poll(() =>
+      page
+        .locator(".kb-channel-avatar img")
+        .evaluateAll((images) =>
+          images.every((image) => (image as HTMLImageElement).naturalWidth > 0),
+        ),
+    )
+    .toBe(true);
+  // Progress is independent of tab/search and represents metadata, not lazy images.
+  let progressFixture = {
+    enabled: true,
+    total: 2100,
+    completed: 630,
+    incomplete: 4,
+    active: 2,
+    queued: 1468,
+    estimatedRemainingSeconds: 480,
+  };
+  let retries = 0;
+  await page.route("**/api/kb/metadata/status", (route) =>
+    route.fulfill({ json: progressFixture }),
+  );
+  await page.route("**/api/kb/metadata/refresh", (route) => {
+    retries++;
+    return route.fulfill({ json: progressFixture });
+  });
+  const progressPanel = page.getByRole("region", {
+    name: "Video details progress",
+  });
+  await expect(progressPanel).toContainText("630 of 2,100 checked · 30%");
+  await expect(progressPanel).toContainText(
+    "2 loading · 1,468 queued · About 8 minutes remaining",
+  );
+  await expect(progressPanel.locator(".kb-spin")).toHaveCount(1);
+  await expect(
+    page.getByRole("progressbar", { name: "Video detail checks" }),
+  ).toHaveAttribute("value", "630");
+  await expect(
+    page.getByRole("button", { name: "Retry missing details" }),
+  ).toBeDisabled();
+  progressFixture = {
+    ...progressFixture,
+    completed: 2100,
+    active: 0,
+    queued: 0,
+  };
+  await expect(progressPanel).toContainText("Video detail checks finished");
+  await expect(progressPanel).toContainText(
+    "4 checked videos still have missing details",
+  );
+  await page.getByRole("button", { name: "Retry missing details" }).click();
+  await expect.poll(() => retries).toBe(1);
+  progressFixture = {
+    ...progressFixture,
+    completed: 630,
+    active: 2,
+    queued: 1468,
+  };
+  await expect(progressPanel).toContainText("Getting video details");
+  await page.screenshot({
+    path: join(screenshots, "videos-grouped.png"),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.screenshot({
+    path: join(screenshots, "videos-grouped-mobile.png"),
+    fullPage: true,
+  });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  if (process.env.KB_PERF_BROWSER === "1") {
+    const results = [];
+    let seeded = 0;
+    await page.unroute("**/api/kb/metadata/status");
+    await page.unroute("**/api/kb/metadata/refresh");
+    await page.setViewportSize({ width: 1440, height: 1050 });
+    for (const size of [2500, 10000]) {
+      for (let i = seeded; i < size; i += 32)
+        await Promise.all(
+          Array.from({ length: Math.min(32, size - i) }, async (_, j) => {
+            const videoId = `s${String(i + j).padStart(10, "0")}`;
+            const fixture = {
+              ...original,
+              id: `youtube:${videoId}`,
+              videoId,
+              url: `https://www.youtube.com/watch?v=${videoId}`,
+              title: `Scale fixture ${String(i + j).padStart(5, "0")}`,
+              status: "ready_for_reflection",
+              channel: `Scale channel ${(i + j) % 100}`,
+              channelUrl: `https://www.youtube.com/@scale${(i + j) % 100}`,
+            };
+            const folder = join(options.vaultPath, "sources/youtube", videoId);
+            await mkdir(folder, { recursive: true });
+            await Bun.write(
+              join(folder, "source.md"),
+              serializeMarkdown("source", fixture),
+            );
+          }),
+        );
+      seeded = size;
+      await app.vault.refresh();
+      const started = performance.now();
+      await page.goto(`${base}/kb`);
+      await expect(page.locator(".kb-source-row")).toHaveCount(50);
+      const firstPageMs = performance.now() - started;
+      const nextTimes = [],
+        searchTimes = [];
+      for (let run = 0; run < 5; run++) {
+        const nextStart = performance.now();
+        await page.getByRole("button", { name: "Next", exact: true }).click();
+        await expect(page.locator(".kb-video-pagination")).toContainText(
+          `Page ${run + 2} of`,
+        );
+        nextTimes.push(performance.now() - nextStart);
+        await expect(page.locator(".kb-source-row")).toHaveCount(50);
+      }
+      for (let run = 0; run < 5; run++) {
+        const searchStart = performance.now();
+        await page
+          .getByLabel("Find a video")
+          .fill(`fixture ${String(size - 1 - run).padStart(5, "0")}`);
+        await expect(page.locator(".kb-source-summary h2")).toHaveText([
+          `Scale fixture ${String(size - 1 - run).padStart(5, "0")}`,
+        ]);
+        searchTimes.push(performance.now() - searchStart);
+      }
+      const summarize = (samples: number[]) => {
+        const sorted = [...samples].sort((a, b) => a - b);
+        return {
+          samples: sorted.length,
+          p50Ms: sorted[Math.floor(sorted.length / 2)],
+          p95Ms: sorted[Math.ceil(sorted.length * 0.95) - 1],
+        };
+      };
+      expect(firstPageMs).toBeLessThan(3000);
+      expect(Math.max(...nextTimes)).toBeLessThan(1500);
+      expect(Math.max(...searchTimes)).toBeLessThan(1500);
+      results.push({
+        videos: size + 5,
+        firstPageMs,
+        nextPage: summarize(nextTimes),
+        search: summarize(searchTimes),
+        maxRenderedRows: 50,
+      });
+    }
+    await mkdir(join(root, ".kb-local/performance"), { recursive: true });
+    await Bun.write(
+      join(root, ".kb-local/performance/browser.json"),
+      JSON.stringify(
+        {
+          at: new Date().toISOString(),
+          runtime: "Next dev + headless Chromium",
+          results,
+        },
+        null,
+        2,
+      ),
+    );
+    console.log("Browser performance:", JSON.stringify(results));
+  }
   // Restart and destroy the derived index: Markdown still contains the reviewed result.
   server.stop(true);
   app.close();

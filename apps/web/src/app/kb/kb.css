@@ -2121,3 +2121,310 @@
     width: 100%;
   }
 }
+.kb-history-pairing {
+  margin-top: 20px;
+  padding: 18px;
+  border: 1px solid var(--kb-border, #d8d7cd);
+  border-radius: 4px;
+}
+.kb-history-pairing label {
+  display: block;
+  margin-bottom: 8px;
+}
+.kb-history-pairing input {
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  background: transparent;
+  color: inherit;
+  border: 1px solid var(--kb-border, #d8d7cd);
+  font-family: monospace;
+}
+
+.kb-video-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding: 20px 0 8px;
+}
+.kb-video-search {
+  display: grid;
+  gap: 7px;
+  flex: 1;
+  min-width: 200px;
+  font-size: 11px;
+  color: var(--kb-muted);
+}
+.kb-video-search input {
+  width: 100%;
+  background: var(--kb-surface);
+  border: 1px solid var(--kb-rule);
+  padding: 10px 12px;
+  border-radius: 4px;
+  color: var(--kb-ink);
+}
+.kb-video-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 10px;
+  font-size: 12px;
+}
+.kb-video-group input {
+  accent-color: var(--kb-green);
+}
+.kb-video-result-count {
+  color: var(--kb-muted);
+  font-size: 11px;
+  margin: 8px 0;
+}
+.kb-channel-group-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 23px 0 12px;
+  margin: 12px 0 0;
+  font: 18px/1.3 var(--kb-serif);
+  border-bottom: 1px solid var(--kb-rule);
+}
+.kb-channel-group-title > span {
+  font: 11px var(--kb-sans);
+  color: var(--kb-muted);
+}
+.kb-channel-group-title .kb-video-channel {
+  font: inherit;
+}
+.kb-video-thumbnail-link {
+  flex: 0 0 auto;
+}
+.kb-video-thumbnail {
+  width: 128px;
+  aspect-ratio: 16/9;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 5px;
+  background: #e9e8dc;
+  color: #858974;
+}
+.kb-video-thumbnail img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.kb-video-channel {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  font: 12px/1.4 var(--kb-sans);
+  color: var(--kb-muted);
+}
+.kb-video-channel > span:last-child {
+  overflow-wrap: anywhere;
+}
+.kb-channel-avatar {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #e4e8dc;
+  color: var(--kb-green);
+  font: 11px var(--kb-sans);
+}
+.kb-channel-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.kb-item-meta {
+  gap: 10px 16px;
+}
+.kb-item-meta .kb-video-channel {
+  gap: 7px;
+}
+.kb-release-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border: 1px solid #d7decf;
+  border-radius: 4px;
+  background: #edf0e6;
+  color: #3d563f;
+  font: 600 11px/1.4 var(--kb-sans);
+}
+.kb-release-date.is-unknown {
+  background: transparent;
+  border-color: var(--kb-rule);
+  color: var(--kb-muted);
+  font-weight: 400;
+}
+.kb-video-detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 24px;
+}
+.kb-video-detail-meta > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+}
+.kb-video-detail-meta .kb-video-thumbnail {
+  width: 176px;
+}
+.kb-video-detail-meta .kb-video-channel {
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  .kb-video-thumbnail {
+    width: 96px;
+  }
+  .kb-source-summary {
+    width: calc(100% - 108px);
+  }
+  .kb-source-row {
+    align-items: flex-start;
+  }
+  .kb-row-actions {
+    margin-left: 108px;
+  }
+  .kb-item-meta {
+    gap: 8px;
+  }
+  .kb-video-channel {
+    font-size: 11px;
+  }
+  .kb-release-date {
+    font-size: 10px;
+  }
+  .kb-video-controls {
+    gap: 10px 16px;
+  }
+  .kb-video-search {
+    flex-basis: 100%;
+  }
+  .kb-video-detail-meta {
+    gap: 14px;
+  }
+  .kb-video-detail-meta .kb-video-thumbnail {
+    width: 110px;
+  }
+}
+
+.kb-metadata-progress {
+  margin: 16px 0 20px;
+  padding: 16px 18px;
+  border: 1px solid var(--kb-rule);
+  border-radius: 6px;
+  background: #edf0e680;
+}
+.kb-metadata-heading,
+.kb-metadata-heading > div {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+.kb-metadata-heading {
+  justify-content: space-between;
+}
+.kb-metadata-heading strong {
+  font-size: 13px;
+  color: var(--kb-green);
+}
+.kb-metadata-heading span {
+  font-size: 12px;
+  color: var(--kb-muted);
+  font-variant-numeric: tabular-nums;
+}
+.kb-metadata-progress progress {
+  display: block;
+  width: 100%;
+  height: 6px;
+  margin: 14px 0;
+  border: 0;
+  border-radius: 6px;
+  overflow: hidden;
+  appearance: none;
+  background: #dfe3d7;
+}
+.kb-metadata-progress progress::-webkit-progress-bar {
+  background: #dfe3d7;
+}
+.kb-metadata-progress progress::-webkit-progress-value {
+  background: var(--kb-green);
+  transition: width 0.4s ease;
+}
+.kb-metadata-progress progress::-moz-progress-bar {
+  background: var(--kb-green);
+}
+.kb-metadata-progress p {
+  margin: 10px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--kb-muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .kb-metadata-progress .kb-spin {
+    animation: none;
+  }
+  .kb-metadata-progress progress::-webkit-progress-value {
+    transition: none;
+  }
+}
+
+.kb-video-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 18px 0;
+}
+.kb-video-pagination > span {
+  margin-right: auto;
+  color: var(--kb-muted);
+  font-size: 12px;
+}
+
+.kb-performance-table {
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 16px 0;
+}
+.kb-performance-table table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 12px;
+}
+.kb-performance-table caption {
+  text-align: left;
+  color: var(--kb-muted);
+  padding-bottom: 10px;
+}
+.kb-performance-table th,
+.kb-performance-table td {
+  padding: 8px;
+  border-bottom: 1px solid var(--kb-rule);
+  white-space: nowrap;
+}
+.kb-performance-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+.kb-settings-section > details {
+  min-width: 0;
+}

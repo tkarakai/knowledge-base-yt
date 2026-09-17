@@ -3,6 +3,7 @@ import type {
   TranscriptSegment,
   TranscriptStatus,
 } from "@repo/kb-shared";
+import { youtubeChannelUrl, youtubeImageUrl } from "@repo/kb-shared";
 export interface NetworkOptions {
   fetch?: typeof globalThis.fetch;
   timeoutMs?: number;
@@ -14,6 +15,9 @@ export interface YouTubeMetadata {
   url: string;
   title: string;
   channel: string;
+  channelUrl?: string;
+  thumbnailUrl?: string;
+  publishedOn?: string;
   publishedAt?: string;
   error?: string;
 }
@@ -242,7 +246,15 @@ export async function fetchYouTubeMetadata(
         "YouTube metadata is incomplete; retry later.",
         "INVALID_RESPONSE",
       );
-    return { ...metadata, title: data.title, channel: data.author_name };
+    const channelUrl = youtubeChannelUrl(data.author_url);
+    const thumbnailUrl = youtubeImageUrl(data.thumbnail_url, "thumbnail");
+    return {
+      ...metadata,
+      title: data.title,
+      channel: data.author_name,
+      ...(channelUrl ? { channelUrl } : {}),
+      ...(thumbnailUrl ? { thumbnailUrl } : {}),
+    };
   } catch (e) {
     return {
       ...metadata,
@@ -252,6 +264,55 @@ export async function fetchYouTubeMetadata(
           : "YouTube metadata is unavailable; retry later.",
     };
   }
+}
+/** Public metadata only: no account cookies or authenticated API requests. */
+export async function fetchYouTubePublication(
+  videoId: string,
+  options: NetworkOptions = {},
+): Promise<string | undefined> {
+  validateVideoId(videoId);
+  const html = await requestText(
+    `https://www.youtube.com/watch?v=${videoId}&hl=en`,
+    { ...options, timeoutMs: options.timeoutMs ?? 8000 },
+  );
+  const player = extractPlayerResponse(html) as {
+    microformat?: { playerMicroformatRenderer?: { publishDate?: unknown } };
+  } | null;
+  const value = player?.microformat?.playerMicroformatRenderer?.publishDate;
+  if (typeof value !== "string") return undefined;
+  const day = value.slice(0, 10);
+  return /^\d{4}-\d\d-\d\d$/.test(day) &&
+    Number.isFinite(Date.parse(day)) &&
+    new Date(day).toISOString().slice(0, 10) === day
+    ? day
+    : undefined;
+}
+export async function fetchYouTubeChannelAvatar(
+  channelUrl: string,
+  options: NetworkOptions = {},
+): Promise<string | undefined> {
+  const url = youtubeChannelUrl(channelUrl);
+  if (!url) throw new IngestionError("Invalid channel URL");
+  const html = await requestText(url, {
+    ...options,
+    timeoutMs: options.timeoutMs ?? 8000,
+  });
+  // Parse only metadata attributes; never evaluate page scripts.
+  for (const tag of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const attributes = new Map(
+      [...tag[0].matchAll(/([\w:-]+)\s*=\s*(["'])(.*?)\2/g)].map((match) => [
+        match[1].toLowerCase(),
+        match[3],
+      ]),
+    );
+    if (attributes.get("property") !== "og:image") continue;
+    const value = youtubeImageUrl(
+      decodeCaption(attributes.get("content") ?? ""),
+      "avatar",
+    );
+    if (value) return value;
+  }
+  return undefined;
 }
 function parseTimestamp(input: string): number {
   const text = input.replace(",", ".");

@@ -7,7 +7,12 @@ import reactHooks from "eslint-plugin-react-hooks";
 export default [
   js.configs.recommended,
   {
-    files: ["apps/companion/**/*.ts", "packages/{kb,ingestion,search,agent,shared}/**/*.ts", "scripts/{dev-kb,build-kb,kb-e2e}.ts"],
+    files: [
+      "apps/companion/**/*.ts",
+      "apps/extension/**/*.ts",
+      "packages/{kb,ingestion,search,agent,shared}/**/*.ts",
+      "scripts/{dev-kb,build-kb,kb-e2e,kb-perf,history-e2e}.ts",
+    ],
     // TypeScript validates runtime and type names for Bun server code.
     rules: { "no-undef": "off" },
   },
@@ -98,7 +103,10 @@ export default [
       "react/react-in-jsx-scope": "off",
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        { argsIgnorePattern: "^_" },
+      ],
       "@typescript-eslint/no-explicit-any": "warn",
       "no-unused-vars": "off",
       "no-redeclare": "off",

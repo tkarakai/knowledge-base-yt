@@ -23,6 +23,10 @@ import type {
 import { timingSafeEqual } from "node:crypto";
 import { posix } from "node:path";
 import { ApiError, State, object, string, id } from "./state";
+import { HistoryImport } from "./history";
+import { PerformanceMetrics, metricRoute } from "./performance";
+import { sourcePage } from "./source-list";
+import { SourceMedia, type MediaOptions } from "./media";
 import { commitAccepted } from "./git";
 export { commitAccepted } from "./git";
 export interface CompanionOptions {
@@ -39,6 +43,7 @@ export interface CompanionOptions {
     fetch(videoId: string, language?: string): Promise<Transcript>;
   };
   metadata?: typeof fetchYouTubeMetadata;
+  media?: MediaOptions;
 }
 const MAX_BODY = 2 * 1024 * 1024;
 const now = () => new Date().toISOString();
@@ -108,10 +113,11 @@ export async function scanForSearch(vault: Vault): Promise<SearchDocument[]> {
 export async function createCompanion(options: CompanionOptions) {
   if (!options.token || options.token.length < 24)
     throw new Error("KB_COMPANION_TOKEN must contain at least 24 characters");
-  const vault = new Vault(options.vaultPath);
+  const vault = new Vault(options.vaultPath, { cache: true });
   await vault.init();
   const state = new State(vault.root);
   await state.load();
+  const history = new HistoryImport(state, vault);
   for (const interrupted of await vault.listSources())
     if (interrupted.status === "synthesis_pending") {
       interrupted.status = "kept";
@@ -127,13 +133,38 @@ export async function createCompanion(options: CompanionOptions) {
       "http://127.0.0.1:3000",
     ],
   );
+  const performanceMetrics = new PerformanceMetrics();
+  let pendingWrites = 0;
   let port = options.port ?? 4317,
     queue: Promise<unknown> = Promise.resolve();
   function exclusive<T>(fn: () => Promise<T>): Promise<T> {
-    const next = queue.then(fn, fn);
+    const started = performance.now();
+    pendingWrites++;
+    const work = async () => {
+      performanceMetrics.record(
+        "write-queue wait",
+        performance.now() - started,
+      );
+      try {
+        return await fn();
+      } finally {
+        pendingWrites--;
+      }
+    };
+    const next = queue.then(work, work);
     queue = next.catch(() => {});
     return next;
   }
+  const media = new SourceMedia(
+    vault,
+    () => state.settings.network.youtube,
+    (sourceId, patch) =>
+      exclusive(async () => {
+        const current = await vault.getSource(sourceId);
+        if (current) await vault.saveSource({ ...current, ...patch });
+      }),
+    { metadata: options.metadata, ...options.media },
+  );
   async function rebuild() {
     return index.rebuild(await scanForSearch(vault));
   }
@@ -178,6 +209,7 @@ export async function createCompanion(options: CompanionOptions) {
     if (interruptedReview) await finishReview(interruptedReview);
     await rebuild();
   } catch (error) {
+    performanceMetrics.close();
     index.close();
     throw error;
   }
@@ -437,6 +469,16 @@ export async function createCompanion(options: CompanionOptions) {
     });
   }
   async function route(request: Request, url: URL) {
+    if (url.pathname === "/metadata/status" && request.method === "GET")
+      return media.status();
+    if (url.pathname === "/metadata/refresh" && request.method === "POST")
+      return media.enqueue(await vault.listSources(), true);
+    if (url.pathname === "/history/connection" && request.method === "GET")
+      return history.status();
+    if (url.pathname === "/history/pair-code" && request.method === "POST")
+      return history.issueCode();
+    if (url.pathname === "/history/disconnect" && request.method === "POST")
+      return history.disconnect();
     if (request.method !== "GET") {
       const pending = (await state.readDocument(
         "review",
@@ -465,8 +507,23 @@ export async function createCompanion(options: CompanionOptions) {
     const method = request.method,
       [resource, item, action, subaction] = parts;
     if (method === "GET") {
+      if (
+        resource === "sources" &&
+        parts.length === 4 &&
+        action === "media" &&
+        ["thumbnail", "avatar"].includes(subaction)
+      )
+        return media.get(id(item), subaction as "thumbnail" | "avatar");
       if (parts.length === 1)
         switch (resource) {
+          case "metrics":
+            return {
+              ...performanceMetrics.snapshot(),
+              vault: vault.diagnostics(),
+              pendingWrites,
+              metadata: media.status(),
+              images: media.imageStatus(),
+            };
           case "health":
             return {
               ok: true,
@@ -474,8 +531,11 @@ export async function createCompanion(options: CompanionOptions) {
               version: "0.1.0",
               retrieval: index.diagnostics,
             };
-          case "sources":
-            return vault.listSources();
+          case "sources": {
+            const sources = await vault.listSources();
+            media.enqueue(sources);
+            return sources;
+          }
           case "knowledge":
             return vault.listKnowledge();
           case "proposals":
@@ -491,6 +551,12 @@ export async function createCompanion(options: CompanionOptions) {
               (url.searchParams.get("q") ?? "").slice(0, 2000),
             );
         }
+      if (parts.length === 2 && resource === "sources" && item === "page") {
+        if (url.searchParams.get("refresh") === "1") await vault.refresh();
+        const sources = await vault.listSources();
+        media.enqueue(sources);
+        return sourcePage(sources, url.searchParams);
+      }
       if (parts.length === 2 && resource === "documents") {
         id(item);
         const document = (await vault.scan()).find(
@@ -504,8 +570,11 @@ export async function createCompanion(options: CompanionOptions) {
           path: document.path,
         };
       }
-      if (parts.length === 2 && resource === "sources")
-        return detail(await source(item));
+      if (parts.length === 2 && resource === "sources") {
+        const s = await source(item);
+        media.enqueue([s]);
+        return detail(s);
+      }
       if (parts.length === 2 && resource === "knowledge") {
         const note = await vault.getKnowledge(id(item));
         if (!note) throw new ApiError(404, "Knowledge not found");
@@ -518,7 +587,10 @@ export async function createCompanion(options: CompanionOptions) {
       item === "rebuild" &&
       parts.length === 2
     )
-      return runJob("rebuild_index", undefined, rebuild);
+      return runJob("rebuild_index", undefined, async () => {
+        await vault.refresh();
+        return rebuild();
+      });
     if (method === "POST" && resource === "sources" && parts.length === 1) {
       const data = await body(request),
         normalized = normalizeYouTubeUrl(string(data.url, "URL"));
@@ -545,6 +617,9 @@ export async function createCompanion(options: CompanionOptions) {
         url: normalized.url,
         title: metadata.title,
         channel: metadata.channel,
+        channelUrl: metadata.channelUrl,
+        thumbnailUrl: metadata.thumbnailUrl,
+        publishedOn: metadata.publishedOn,
         publishedAt: metadata.publishedAt,
         firstSeenAt: at,
         lastSeenAt: at,
@@ -557,6 +632,7 @@ export async function createCompanion(options: CompanionOptions) {
       await timeline(s, "encountered");
       await acquireTranscript(s);
       await rebuild();
+      media.enqueue([s]);
       return detail(s);
     }
     if (resource === "sources" && item) {
@@ -753,13 +829,49 @@ export async function createCompanion(options: CompanionOptions) {
     }
     throw new ApiError(404, "Route not found");
   }
-  async function fetchHandler(request: Request): Promise<Response> {
+  async function dispatch(request: Request): Promise<Response> {
     try {
       const url = new URL(request.url),
         host = request.headers.get("host") ?? url.host;
       if (!new Set([`127.0.0.1:${port}`, `localhost:${port}`]).has(host))
         throw new ApiError(403, "Host not allowed");
       const origin = request.headers.get("origin");
+      // A separate, import-only capability. Never expose the companion's master token.
+      if (["/history/pair", "/history/batches"].includes(url.pathname)) {
+        const headers: Record<string, string> = { "Cache-Control": "no-store" };
+        if (origin && /^chrome-extension:\/\/[a-p]{32}$/.test(origin)) {
+          headers["Access-Control-Allow-Origin"] = origin;
+          headers["Vary"] = "Origin";
+        } else if (origin)
+          throw new ApiError(403, "Extension origin not allowed");
+        if (request.method === "OPTIONS") {
+          if (!origin || !headers["Access-Control-Allow-Origin"])
+            throw new ApiError(403, "Extension origin required");
+          return new Response(null, {
+            status: 204,
+            headers: {
+              ...headers,
+              "Access-Control-Allow-Methods": "POST",
+              "Access-Control-Allow-Headers":
+                "Content-Type, Authorization, X-KB-Extension-Id",
+            },
+          });
+        }
+        if (request.method !== "POST")
+          throw new ApiError(405, "Use POST for history imports");
+        const result = await exclusive(async () => {
+          if (url.pathname === "/history/pair")
+            return history.pair(request, await body(request));
+          await history.authorize(request);
+          if (!state.settings.network.youtube)
+            throw new ApiError(403, "YouTube access is disabled in Settings");
+          const result = await history.batch(await body(request));
+          await rebuild();
+          media.enqueue(await vault.listSources());
+          return result;
+        });
+        return Response.json(result, { headers });
+      }
       if (origin && !origins.has(origin))
         throw new ApiError(403, "Origin not allowed");
       if (
@@ -775,8 +887,12 @@ export async function createCompanion(options: CompanionOptions) {
         request.method === "GET"
           ? await route(request, url)
           : await exclusive(() => route(request, url));
-      return Response.json(value, {
+      if (value instanceof Response) return value;
+      const json = JSON.stringify(value);
+      return new Response(json, {
         headers: {
+          "Content-Type": "application/json",
+          "Content-Length": String(Buffer.byteLength(json)),
           "Cache-Control": "no-store",
           "X-Content-Type-Options": "nosniff",
           "X-KB-Retrieval-Mode": index.diagnostics.mode,
@@ -816,6 +932,22 @@ export async function createCompanion(options: CompanionOptions) {
       );
     }
   }
+  async function fetchHandler(request: Request): Promise<Response> {
+    const started = performance.now();
+    const response = await dispatch(request);
+    const duration = performance.now() - started;
+    performanceMetrics.record(
+      metricRoute(request),
+      duration,
+      response.status >= 400,
+      Number(response.headers.get("content-length") ?? 0),
+    );
+    response.headers.set(
+      "Server-Timing",
+      `companion;dur=${duration.toFixed(2)}`,
+    );
+    return response;
+  }
   return {
     vault,
     state,
@@ -835,6 +967,8 @@ export async function createCompanion(options: CompanionOptions) {
       return server;
     },
     close() {
+      media.close();
+      performanceMetrics.close();
       index.close();
     },
   };

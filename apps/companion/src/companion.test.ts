@@ -29,6 +29,7 @@ async function setup() {
   const app = await createCompanion({
     vaultPath: root,
     token,
+    media: { background: false },
     metadata: async (videoId) => ({
       videoId,
       url: `https://www.youtube.com/watch?v=${videoId}`,
