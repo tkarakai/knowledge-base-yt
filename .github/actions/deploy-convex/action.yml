@@ -1,0 +1,46 @@
+name: "Deploy Convex"
+description: "Deploy Convex backend functions and schema"
+
+inputs:
+  deploy-key:
+    description: "Convex deploy key for the target environment"
+    required: true
+  environment:
+    description: "Target environment name (for logging)"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Deploy Convex functions
+      shell: bash
+      env:
+        CONVEX_DEPLOY_KEY: ${{ inputs.deploy-key }}
+      run: |
+        if [ -z "$CONVEX_DEPLOY_KEY" ]; then
+          echo "::error::CONVEX_DEPLOY_KEY is not set. Add it as a repository secret (Settings → Secrets → Actions)."
+          exit 1
+        fi
+        echo "Deploying Convex backend to ${{ inputs.environment }}..."
+        cd packages/backend
+        bunx convex deploy --cmd 'echo "skip build"'
+        echo "Convex deployment complete"
+
+    - name: Run pending migrations
+      shell: bash
+      env:
+        CONVEX_DEPLOY_KEY: ${{ inputs.deploy-key }}
+      run: |
+        echo "Running pending migrations on ${{ inputs.environment }}..."
+        cd packages/backend
+        bunx convex run migrations
+        echo "Migrations complete"
+
+    - name: Verify deployment
+      shell: bash
+      env:
+        CONVEX_DEPLOY_KEY: ${{ inputs.deploy-key }}
+      run: |
+        echo "### Convex Deployment (${{ inputs.environment }})" >> "$GITHUB_STEP_SUMMARY"
+        echo "SHA: ${{ github.sha }}" >> "$GITHUB_STEP_SUMMARY"
+        echo "Timestamp: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,512 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "saving": "Saving...",
+    "create": "Create",
+    "creating": "Creating...",
+    "delete": "Delete",
+    "signOut": "Sign out",
+    "error": "An error occurred",
+    "backToHome": "Back to home",
+    "note": "Note"
+  },
+  "theme": {
+    "light": "Light theme",
+    "system": "System theme",
+    "dark": "Dark theme",
+    "ariaLabel": "Theme: {label}. Click to switch."
+  },
+  "language": {
+    "label": "Language",
+    "ariaLabel": "Select language"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welcome back",
+      "description": "Sign in to continue to your dashboard.",
+      "cta": "Sign in",
+      "switchPrompt": "New here?",
+      "switchLink": "Create an account",
+      "pageHeading": "Welcome back. Pick up where you left off.",
+      "pageDescription": "Better Auth powers session flows, while Convex keeps data live. Sign in to access your projects and tasks."
+    },
+    "signUp": {
+      "title": "Create your workspace",
+      "description": "Get started in under a minute.",
+      "cta": "Create account",
+      "switchPrompt": "Already have access?",
+      "switchLink": "Sign in",
+      "pageHeading": "Create your account and start building.",
+      "pageDescription": "Convex + Better Auth are already wired, so your account is immediately production-ready."
+    },
+    "badge": "Account",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Avery Quinn",
+      "email": "Email",
+      "emailPlaceholder": "you@example.com",
+      "password": "Password",
+      "passwordPlaceholder": "Your password",
+      "passwordSignUpPlaceholder": "At least 12 characters",
+      "confirmPassword": "Confirm password",
+      "confirmPasswordPlaceholder": "Confirm your password"
+    },
+    "errors": {
+      "passwordMismatch": "Passwords do not match",
+      "passwordCompromised": "The password you entered has been compromised. Please choose a different password.",
+      "rateLimited": "Too many attempts. Please wait a moment before trying again.",
+      "invalidCredentials": "Invalid email or password",
+      "generic": "An error occurred"
+    },
+    "twoFactorVerify": {
+      "title": "Two-factor authentication",
+      "description": "Enter the 6-digit code from your authenticator app.",
+      "cta": "Verify",
+      "invalidCode": "Invalid code. Please try again.",
+      "useBackupCode": "Use a backup code instead",
+      "backupCodeTitle": "Backup code",
+      "backupCodeDescription": "Enter one of your backup codes to sign in.",
+      "backupCodePlaceholder": "Enter backup code",
+      "useAuthenticator": "Use authenticator app instead"
+    },
+    "multiStep": {
+      "emailStep": {
+        "title": "Welcome back",
+        "description": "Sign in to continue to your dashboard.",
+        "continue": "Continue"
+      },
+      "authStep": {
+        "title": "Sign in",
+        "signingInAs": "Signing in as {email}",
+        "signInWithPassword": "Sign in with password",
+        "signInWithPasskey": "Sign in with passkey",
+        "signInWithMagicLink": "Sign in with magic link",
+        "forgotPassword": "Forgot password?",
+        "or": "or"
+      },
+      "magicLinkStep": {
+        "sent": "Check your inbox",
+        "sentDescription": "We sent a sign-in link to {email}. Click the link to continue.",
+        "resend": "Resend magic link",
+        "resent": "Magic link sent!",
+        "usePassword": "Use password instead",
+        "usePasskey": "Use passkey instead"
+      },
+      "back": "Back"
+    },
+    "footer": "Secure email + password",
+    "working": "Working...",
+    "legal": {
+      "prefix": "By continuing, you agree to our",
+      "termsOfService": "Terms of Service",
+      "and": "and",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "forgotPassword": {
+      "badge": "Password Recovery",
+      "title": "Forgot your password?",
+      "description": "Enter your email and we'll send you a link to reset your password.",
+      "cta": "Send reset link",
+      "emailSent": "Check your email",
+      "emailSentDescription": "If an account exists for {email}, we've sent a password reset link. Check your inbox and spam folder.",
+      "backToSignIn": "Back to sign in",
+      "pageHeading": "Reset your password. Get back on track.",
+      "pageDescription": "Enter the email address associated with your account and we'll send you a link to create a new password."
+    },
+    "resetPassword": {
+      "badge": "Password Recovery",
+      "title": "Set a new password",
+      "description": "Choose a strong password for your account.",
+      "newPassword": "New password",
+      "cta": "Reset password",
+      "invalidTitle": "Invalid Reset Link",
+      "tokenExpired": "This password reset link has expired. Please request a new one.",
+      "tokenInvalid": "This password reset link is invalid or has already been used.",
+      "requestNewLink": "Request a new link",
+      "backToSignIn": "Back to sign in",
+      "successTitle": "Password updated",
+      "successDescription": "Your password has been reset successfully. You can now sign in with your new password.",
+      "signInNow": "Sign in now",
+      "pageHeading": "Almost there. Choose a new password.",
+      "pageDescription": "Pick a strong password you haven't used before. Your new password must be at least 12 characters."
+    },
+    "verifyEmail": {
+      "badge": "Email Verification",
+      "title": "Check your email",
+      "description": "We've sent a verification link to your email address. Click the link to verify your account.",
+      "descriptionWithEmail": "We've sent a verification link to {email}. Click the link to verify your account.",
+      "resend": "Resend verification email",
+      "resent": "Verification email sent! Check your inbox.",
+      "recentlySentJustNow": "A verification email was sent just now. Please check your inbox and spam folder.",
+      "recentlySentSecondsAgo": "A verification email was sent seconds ago. Please check your inbox and spam folder.",
+      "recentlySentMinutesAgo": "A verification email was sent {minutes} {minutes, plural, one {minute} other {minutes}} ago. Please check your inbox and spam folder.",
+      "backToSignIn": "Back to sign in",
+      "pageHeading": "One last step. Verify your email.",
+      "pageDescription": "We've sent you a verification link. Click it to activate your account and start using the app.",
+      "verificationSuccessTitle": "Thank you for verifying your email.",
+      "verificationSuccessDescription": "Your email has been verified successfully.",
+      "verificationErrorTitle": "Email verification failed",
+      "verificationErrorUnknown": "We couldn't verify this email link. Please request a new verification email.",
+      "verificationErrorTokenExpired": "This verification link has expired. Please request a new one.",
+      "verificationErrorInvalidToken": "This verification link is invalid or has already been used.",
+      "verificationErrorUserNotFound": "We couldn't find an account for this verification link.",
+      "verificationErrorUnauthorized": "This verification request could not be completed for your account.",
+      "sessionStatusChecking": "Checking your session status...",
+      "sessionStatusSignedInOnDevice": "Now you are signed in on {device}.",
+      "sessionStatusNoSession": "Please sign in to use the app.",
+      "goToSignIn": "Go to Sign In page",
+      "closeWindow": "Close this window"
+    },
+    "forgotPasswordLink": "Forgot password?",
+    "invitation": {
+      "badge": "Invitation",
+      "title": "Complete your signup",
+      "description": "You've been invited! Create your account below.",
+      "cta": "Create account",
+      "pageHeading": "Welcome. You've been invited.",
+      "pageDescription": "Complete your signup to get started.",
+      "invalidTitle": "About this Invitation",
+      "noToken": "No invitation token was provided. Please use the link from your invitation email.",
+      "tokenExpired": "This invitation has expired. Please contact the team for a new one.",
+      "tokenUsed": "Invitation has been claimed.",
+      "tokenInvalid": "This invitation link is invalid.",
+      "signupBlocked": "Sign-up is currently by invitation only.",
+      "signupBlockedDescription": "Join the waitlist on our homepage to request access.",
+      "goToWaitlist": "Join waitlist",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    }
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "Your starting line.",
+    "headingLine2": "Build from here.",
+    "description": "Auth, database, real-time sync, and file uploads — wired and ready.",
+    "getStarted": "Get started",
+    "signIn": "Sign in",
+    "footer": {
+      "about": "About",
+      "privacyPolicy": "Privacy Policy",
+      "termsOfService": "Terms of Service"
+    },
+    "waitlist": {
+      "title": "Join the Waitlist",
+      "description": "Request access by joining the waitlist.",
+      "emailLabel": "Email",
+      "emailPlaceholder": "you@example.com",
+      "superpowersLabel": "What's your superpower?",
+      "superpowersPlaceholder": "Select your superpowers",
+      "excitementLabel": "How excited are you?",
+      "excitementPlaceholder": "Tell us how you feel",
+      "selectedCount": "{count} selected",
+      "submit": "Join waitlist",
+      "submitting": "Joining...",
+      "successTitle": "You're on the list!",
+      "successDescription": "We'll send you an invitation when it's your turn.",
+      "alreadySignedUp": "Already have an account?",
+      "signIn": "Sign in",
+      "superpowers": {
+        "coffee-to-code": "Turning coffee into code",
+        "pixel-perfect": "Making pixels perfect",
+        "bug-whisperer": "Bug whispering",
+        "spreadsheet-wizard": "Spreadsheet wizardry",
+        "inbox-zero": "Inbox zero every day",
+        "parallel-parking": "Parallel parking on the first try",
+        "remembering-names": "Remembering everyone's name",
+        "never-burning-toast": "Never burning toast",
+        "explaining-tech": "Explaining tech to parents",
+        "finding-restaurants": "Finding the best restaurants",
+        "staying-calm": "Staying calm in long meetings",
+        "other": "Something else entirely"
+      },
+      "excitement": {
+        "take-my-money": "Take my money!",
+        "cant-wait": "Can't wait to try it",
+        "cautiously-optimistic": "Cautiously optimistic",
+        "just-browsing": "Just browsing",
+        "friend-made-me": "My friend made me sign up"
+      },
+      "errors": {
+        "waitlistNotEnabled": "The waitlist is not currently accepting sign-ups. Please try again later.",
+        "invalidEmail": "Please enter a valid email address.",
+        "rateLimited": "Too many requests. Please wait a moment and try again.",
+        "generic": "Something went wrong. Please try again."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "Projects",
+    "noProjects": "No projects yet",
+    "noProjectsDescription": "Create a project to get started.",
+    "projectNotFound": "Project not found",
+    "projectNotFoundDescription": "This project may have been deleted.",
+    "tabs": {
+      "tasks": "Tasks",
+      "attachments": "Attachments"
+    },
+    "security": "Security",
+    "sessions": {
+      "title": "Active Sessions",
+      "description": "Manage your active sessions across all devices. You can sign out of any session you no longer recognize.",
+      "currentSession": "This device",
+      "otherSessions": "Other devices",
+      "current": "Current",
+      "lastActive": "Active {time}",
+      "noOtherSessions": "No other active sessions. You're only signed in on this device.",
+      "revokeAll": "Sign out all others",
+      "revokeAllTitle": "Sign out all other devices?",
+      "revokeAllDescription": "This will sign you out of all other devices and browsers. Only your current session will remain active.",
+      "revokeAllConfirm": "Sign out all",
+      "revokeTitle": "Sign out this device?",
+      "revokeDescription": "This will end the session for {device}. They will need to sign in again to access the account.",
+      "backToDashboard": "Back to dashboard"
+    },
+    "account": "Settings",
+    "profile": {
+      "title": "Profile",
+      "description": "Manage your profile information and preferences.",
+      "name": "Display name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailReadonly": "Contact support to change your email.",
+      "avatarColor": "Avatar color",
+      "saved": "Profile updated.",
+      "language": "Language",
+      "timezone": "Timezone",
+      "timezonePlaceholder": "Select your timezone",
+      "timezoneSearch": "Search timezones...",
+      "timezoneDetected": "Detected",
+      "noTimezoneResults": "No timezone found.",
+      "theme": "Theme"
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "currentPassword": "Current password",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "revokeOtherSessions": "Sign out all other devices",
+      "cta": "Update password",
+      "success": "Password updated successfully.",
+      "errorCurrentPassword": "Current password is incorrect."
+    },
+    "twoFactor": {
+      "title": "Two-Factor Authentication",
+      "description": "Add an extra layer of security to your account.",
+      "enabled": "2FA is enabled",
+      "disabled": "2FA is not enabled",
+      "enable": "Enable 2FA",
+      "disable": "Disable 2FA",
+      "enterPassword": "Enter your password to continue.",
+      "scanQrCode": "Scan this QR code with your authenticator app (e.g. Google Authenticator, Authy).",
+      "manualEntry": "Can't scan? Enter this key manually",
+      "manualEntryDescription": "Open your authenticator app, choose \"Add account\", then select \"Enter setup key\" and paste the key below.",
+      "secretKey": "Secret key",
+      "copied": "Copied to clipboard",
+      "enterCode": "Enter the 6-digit code from your authenticator app to verify setup.",
+      "verify": "Verify",
+      "backupCodes": "Backup codes",
+      "backupCodesDescription": "Save these codes in a safe place. Each code can only be used once.",
+      "viewBackupCodes": "View backup codes",
+      "regenerateBackupCodes": "Regenerate backup codes",
+      "disableConfirm": "Are you sure you want to disable 2FA?",
+      "regenerateConfirm": "This will replace your existing backup codes. Any unused codes will no longer work.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "New project",
+    "createProject": "Create project",
+    "createFirst": "Create your first project",
+    "noProjects": "No projects",
+    "editProject": "Edit project",
+    "deleteProject": "Delete project",
+    "deleteConfirmTitle": "Delete project?",
+    "deleteConfirmDescription": "This will permanently delete “{name}” and all its tasks. This action cannot be undone.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Project name",
+      "description": "Description",
+      "descriptionPlaceholder": "What is this project about?"
+    }
+  },
+  "tasks": {
+    "title": "Tasks",
+    "addTask": "Add task",
+    "newTask": "New task",
+    "editTask": "Edit task",
+    "deleteTask": "Delete task",
+    "confirmDelete": "Confirm delete",
+    "createTask": "Create task",
+    "noTasks": "No tasks yet. Add one to get started.",
+    "noTasksSummary": "No tasks yet",
+    "progress": "{doneCount} of {totalCount} tasks done",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "Status",
+      "todo": "To do",
+      "inProgress": "In progress",
+      "done": "Done",
+      "all": "All"
+    },
+    "fields": {
+      "title": "Title",
+      "titlePlaceholder": "What needs to be done?",
+      "description": "Description",
+      "descriptionPlaceholder": "Add details...",
+      "deadline": "Deadline",
+      "deadlinePlaceholder": "No deadline",
+      "clearDeadline": "Clear deadline"
+    },
+    "deadline": {
+      "overdue": "Overdue",
+      "dueToday": "Due today"
+    },
+    "aria": {
+      "changeStatus": "Change status from {status}"
+    },
+    "count": "{count, plural, =0 {No tasks yet} one {# task} other {# tasks}}"
+  },
+  "uploads": {
+    "title": "Attachments",
+    "addFile": "Add file",
+    "uploading": "Uploading...",
+    "processing": "Processing",
+    "view": "View",
+    "deleteFile": "Delete file",
+    "emptyState": "Upload files to show the Convex file storage flow.",
+    "errors": {
+      "tooLarge": "File too large (max 1MB)",
+      "uploadFailed": "Upload failed. Please try again.",
+      "generic": "Upload failed."
+    },
+    "count": "{count, plural, =0 {No attachments} one {# attachment} other {# attachments}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "Not authenticated",
+    "PROJECT_NOT_FOUND": "Project not found",
+    "TASK_NOT_FOUND": "Task not found",
+    "FILE_NOT_FOUND": "File not found in storage",
+    "FILE_TOO_LARGE": "File too large (max 1MB)",
+    "UPLOAD_NOT_FOUND": "Upload not found",
+    "convex": {
+      "rateLimited": "Too many requests. Please wait {seconds} seconds.",
+      "notAuthenticated": "Your session has expired. Please sign in again.",
+      "connectionLost": "Unable to connect to the server. Please check your connection.",
+      "serverError": "Something went wrong. Please try again.",
+      "projectNotFound": "Project not found.",
+      "taskNotFound": "Task not found.",
+      "fileNotFound": "File not found in storage.",
+      "fileTooLarge": "File too large (max 1MB).",
+      "uploadNotFound": "Upload not found."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "A Next.js starter with Convex, Better Auth, and Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "About",
+      "description": "Learn about Web App Starter and our mission.",
+      "notice": "This is placeholder content. Replace it with your own before launching.",
+      "heading": "About",
+      "mission": "Our Mission",
+      "missionText": "We believe developers should spend their time building features, not configuring infrastructure. Web App Starter provides a production-ready starting point with real-time data sync, file uploads, and session-based authentication out of the box.",
+      "whatIncluded": "What's Included",
+      "whatIncludedText": "The starter kit ships with a landing page, a fully authenticated web application, an admin dashboard, and a component storybook. Each app shares a unified design system built on Radix UI primitives with Tailwind CSS.",
+      "openSource": "Open Source",
+      "openSourceText": "This project is open source and designed to be forked and customised.",
+      "intro": "Web App Starter is a full-stack foundation for building modern web applications. It combines Next.js for the frontend, Convex for the backend, and Better Auth for secure authentication — all wired together and ready to ship."
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "description": "How we collect, use, and protect your data.",
+      "notice": "This is a template privacy policy. Customize it for your specific application and jurisdiction before launching.",
+      "heading": "Privacy Policy",
+      "lastUpdated": "Last updated: {date}"
+    },
+    "terms": {
+      "title": "Terms of Service",
+      "description": "The rules and guidelines for using our service.",
+      "notice": "This is a template terms of service. Customize it for your specific application and jurisdiction before launching.",
+      "heading": "Terms of Service",
+      "lastUpdated": "Last updated: {date}"
+    }
+  },
+  "offline": {
+    "message": "You appear to be offline. An active connection is needed to continue."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "Very weak",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong"
+    },
+    "crackTimeLabel": "Estimated crack time: {time}",
+    "minLength": "Minimum {count} characters required.",
+    "strengthRequirement": "Password does not meet strength requirements.",
+    "warnings": {
+      "straightRow": "Straight rows of keys on your keyboard are easy to guess.",
+      "keyPattern": "Short keyboard patterns are easy to guess.",
+      "simpleRepeat": "Repeated characters like \"aaa\" are easy to guess.",
+      "extendedRepeat": "Repeated character patterns like \"abcabcabc\" are easy to guess.",
+      "sequences": "Common character sequences like \"abc\" are easy to guess.",
+      "recentYears": "Recent years are easy to guess.",
+      "dates": "Dates are easy to guess.",
+      "topTen": "This is a heavily used password.",
+      "topHundred": "This is a frequently used password.",
+      "common": "This is a commonly used password.",
+      "similarToCommon": "This is similar to a commonly used password.",
+      "wordByItself": "Single words are easy to guess.",
+      "namesByThemselves": "Single names or surnames are easy to guess.",
+      "commonNames": "Common names and surnames are easy to guess.",
+      "userInputs": "There should not be any personal or page related data.",
+      "pwned": "Your password was exposed by a data breach on the Internet."
+    },
+    "suggestions": {
+      "l33t": "Avoid predictable letter substitutions like '@' for 'a'.",
+      "reverseWords": "Avoid reversed spellings of common words.",
+      "allUppercase": "Capitalize some, but not all letters.",
+      "capitalization": "Capitalize more than the first letter.",
+      "dates": "Avoid dates and years that are associated with you.",
+      "recentYears": "Avoid recent years.",
+      "associatedYears": "Avoid years that are associated with you.",
+      "sequences": "Avoid common character sequences.",
+      "repeated": "Avoid repeated words and characters.",
+      "longerKeyboardPattern": "Use longer keyboard patterns and change typing direction multiple times.",
+      "anotherWord": "Add more words that are less common.",
+      "useWords": "Use multiple words, but avoid common phrases.",
+      "noNeed": "You can create strong passwords without using symbols, numbers, or uppercase letters.",
+      "pwned": "If you use this password elsewhere, you should change it."
+    },
+    "timeEstimation": {
+      "ltSecond": "less than a second",
+      "second": "{base} second",
+      "seconds": "{base} seconds",
+      "minute": "{base} minute",
+      "minutes": "{base} minutes",
+      "hour": "{base} hour",
+      "hours": "{base} hours",
+      "day": "{base} day",
+      "days": "{base} days",
+      "month": "{base} month",
+      "months": "{base} months",
+      "year": "{base} year",
+      "years": "{base} years",
+      "centuries": "centuries"
+    }
+  },
+  "forbidden": {
+    "title": "Access Denied",
+    "signedInAs": "You are signed in as {email}.",
+    "description": "You do not have permission to access this resource. If you believe this is an error, please contact your organization's administrator.",
+    "backToSignIn": "Back to sign in"
+  }
+}

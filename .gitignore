@@ -1,0 +1,57 @@
+node_modules
+.bun
+.next
+next-env.d.ts
+out
+dist
+.turbo
+
+.env
+.env.*
+!.env.example
+
+*.log
+.DS_Store
+.dev-pids
+.dev-processes.json
+.dev-processes-*
+*.tsbuildinfo
+
+# Generated shared assets (copied by scripts/copy-shared-assets.sh)
+apps/*/public/icon.svg
+apps/*/public/apple-touch-icon.png
+apps/*/public/favicon.ico
+
+# Test coverage reports
+**/qa/coverage/
+
+# Playwright
+**/qa/playwright-report/
+**/qa/test-results/
+**/qa/e2e/__screenshots__/
+
+# Local CI artifacts
+.act-artifacts/
+.ci-local-artifacts/
+
+# Staging setup records and logs (contain secrets)
+.infra-setup-staging-record-*
+.infra-setup-staging-log-*
+
+# Auto Claude data directory
+.auto-claude/
+
+# Auto Claude generated files
+.auto-claude-security.json
+.auto-claude-status
+.claude_settings.json
+.worktrees/
+.security-key
+logs/security/
+
+# Python development-process regression tests
+__pycache__/
+
+# Personal knowledge and local model/companion credentials
+/vault/
+/.kb-local/

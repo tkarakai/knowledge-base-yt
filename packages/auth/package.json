@@ -1,0 +1,27 @@
+{
+  "name": "@repo/auth",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./client": "./src/client.ts",
+    "./server": "./src/server.ts",
+    "./provider": "./src/provider.tsx",
+    "./error-handler": "./src/convex-error-handler.tsx"
+  },
+  "dependencies": {
+    "@better-auth/passkey": "1.4.12",
+    "@convex-dev/better-auth": "0.10.10",
+    "better-auth": "1.4.12",
+    "convex": "1.31.7"
+  },
+  "peerDependencies": {
+    "next": "^16.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.8",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}

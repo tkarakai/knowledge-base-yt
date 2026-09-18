@@ -1,0 +1,19 @@
+# act configuration for running GitHub Actions locally
+# See: https://nektosact.com/usage/index.html#configuration-file
+
+# Use medium-sized runner image (good balance of size vs compatibility)
+-P ubuntu-latest=catthehacker/ubuntu:act-latest
+
+# Use native ARM64 on Apple Silicon (faster than amd64 emulation)
+--container-architecture linux/arm64
+
+# Clean up containers after each run (prevents orphaned containers)
+--rm
+
+# Bind-mount working directory instead of copying from git tree.
+# Required for composite actions (.github/actions/*) to be visible in act,
+# since act's default copy mode only includes committed files.
+-b
+
+# Volume mounts for caching are handled in scripts/ci-local-act.sh
+# (act doesn't properly accumulate multiple --container-options in .actrc)

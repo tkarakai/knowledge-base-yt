@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "Načítání...",
+    "cancel": "Zrušit",
+    "save": "Uložit změny",
+    "saving": "Ukládání...",
+    "create": "Vytvořit",
+    "creating": "Vytváření...",
+    "delete": "Smazat",
+    "signOut": "Odhlásit se",
+    "error": "Došlo k chybě",
+    "backToHome": "Zpět na domů",
+    "note": "Poznámka"
+  },
+  "theme": {
+    "light": "Světlý motiv",
+    "system": "Systémový motiv",
+    "dark": "Tmavý motiv",
+    "ariaLabel": "Motiv: {label}. Klikněte pro přepnutí."
+  },
+  "language": {
+    "label": "Jazyk",
+    "ariaLabel": "Vyberte jazyk"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Vítejte zpět",
+      "description": "Přihlaste se a pokračujte do panelu.",
+      "cta": "Přihlásit se",
+      "switchPrompt": "Jste tu poprvé?",
+      "switchLink": "Vytvořit účet",
+      "pageHeading": "Vítejte zpět. Pokračujte tam, kde jste skončili.",
+      "pageDescription": "Better Auth řídí relace, Convex udržuje data v reálném čase. Přihlaste se pro přístup k projektům a úkolům."
+    },
+    "signUp": {
+      "title": "Vytvořte si pracovní prostor",
+      "description": "Začněte za méně než minutu.",
+      "cta": "Vytvořit účet",
+      "switchPrompt": "Již máte přístup?",
+      "switchLink": "Přihlásit se",
+      "pageHeading": "Vytvořte si účet a začněte tvořit.",
+      "pageDescription": "Convex + Better Auth jsou již propojeny, takže váš účet je okamžitě připraven k produkci."
+    },
+    "badge": "Účet",
+    "fields": {
+      "name": "Jméno",
+      "namePlaceholder": "Jan Novák",
+      "email": "E-mail",
+      "emailPlaceholder": "vy@example.com",
+      "password": "Heslo",
+      "passwordPlaceholder": "Vaše heslo",
+      "passwordSignUpPlaceholder": "Alespoň 12 znaků",
+      "confirmPassword": "Potvrzení hesla",
+      "confirmPasswordPlaceholder": "Potvrďte své heslo"
+    },
+    "errors": {
+      "passwordMismatch": "Hesla se neshodují",
+      "passwordCompromised": "Zadané heslo bylo kompromitováno. Zvolte prosím jiné heslo.",
+      "rateLimited": "Příliš mnoho pokusů. Počkejte prosím chvíli a zkuste to znovu.",
+      "invalidCredentials": "Neplatný e-mail nebo heslo",
+      "generic": "Došlo k chybě"
+    },
+    "twoFactorVerify": {
+      "title": "Dvoufaktorové ověření",
+      "description": "Zadejte 6místný kód z autentizační aplikace.",
+      "cta": "Ověřit",
+      "invalidCode": "Neplatný kód. Zkuste to prosím znovu.",
+      "useBackupCode": "Použít záložní kód",
+      "backupCodeTitle": "Záložní kód",
+      "backupCodeDescription": "Zadejte jeden ze svých záložních kódů pro přihlášení.",
+      "backupCodePlaceholder": "Zadejte záložní kód",
+      "useAuthenticator": "Použít autentizační aplikaci"
+    },
+    "footer": "Bezpečný e-mail + heslo",
+    "working": "Zpracování...",
+    "legal": {
+      "prefix": "Pokračováním souhlasíte s našimi",
+      "termsOfService": "Podmínkami služby",
+      "and": "a",
+      "privacyPolicy": "Zásadami ochrany osobních údajů"
+    },
+    "invitation": {
+      "badge": "Pozvánka",
+      "title": "Dokončete registraci",
+      "description": "Byli jste pozváni! Vytvořte si účet níže.",
+      "cta": "Vytvořit účet",
+      "pageHeading": "Vítejte. Byli jste pozváni.",
+      "pageDescription": "Dokončete registraci a začněte.",
+      "invalidTitle": "O této pozvánce",
+      "noToken": "Nebyl zadán token pozvánky. Použijte prosím odkaz z e-mailu s pozvánkou.",
+      "tokenExpired": "Platnost této pozvánky vypršela. Kontaktujte tým pro získání nové.",
+      "tokenUsed": "Tato pozvánka již byla uplatněna.",
+      "tokenInvalid": "Tento odkaz pozvánky je neplatný.",
+      "signupBlocked": "Registrace je v současné době pouze na pozvánku.",
+      "signupBlockedDescription": "Připojte se na čekací listinu na naší hlavní stránce a požádejte o přístup.",
+      "goToWaitlist": "Připojit se na čekací listinu",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "Obnovení hesla",
+      "title": "Zapomněli jste heslo?",
+      "description": "Zadejte svůj e-mail a pošleme vám odkaz pro obnovení hesla.",
+      "cta": "Odeslat odkaz pro obnovení",
+      "emailSent": "Zkontrolujte svůj e-mail",
+      "emailSentDescription": "Pokud pro {email} existuje účet, odeslali jsme odkaz pro obnovení hesla. Zkontrolujte doručenou poštu i složku se spamem.",
+      "backToSignIn": "Zpět na přihlášení",
+      "pageHeading": "Obnovte si heslo. Vraťte se zpět.",
+      "pageDescription": "Zadejte e-mailovou adresu spojenou s vaším účtem a pošleme vám odkaz pro vytvoření nového hesla."
+    },
+    "resetPassword": {
+      "badge": "Obnovení hesla",
+      "title": "Nastavte nové heslo",
+      "description": "Zvolte silné heslo pro svůj účet.",
+      "newPassword": "Nové heslo",
+      "cta": "Obnovit heslo",
+      "invalidTitle": "Neplatný odkaz pro obnovení",
+      "tokenExpired": "Platnost tohoto odkazu pro obnovení hesla vypršela. Vyžádejte si prosím nový.",
+      "tokenInvalid": "Tento odkaz pro obnovení hesla je neplatný nebo již byl použit.",
+      "requestNewLink": "Vyžádat nový odkaz",
+      "backToSignIn": "Zpět na přihlášení",
+      "successTitle": "Heslo aktualizováno",
+      "successDescription": "Vaše heslo bylo úspěšně obnoveno. Nyní se můžete přihlásit s novým heslem.",
+      "signInNow": "Přihlásit se",
+      "pageHeading": "Skoro hotovo. Zvolte nové heslo.",
+      "pageDescription": "Vyberte si silné heslo, které jste dosud nepoužili. Nové heslo musí mít alespoň 12 znaků."
+    },
+    "verifyEmail": {
+      "badge": "Ověření e-mailu",
+      "title": "Zkontrolujte svůj e-mail",
+      "description": "Na vaši e-mailovou adresu jsme odeslali ověřovací odkaz. Klikněte na něj pro ověření svého účtu.",
+      "descriptionWithEmail": "Na adresu {email} jsme odeslali ověřovací odkaz. Klikněte na něj pro ověření svého účtu.",
+      "resend": "Znovu odeslat ověřovací e-mail",
+      "resent": "Ověřovací e-mail odeslán! Zkontrolujte svou schránku.",
+      "recentlySentJustNow": "Ověřovací e-mail byl právě odeslán. Zkontrolujte prosím svou doručenou poštu a složku se spamem.",
+      "recentlySentSecondsAgo": "Ověřovací e-mail byl odeslán před několika sekundami. Zkontrolujte prosím svou doručenou poštu a složku se spamem.",
+      "recentlySentMinutesAgo": "Ověřovací e-mail byl odeslán před {minutes} {minutes, plural, one {minutou} other {minutami}}. Zkontrolujte prosím svou doručenou poštu a složku se spamem.",
+      "backToSignIn": "Zpět na přihlášení",
+      "pageHeading": "Poslední krok. Ověřte svůj e-mail.",
+      "pageDescription": "Poslali jsme vám ověřovací odkaz. Klikněte na něj pro aktivaci účtu a zahájení používání aplikace.",
+      "verificationSuccessTitle": "Děkujeme za ověření vašeho e-mailu.",
+      "verificationSuccessDescription": "Váš e-mail byl úspěšně ověřen.",
+      "verificationErrorTitle": "Ověření e-mailu se nezdařilo",
+      "verificationErrorUnknown": "Tento ověřovací odkaz se nepodařilo ověřit. Požádejte prosím o nový ověřovací e-mail.",
+      "verificationErrorTokenExpired": "Platnost tohoto ověřovacího odkazu vypršela. Požádejte o nový.",
+      "verificationErrorInvalidToken": "Tento ověřovací odkaz je neplatný nebo už byl použit.",
+      "verificationErrorUserNotFound": "K tomuto ověřovacímu odkazu jsme nenašli žádný účet.",
+      "verificationErrorUnauthorized": "Tento požadavek na ověření se pro váš účet nepodařilo dokončit.",
+      "sessionStatusChecking": "Ověřujeme stav vašeho přihlášení...",
+      "sessionStatusSignedInOnDevice": "Nyní jste přihlášeni na zařízení {device}.",
+      "sessionStatusNoSession": "Pro používání aplikace se prosím přihlaste.",
+      "goToSignIn": "Přejít na přihlášení",
+      "closeWindow": "Zavřít toto okno"
+    },
+    "forgotPasswordLink": "Zapomněli jste heslo?"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "Vaše startovní čára.",
+    "headingLine2": "Stavějte odsud.",
+    "description": "Autentizace, databáze, synchronizace v reálném čase a nahrávání souborů — propojeno a připraveno.",
+    "getStarted": "Začít",
+    "signIn": "Přihlásit se",
+    "footer": {
+      "about": "O nás",
+      "privacyPolicy": "Zásady ochrany osobních údajů",
+      "termsOfService": "Podmínky služby"
+    },
+    "waitlist": {
+      "title": "Připojit se na čekací listinu",
+      "description": "Požádejte o přístup připojením se na čekací listinu.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "vy@priklad.cz",
+      "superpowersLabel": "Jaká je tvoje superschopnost?",
+      "superpowersPlaceholder": "Vyber si své superschopnosti",
+      "excitementLabel": "Jak moc se těšíš?",
+      "excitementPlaceholder": "Řekni nám, jak se cítíš",
+      "selectedCount": "{count} vybráno",
+      "submit": "Připojit se na listinu",
+      "submitting": "Zapisování...",
+      "successTitle": "Jste na seznamu!",
+      "successDescription": "Pošleme vám pozvánku, až na vás přijde řada.",
+      "alreadySignedUp": "Již máte účet?",
+      "signIn": "Přihlásit se",
+      "superpowers": {
+        "coffee-to-code": "Přeměna kávy na kód",
+        "pixel-perfect": "Dokonalé pixely",
+        "bug-whisperer": "Zaříkávač bugů",
+        "spreadsheet-wizard": "Kouzelník tabulek",
+        "inbox-zero": "Prázdná schránka každý den",
+        "parallel-parking": "Podélné parkování na první pokus",
+        "remembering-names": "Pamatuji si jména všech",
+        "never-burning-toast": "Nikdy nespálím toast",
+        "explaining-tech": "Vysvětlování techniky rodičům",
+        "finding-restaurants": "Hledání nejlepších restaurací",
+        "staying-calm": "Klid i na dlouhých poradách",
+        "other": "Něco úplně jiného"
+      },
+      "excitement": {
+        "take-my-money": "Vezměte si moje peníze!",
+        "cant-wait": "Nemůžu se dočkat",
+        "cautiously-optimistic": "Opatrný optimismus",
+        "just-browsing": "Jen se rozhlížím",
+        "friend-made-me": "Kamarád mě donutil se přihlásit"
+      },
+      "errors": {
+        "waitlistNotEnabled": "Čekací listina momentálně nepřijímá registrace. Zkuste to prosím později.",
+        "invalidEmail": "Zadejte prosím platnou e-mailovou adresu.",
+        "rateLimited": "Příliš mnoho požadavků. Počkejte chvíli a zkuste to znovu.",
+        "generic": "Něco se pokazilo. Zkuste to prosím znovu."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "Projekty",
+    "noProjects": "Zatím žádné projekty",
+    "noProjectsDescription": "Vytvořte projekt a začněte.",
+    "projectNotFound": "Projekt nenalezen",
+    "projectNotFoundDescription": "Tento projekt mohl být smazán.",
+    "tabs": {
+      "tasks": "Úkoly",
+      "attachments": "Přílohy"
+    },
+    "security": "Zabezpečení",
+    "sessions": {
+      "title": "Aktivní relace",
+      "description": "Spravujte své aktivní relace na všech zařízeních. Můžete se odhlásit z jakékoli relace, kterou nepoznáváte.",
+      "currentSession": "Toto zařízení",
+      "otherSessions": "Ostatní zařízení",
+      "current": "Aktuální",
+      "lastActive": "Aktivní {time}",
+      "noOtherSessions": "Žádné další aktivní relace. Jste přihlášeni pouze na tomto zařízení.",
+      "revokeAll": "Odhlásit ze všech ostatních",
+      "revokeAllTitle": "Odhlásit ze všech ostatních zařízení?",
+      "revokeAllDescription": "Budete odhlášeni ze všech ostatních zařízení a prohlížečů. Aktivní zůstane pouze vaše aktuální relace.",
+      "revokeAllConfirm": "Odhlásit ze všech",
+      "revokeTitle": "Odhlásit toto zařízení?",
+      "revokeDescription": "Tím ukončíte relaci pro {device}. Pro přístup k účtu se bude muset znovu přihlásit.",
+      "backToDashboard": "Zpět na přehled"
+    },
+    "account": "Nastavení",
+    "profile": {
+      "title": "Profil",
+      "description": "Spravujte informace o svém profilu a předvolby.",
+      "name": "Zobrazované jméno",
+      "namePlaceholder": "Vaše jméno",
+      "email": "E-mail",
+      "emailReadonly": "Pro změnu e-mailu kontaktujte podporu.",
+      "avatarColor": "Barva avatara",
+      "saved": "Profil aktualizován.",
+      "language": "Jazyk",
+      "timezone": "Časové pásmo",
+      "timezonePlaceholder": "Vyberte časové pásmo",
+      "timezoneSearch": "Hledat časová pásma...",
+      "timezoneDetected": "Zjištěno",
+      "noTimezoneResults": "Časové pásmo nenalezeno.",
+      "theme": "Motiv"
+    },
+    "changePassword": {
+      "title": "Změna hesla",
+      "currentPassword": "Aktuální heslo",
+      "newPassword": "Nové heslo",
+      "confirmPassword": "Potvrďte nové heslo",
+      "revokeOtherSessions": "Odhlásit ze všech ostatních zařízení",
+      "cta": "Aktualizovat heslo",
+      "success": "Heslo bylo úspěšně aktualizováno.",
+      "errorCurrentPassword": "Aktuální heslo je nesprávné."
+    },
+    "twoFactor": {
+      "title": "Dvoufaktorové ověření",
+      "description": "Přidejte k účtu další vrstvu zabezpečení.",
+      "enabled": "2FA je zapnuto",
+      "disabled": "2FA není zapnuto",
+      "enable": "Zapnout 2FA",
+      "disable": "Vypnout 2FA",
+      "enterPassword": "Pro pokračování zadejte heslo.",
+      "scanQrCode": "Naskenujte tento QR kód pomocí autentizační aplikace (např. Google Authenticator, Authy).",
+      "manualEntry": "Nejde naskenovat? Zadejte tento klíč ručně",
+      "manualEntryDescription": "Otevřete svou autentizační aplikaci, zvolte „Přidat účet“ a poté vyberte „Zadat klíč nastavení“ a vložte klíč níže.",
+      "secretKey": "Tajný klíč",
+      "copied": "Zkopírováno do schránky",
+      "enterCode": "Zadejte 6místný kód z autentizační aplikace pro ověření nastavení.",
+      "verify": "Ověřit",
+      "backupCodes": "Záložní kódy",
+      "backupCodesDescription": "Uložte si tyto kódy na bezpečné místo. Každý kód lze použít pouze jednou.",
+      "viewBackupCodes": "Zobrazit záložní kódy",
+      "regenerateBackupCodes": "Vygenerovat nové záložní kódy",
+      "disableConfirm": "Opravdu chcete vypnout 2FA?",
+      "regenerateConfirm": "Tímto nahradíte své stávající záložní kódy. Nepoužité kódy přestanou fungovat.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "Nový projekt",
+    "createProject": "Vytvořit projekt",
+    "createFirst": "Vytvořte svůj první projekt",
+    "noProjects": "Žádné projekty",
+    "editProject": "Upravit projekt",
+    "deleteProject": "Smazat projekt",
+    "deleteConfirmTitle": "Smazat projekt?",
+    "deleteConfirmDescription": "Toto trvale smaže “{name}” a všechny související úkoly. Tuto akci nelze vrátit zpět.",
+    "fields": {
+      "name": "Název",
+      "namePlaceholder": "Název projektu",
+      "description": "Popis",
+      "descriptionPlaceholder": "O čem je tento projekt?"
+    }
+  },
+  "tasks": {
+    "title": "Úkoly",
+    "addTask": "Přidat úkol",
+    "newTask": "Nový úkol",
+    "editTask": "Upravit úkol",
+    "deleteTask": "Smazat úkol",
+    "confirmDelete": "Potvrdit smazání",
+    "createTask": "Vytvořit úkol",
+    "noTasks": "Zatím žádné úkoly. Přidejte první.",
+    "noTasksSummary": "Zatím žádné úkoly",
+    "progress": "{doneCount} z {totalCount} úkolů hotovo",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "Stav",
+      "todo": "K vyřízení",
+      "inProgress": "Probíhá",
+      "done": "Hotovo",
+      "all": "Vše"
+    },
+    "fields": {
+      "title": "Název",
+      "titlePlaceholder": "Co je potřeba udělat?",
+      "description": "Popis",
+      "descriptionPlaceholder": "Přidat podrobnosti...",
+      "deadline": "Termín",
+      "deadlinePlaceholder": "Bez termínu",
+      "clearDeadline": "Odstranit termín"
+    },
+    "deadline": {
+      "overdue": "Po termínu",
+      "dueToday": "Splatné dnes"
+    },
+    "aria": {
+      "changeStatus": "Změnit stav z {status}"
+    },
+    "count": "{count, plural, =0 {Žádné úkoly} one {# úkol} few {# úkoly} other {# úkolů}}"
+  },
+  "uploads": {
+    "title": "Přílohy",
+    "addFile": "Přidat soubor",
+    "uploading": "Nahrávání...",
+    "processing": "Zpracování",
+    "view": "Zobrazit",
+    "deleteFile": "Smazat soubor",
+    "emptyState": "Nahrajte soubory a uvidíte ukládání souborů Convex v akci.",
+    "errors": {
+      "tooLarge": "Soubor je příliš velký (max. 1 MB)",
+      "uploadFailed": "Nahrávání selhalo. Zkuste to znovu.",
+      "generic": "Nahrávání selhalo."
+    },
+    "count": "{count, plural, =0 {Žádné přílohy} one {# příloha} few {# přílohy} other {# příloh}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "Nepřihlášen",
+    "PROJECT_NOT_FOUND": "Projekt nenalezen",
+    "TASK_NOT_FOUND": "Úkol nenalezen",
+    "FILE_NOT_FOUND": "Soubor nenalezen v úložišti",
+    "FILE_TOO_LARGE": "Soubor je příliš velký (max. 1 MB)",
+    "UPLOAD_NOT_FOUND": "Nahrávání nenalezeno",
+    "convex": {
+      "rateLimited": "Příliš mnoho požadavků. Počkejte prosím {seconds} sekund.",
+      "notAuthenticated": "Vaše relace vypršela. Přihlaste se prosím znovu.",
+      "connectionLost": "Nelze se připojit k serveru. Zkontrolujte prosím připojení.",
+      "serverError": "Něco se pokazilo. Zkuste to prosím znovu.",
+      "projectNotFound": "Projekt nenalezen.",
+      "taskNotFound": "Úkol nenalezen.",
+      "fileNotFound": "Soubor nenalezen v úložišti.",
+      "fileTooLarge": "Soubor je příliš velký (max 1 MB).",
+      "uploadNotFound": "Nahrávání nenalezeno."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "Starter Next.js s Convex, Better Auth a Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "O nás",
+      "description": "Dozvěďte se více o Web App Starter a naší misi.",
+      "notice": "Toto je obsah zástupného symbolu. Před spuštěním ho nahraďte svým vlastním.",
+      "heading": "O nás",
+      "mission": "Naše mise",
+      "missionText": "Věříme, že by vývojáři měli trávit čas stavbou funkcí, ne konfigurací infrastruktury. Web App Starter poskytuje produkční zahájení s synchronizací dat v reálném čase, nahráváním souborů a ověřováním na základě relací, vše již připojeno a připraveno.",
+      "whatIncluded": "Co je součástí",
+      "whatIncludedText": "Balíček zahájení obsahuje úvodní stránku, plně ověřenou webovou aplikaci, ovládací panel správce a sbírku komponent. Každá aplikace sdílí jednotný design systém vytvořený na primitivech Radix UI s Tailwind CSS.",
+      "openSource": "Open Source",
+      "openSourceText": "Tento projekt je otevřený zdroj a je navržen k rozštěpení a přizpůsobení.",
+      "intro": "Web App Starter je plnostranná základna pro budování moderních webových aplikací. Kombinuje Next.js pro frontend, Convex pro backend a Better Auth pro bezpečné ověření — vše propojeno a připraveno k odeslání."
+    },
+    "privacy": {
+      "title": "Zásady ochrany osobních údajů",
+      "description": "Jak shromažďujeme, používáme a chráníme vaše údaje.",
+      "notice": "Toto je šablona zásad ochrany osobních údajů. Přizpůsobte ji svému konkrétnímu použití a právnímu prostředí před spuštěním.",
+      "heading": "Zásady ochrany osobních údajů",
+      "lastUpdated": "Poslední aktualizace: {date}"
+    },
+    "terms": {
+      "title": "Podmínky služby",
+      "description": "Pravidla a pokyny pro používání naší služby.",
+      "notice": "Toto je šablona podmínek služby. Přizpůsobte ji svému konkrétnímu použití a právnímu prostředí před spuštěním.",
+      "heading": "Podmínky služby",
+      "lastUpdated": "Poslední aktualizace: {date}"
+    }
+  },
+  "offline": {
+    "message": "Zdá se, že jste offline. Pro pokračování je potřeba aktivní připojení."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "Velmi slabe",
+      "weak": "Slabe",
+      "fair": "Prijatelne",
+      "good": "Dobre",
+      "strong": "Silne"
+    },
+    "crackTimeLabel": "Odhadovany cas prolomeni: {time}",
+    "minLength": "Vyzadovano minimalne {count} znaku.",
+    "strengthRequirement": "Heslo nesplnuje pozadavky na silu.",
+    "warnings": {
+      "straightRow": "Prime rady klaves na klavesnici se snadno uhodnou.",
+      "keyPattern": "Kratke vzory na klavesnici se snadno uhodnou.",
+      "simpleRepeat": "Opakovane znaky jako \"aaa\" se snadno uhodnou.",
+      "extendedRepeat": "Opakovane vzory znaku jako \"abcabcabc\" se snadno uhodnou.",
+      "sequences": "Bezne sekvence znaku jako \"abc\" se snadno uhodnou.",
+      "recentYears": "Nedavne roky se snadno uhodnou.",
+      "dates": "Data se snadno uhodnou.",
+      "topTen": "Toto je velmi casto pouzivane heslo.",
+      "topHundred": "Toto je casto pouzivane heslo.",
+      "common": "Toto je bezne pouzivane heslo.",
+      "similarToCommon": "Toto je podobne bezne pouzivanemu heslu.",
+      "wordByItself": "Jednotliva slova se snadno uhodnou.",
+      "namesByThemselves": "Jednotliva jmena nebo prijmeni se snadno uhodnou.",
+      "commonNames": "Bezna jmena a prijmeni se snadno uhodnou.",
+      "userInputs": "Heslo by nemelo obsahovat osobni udaje.",
+      "pwned": "Vase heslo bylo odhaleno pri uniku dat na internetu."
+    },
+    "suggestions": {
+      "l33t": "Vyhnete se predvidatelnym zamenam pismen, jako \"@\" za \"a\".",
+      "reverseWords": "Vyhnete se obracenym hlaskovanim beznych slov.",
+      "allUppercase": "Pouzijte velka pismena jen u nekterych, ne u vsech.",
+      "capitalization": "Pouzijte velka pismena i jinde nez na zacatku.",
+      "dates": "Vyhnete se datum a rokum spojenym s vami.",
+      "recentYears": "Vyhnete se nedavnym rokum.",
+      "associatedYears": "Vyhnete se rokum spojenym s vami.",
+      "sequences": "Vyhnete se beznym sekvencim znaku.",
+      "repeated": "Vyhnete se opakovanym slovum a znakum.",
+      "longerKeyboardPattern": "Pouzijte delsi vzory na klavesnici a mente smer psani.",
+      "anotherWord": "Pridejte vice mene obvyklych slov.",
+      "useWords": "Pouzijte vice slov, ale vyhnete se beznym frazim.",
+      "noNeed": "Silna hesla muzete vytvorit i bez symbolu, cislic nebo velkych pismen.",
+      "pwned": "Pokud toto heslo pouzivate jinde, meli byste ho zmenit."
+    },
+    "timeEstimation": {
+      "ltSecond": "mene nez sekunda",
+      "second": "{base} sekunda",
+      "seconds": "{base} sekund",
+      "minute": "{base} minuta",
+      "minutes": "{base} minut",
+      "hour": "{base} hodina",
+      "hours": "{base} hodin",
+      "day": "{base} den",
+      "days": "{base} dnu",
+      "month": "{base} mesic",
+      "months": "{base} mesicu",
+      "year": "{base} rok",
+      "years": "{base} let",
+      "centuries": "staleti"
+    }
+  },
+  "forbidden": {
+    "title": "Přístup odepřen",
+    "signedInAs": "Jste přihlášeni jako {email}.",
+    "description": "Nemáte oprávnění k přístupu k tomuto prostředku. Pokud se domníváte, že jde o chybu, kontaktujte prosím administrátora vaší organizace.",
+    "backToSignIn": "Zpět na přihlášení"
+  }
+}

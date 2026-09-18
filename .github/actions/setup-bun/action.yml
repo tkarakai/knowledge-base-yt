@@ -1,0 +1,85 @@
+name: "Setup Bun Environment"
+description: "Install Node, Bun, cache dependencies, and run bun install. Requires actions/checkout first."
+
+inputs:
+  bun-version:
+    description: "Bun version to install"
+    default: "1.3.6"
+  node-version:
+    description: "Node.js version"
+    default: "20"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node
+      if: ${{ !env.ACT }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    # In act, parallel jobs race on cloning actions/setup-node to the host cache,
+    # causing intermittent failures. Use the toolcache volume directly instead.
+    - name: Setup Node (act)
+      if: ${{ env.ACT }}
+      shell: bash
+      run: |
+        NODE_DIR=$(find /opt/act-toolcache/node/${{ inputs.node-version }}* -maxdepth 0 -type d 2>/dev/null | sort -V | tail -1)
+        if [ -n "$NODE_DIR" ] && [ -x "$NODE_DIR/arm64/bin/node" ]; then
+          echo "Node found at $NODE_DIR/arm64/bin/node ($(${NODE_DIR}/arm64/bin/node --version))"
+          echo "$NODE_DIR/arm64/bin" >> $GITHUB_PATH
+        elif [ -n "$NODE_DIR" ] && [ -x "$NODE_DIR/x64/bin/node" ]; then
+          echo "Node found at $NODE_DIR/x64/bin/node ($(${NODE_DIR}/x64/bin/node --version))"
+          echo "$NODE_DIR/x64/bin" >> $GITHUB_PATH
+        else
+          echo "::warning::Node ${{ inputs.node-version }} not found in toolcache, using actions/setup-node"
+          echo "Available: $(ls /opt/act-toolcache/node/ 2>/dev/null || echo 'none')"
+        fi
+
+    - name: Setup Bun
+      if: ${{ !env.ACT }}
+      uses: oven-sh/setup-bun@v2
+      with:
+        bun-version: ${{ inputs.bun-version }}
+
+    - name: Setup Bun (act)
+      if: ${{ env.ACT }}
+      shell: bash
+      run: |
+        BUN_DIR="/root/.bun"
+        if [ -x "$BUN_DIR/bin/bun" ]; then
+          echo "Bun already installed at $BUN_DIR"
+        else
+          echo "Installing Bun ${{ inputs.bun-version }}..."
+          curl -fsSL https://bun.sh/install | bash -s "bun-v${{ inputs.bun-version }}"
+        fi
+        echo "$BUN_DIR/bin" >> $GITHUB_PATH
+
+    - name: Cache dependencies
+      if: ${{ !env.ACT }}
+      uses: actions/cache@v4
+      with:
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-bun-
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        # Retry logic: when multiple act containers share the same bun cache
+        # volume, concurrent `bun install` can race on symlink creation (EEXIST).
+        MAX_ATTEMPTS=5
+        for attempt in $(seq 1 $MAX_ATTEMPTS); do
+          if bun install --frozen-lockfile; then
+            break
+          fi
+          if [ "$attempt" -lt "$MAX_ATTEMPTS" ]; then
+            delay=$((attempt * 2))
+            echo "bun install failed (attempt $attempt/$MAX_ATTEMPTS), retrying in ${delay}s..."
+            sleep "$delay"
+          else
+            echo "bun install failed after $MAX_ATTEMPTS attempts"
+            exit 1
+          fi
+        done

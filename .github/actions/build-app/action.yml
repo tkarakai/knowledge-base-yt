@@ -1,0 +1,168 @@
+name: "Build App"
+description: "Build a Next.js app via Vercel CLI and package as artifact"
+
+inputs:
+  app:
+    description: "App name (web, admin, or landing)"
+    required: true
+  environment:
+    description: "Target environment (preview or production)"
+    required: true
+  vercel-token:
+    description: "Vercel API token"
+    required: true
+  vercel-org-id:
+    description: "Vercel organization ID"
+    required: true
+  vercel-project-id:
+    description: "Vercel project ID for this app"
+    required: true
+
+outputs:
+  artifact-name:
+    description: "Name of the uploaded artifact"
+    value: ${{ steps.meta.outputs.artifact-name }}
+  tarball:
+    description: "Filename of the tarball"
+    value: ${{ steps.meta.outputs.tarball }}
+  checksum-file:
+    description: "Filename of the checksum file"
+    value: ${{ steps.meta.outputs.checksum-file }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set metadata
+      id: meta
+      shell: bash
+      run: |
+        ARTIFACT_NAME="${{ inputs.app }}-${{ inputs.environment }}-${{ github.sha }}"
+        TARBALL="${{ inputs.app }}-${{ inputs.environment }}.tar.gz"
+        CHECKSUM="${{ inputs.app }}-${{ inputs.environment }}.tar.gz.sha256"
+        TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+        echo "artifact-name=${ARTIFACT_NAME}" >> "$GITHUB_OUTPUT"
+        echo "tarball=${TARBALL}" >> "$GITHUB_OUTPUT"
+        echo "checksum-file=${CHECKSUM}" >> "$GITHUB_OUTPUT"
+        echo "timestamp=${TIMESTAMP}" >> "$GITHUB_OUTPUT"
+
+    - name: Install Vercel CLI
+      shell: bash
+      run: bun add -g vercel@latest
+
+    # Run all Vercel commands from the monorepo root to avoid the Turbopack
+    # path-doubling bug (https://github.com/vercel/next.js/issues/88579).
+    # The Vercel project must have Root Directory set to "apps/<app>" so the
+    # builder knows which app to build.
+    - name: Create Vercel project link
+      shell: bash
+      run: |
+        mkdir -p ".vercel"
+        printf '{"orgId":"%s","projectId":"%s"}' \
+          "${{ inputs.vercel-org-id }}" \
+          "${{ inputs.vercel-project-id }}" \
+          > ".vercel/project.json"
+
+    - name: Pull Vercel environment
+      shell: bash
+      env:
+        VERCEL_TOKEN: ${{ inputs.vercel-token }}
+      run: |
+        vercel pull --yes \
+          --environment=${{ inputs.environment }} \
+          --token="$VERCEL_TOKEN"
+
+    - name: Debug Vercel project settings
+      shell: bash
+      run: |
+        echo "::group::Vercel project settings"
+        echo "App: ${{ inputs.app }}"
+        echo "Environment: ${{ inputs.environment }}"
+        echo "Working directory: $(pwd)"
+        echo "--- .vercel/project.json ---"
+        cat .vercel/project.json | jq . 2>/dev/null || cat .vercel/project.json
+        echo ""
+        echo "--- GitHub context ---"
+        echo "Runner OS: ${{ runner.os }}"
+        echo "Runner Arch: ${{ runner.arch }}"
+        echo "SHA: ${{ github.sha }}"
+        echo "Ref: ${{ github.ref }}"
+        echo "::endgroup::"
+
+    - name: Copy shared assets to app public directory
+      shell: bash
+      run: ./scripts/copy-shared-assets.sh
+
+    - name: Build with Vercel
+      shell: bash
+      env:
+        VERCEL_TOKEN: ${{ inputs.vercel-token }}
+        NEXT_PUBLIC_GIT_SHA: ${{ github.sha }}
+        NEXT_PUBLIC_GIT_BRANCH: ${{ github.ref_name }}
+        NEXT_PUBLIC_DEPLOY_TIMESTAMP: ${{ steps.meta.outputs.timestamp }}
+        NEXT_PUBLIC_BUILD_ID: ${{ github.run_id }}-${{ github.run_attempt }}
+        NEXT_PUBLIC_APP_NAME: ${{ inputs.app }}
+      run: |
+        BUILD_FLAGS=""
+        if [ "${{ inputs.environment }}" = "production" ]; then
+          BUILD_FLAGS="--prod"
+        fi
+        vercel build ${BUILD_FLAGS} \
+          --token="$VERCEL_TOKEN"
+
+    - name: Package artifact
+      shell: bash
+      run: |
+        TARBALL="${{ steps.meta.outputs.tarball }}"
+        CHECKSUM="${{ steps.meta.outputs.checksum-file }}"
+
+        # Include both .vercel/output and the app's .next/ build output.
+        # The serverless functions in .vercel/output reference files in
+        # apps/<app>/.next/ via .nft.json trace files — both are needed
+        # for vercel deploy --prebuilt to succeed.
+        tar -czf "${TARBALL}" .vercel/output "apps/${{ inputs.app }}/.next"
+        sha256sum "${TARBALL}" > "${CHECKSUM}"
+
+        echo "### Build Artifact: ${{ inputs.app }} (${{ inputs.environment }})" >> "$GITHUB_STEP_SUMMARY"
+        echo '```' >> "$GITHUB_STEP_SUMMARY"
+        cat "${CHECKSUM}" >> "$GITHUB_STEP_SUMMARY"
+        echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+    - name: Generate build manifest
+      shell: bash
+      run: |
+        MANIFEST="${{ inputs.app }}-${{ inputs.environment }}-manifest.json"
+        CHECKSUM=$(awk '{print $1}' "${{ steps.meta.outputs.checksum-file }}")
+        TIMESTAMP=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+        jq -n \
+          --arg app "${{ inputs.app }}" \
+          --arg env "${{ inputs.environment }}" \
+          --arg sha "${{ github.sha }}" \
+          --arg ref "${{ github.ref }}" \
+          --arg ts "$TIMESTAMP" \
+          --arg run "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+          --arg sum "$CHECKSUM" \
+          --arg os "${{ runner.os }}" \
+          --arg arch "${{ runner.arch }}" \
+          '{
+            app: $app,
+            environment: $env,
+            git_sha: $sha,
+            git_ref: $ref,
+            timestamp: $ts,
+            workflow_run: $run,
+            artifact_checksum: $sum,
+            runner_os: $os,
+            runner_arch: $arch
+          }' > "${MANIFEST}"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ steps.meta.outputs.artifact-name }}
+        path: |
+          ${{ steps.meta.outputs.tarball }}
+          ${{ steps.meta.outputs.checksum-file }}
+          ${{ inputs.app }}-${{ inputs.environment }}-manifest.json
+        retention-days: 90
+        if-no-files-found: error

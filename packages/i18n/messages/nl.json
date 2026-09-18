@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "Laden...",
+    "cancel": "Annuleren",
+    "save": "Wijzigingen opslaan",
+    "saving": "Opslaan...",
+    "create": "Aanmaken",
+    "creating": "Aanmaken...",
+    "delete": "Verwijderen",
+    "signOut": "Uitloggen",
+    "error": "Er is een fout opgetreden",
+    "backToHome": "Terug naar startpagina",
+    "note": "Opmerking"
+  },
+  "theme": {
+    "light": "Licht thema",
+    "system": "Systeemthema",
+    "dark": "Donker thema",
+    "ariaLabel": "Thema: {label}. Klik om te wisselen."
+  },
+  "language": {
+    "label": "Taal",
+    "ariaLabel": "Selecteer taal"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welkom terug",
+      "description": "Log in om naar je dashboard te gaan.",
+      "cta": "Inloggen",
+      "switchPrompt": "Nieuw hier?",
+      "switchLink": "Account aanmaken",
+      "pageHeading": "Welkom terug. Ga verder waar je gebleven was.",
+      "pageDescription": "Better Auth beheert sessies, terwijl Convex data realtime bijhoudt. Log in om toegang te krijgen tot je projecten en taken."
+    },
+    "signUp": {
+      "title": "Maak je werkruimte aan",
+      "description": "Begin in minder dan een minuut.",
+      "cta": "Account aanmaken",
+      "switchPrompt": "Heb je al toegang?",
+      "switchLink": "Inloggen",
+      "pageHeading": "Maak je account aan en begin met bouwen.",
+      "pageDescription": "Convex + Better Auth zijn al ingesteld, dus je account is meteen productieklaar."
+    },
+    "badge": "Account",
+    "fields": {
+      "name": "Naam",
+      "namePlaceholder": "Jan de Vries",
+      "email": "E-mail",
+      "emailPlaceholder": "jij@voorbeeld.nl",
+      "password": "Wachtwoord",
+      "passwordPlaceholder": "Je wachtwoord",
+      "passwordSignUpPlaceholder": "Minimaal 12 tekens",
+      "confirmPassword": "Wachtwoord bevestigen",
+      "confirmPasswordPlaceholder": "Bevestig je wachtwoord"
+    },
+    "errors": {
+      "passwordMismatch": "Wachtwoorden komen niet overeen",
+      "passwordCompromised": "Het ingevoerde wachtwoord is gecompromitteerd. Kies een ander wachtwoord.",
+      "rateLimited": "Te veel pogingen. Wacht even voordat u het opnieuw probeert.",
+      "invalidCredentials": "Ongeldig e-mailadres of wachtwoord",
+      "generic": "Er is een fout opgetreden"
+    },
+    "twoFactorVerify": {
+      "title": "Tweefactorauthenticatie",
+      "description": "Voer de 6-cijferige code van je authenticator-app in.",
+      "cta": "Verifiëren",
+      "invalidCode": "Ongeldige code. Probeer het opnieuw.",
+      "useBackupCode": "Gebruik een backupcode",
+      "backupCodeTitle": "Backupcode",
+      "backupCodeDescription": "Voer een van je backupcodes in om in te loggen.",
+      "backupCodePlaceholder": "Voer backupcode in",
+      "useAuthenticator": "Gebruik authenticator-app"
+    },
+    "footer": "Beveiligde e-mail + wachtwoord",
+    "working": "Bezig...",
+    "legal": {
+      "prefix": "Door door te gaan, ga je akkoord met onze",
+      "termsOfService": "Servicevoorwaarden",
+      "and": "en",
+      "privacyPolicy": "Privacybeleid"
+    },
+    "invitation": {
+      "badge": "Uitnodiging",
+      "title": "Voltooi uw registratie",
+      "description": "U bent uitgenodigd! Maak hieronder uw account aan.",
+      "cta": "Account aanmaken",
+      "pageHeading": "Welkom. U bent uitgenodigd.",
+      "pageDescription": "Voltooi uw registratie om te beginnen.",
+      "invalidTitle": "Over deze uitnodiging",
+      "noToken": "Er is geen uitnodigingstoken opgegeven. Gebruik de link uit uw uitnodigingse-mail.",
+      "tokenExpired": "Deze uitnodiging is verlopen. Neem contact op met het team voor een nieuwe.",
+      "tokenUsed": "Deze uitnodiging is al geclaimd.",
+      "tokenInvalid": "Deze uitnodigingslink is ongeldig.",
+      "signupBlocked": "Registratie is momenteel alleen op uitnodiging.",
+      "signupBlockedDescription": "Meld u aan voor de wachtlijst op onze homepage om toegang aan te vragen.",
+      "goToWaitlist": "Aanmelden voor de wachtlijst",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "Wachtwoord herstellen",
+      "title": "Wachtwoord vergeten?",
+      "description": "Voer je e-mailadres in en we sturen je een link om je wachtwoord te herstellen.",
+      "cta": "Herstelkoppeling versturen",
+      "emailSent": "Controleer je e-mail",
+      "emailSentDescription": "Als er een account bestaat voor {email}, hebben we een link gestuurd om je wachtwoord te herstellen. Controleer je inbox en spammap.",
+      "backToSignIn": "Terug naar inloggen",
+      "pageHeading": "Herstel je wachtwoord. Ga weer aan de slag.",
+      "pageDescription": "Voer het e-mailadres in dat bij je account hoort en we sturen je een link om een nieuw wachtwoord aan te maken."
+    },
+    "resetPassword": {
+      "badge": "Wachtwoord herstellen",
+      "title": "Stel een nieuw wachtwoord in",
+      "description": "Kies een sterk wachtwoord voor je account.",
+      "newPassword": "Nieuw wachtwoord",
+      "cta": "Wachtwoord herstellen",
+      "invalidTitle": "Ongeldige herstelkoppeling",
+      "tokenExpired": "Deze herstelkoppeling is verlopen. Vraag een nieuwe aan.",
+      "tokenInvalid": "Deze herstelkoppeling is ongeldig of al gebruikt.",
+      "requestNewLink": "Nieuwe koppeling aanvragen",
+      "backToSignIn": "Terug naar inloggen",
+      "successTitle": "Wachtwoord bijgewerkt",
+      "successDescription": "Je wachtwoord is succesvol hersteld. Je kunt nu inloggen met je nieuwe wachtwoord.",
+      "signInNow": "Nu inloggen",
+      "pageHeading": "Bijna klaar. Kies een nieuw wachtwoord.",
+      "pageDescription": "Kies een sterk wachtwoord dat je nog niet eerder hebt gebruikt. Je nieuwe wachtwoord moet minimaal 12 tekens bevatten."
+    },
+    "verifyEmail": {
+      "badge": "E-mailverificatie",
+      "title": "Controleer je e-mail",
+      "description": "We hebben een verificatielink naar je e-mailadres gestuurd. Klik op de link om je account te verifiëren.",
+      "descriptionWithEmail": "We hebben een verificatielink naar {email} gestuurd. Klik op de link om je account te verifiëren.",
+      "resend": "Verificatie-e-mail opnieuw versturen",
+      "resent": "Verificatie-e-mail verstuurd! Controleer je inbox.",
+      "recentlySentJustNow": "Er is zojuist een verificatie-e-mail verstuurd. Controleer je inbox en spammap.",
+      "recentlySentSecondsAgo": "Er is enkele seconden geleden een verificatie-e-mail verstuurd. Controleer je inbox en spammap.",
+      "recentlySentMinutesAgo": "Er is {minutes} {minutes, plural, one {minuut} other {minuten}} geleden een verificatie-e-mail verstuurd. Controleer je inbox en spammap.",
+      "backToSignIn": "Terug naar inloggen",
+      "pageHeading": "Nog één stap. Verifieer je e-mail.",
+      "pageDescription": "We hebben je een verificatielink gestuurd. Klik erop om je account te activeren en de app te gebruiken.",
+      "verificationSuccessTitle": "Bedankt voor het verifiëren van je e-mailadres.",
+      "verificationSuccessDescription": "Je e-mailadres is succesvol geverifieerd.",
+      "verificationErrorTitle": "E-mailverificatie mislukt",
+      "verificationErrorUnknown": "We konden deze e-maillink niet verifiëren. Vraag een nieuwe verificatie-e-mail aan.",
+      "verificationErrorTokenExpired": "Deze verificatielink is verlopen. Vraag een nieuwe aan.",
+      "verificationErrorInvalidToken": "Deze verificatielink is ongeldig of al gebruikt.",
+      "verificationErrorUserNotFound": "We konden geen account vinden voor deze verificatielink.",
+      "verificationErrorUnauthorized": "Deze verificatieaanvraag kon niet voor je account worden voltooid.",
+      "sessionStatusChecking": "Je sessiestatus wordt gecontroleerd...",
+      "sessionStatusSignedInOnDevice": "Je bent nu ingelogd op {device}.",
+      "sessionStatusNoSession": "Meld je aan om de app te gebruiken.",
+      "goToSignIn": "Naar de inlogpagina",
+      "closeWindow": "Dit venster sluiten"
+    },
+    "forgotPasswordLink": "Wachtwoord vergeten?"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "Je startlijn.",
+    "headingLine2": "Bouw vanaf hier.",
+    "description": "Authenticatie, database, realtime synchronisatie en bestandsuploads — aangesloten en klaar.",
+    "getStarted": "Aan de slag",
+    "signIn": "Inloggen",
+    "footer": {
+      "about": "Over ons",
+      "privacyPolicy": "Privacybeleid",
+      "termsOfService": "Servicevoorwaarden"
+    },
+    "waitlist": {
+      "title": "Aanmelden voor de wachtlijst",
+      "description": "Vraag toegang aan door u aan te melden voor de wachtlijst.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "u@voorbeeld.nl",
+      "superpowersLabel": "Wat is jouw superkracht?",
+      "superpowersPlaceholder": "Kies je superkrachten",
+      "excitementLabel": "Hoe enthousiast ben je?",
+      "excitementPlaceholder": "Vertel ons hoe je je voelt",
+      "selectedCount": "{count} geselecteerd",
+      "submit": "Aanmelden",
+      "submitting": "Bezig met aanmelden...",
+      "successTitle": "U staat op de lijst!",
+      "successDescription": "We sturen u een uitnodiging wanneer u aan de beurt bent.",
+      "alreadySignedUp": "Heeft u al een account?",
+      "signIn": "Inloggen",
+      "superpowers": {
+        "coffee-to-code": "Koffie omzetten in code",
+        "pixel-perfect": "Pixels perfect maken",
+        "bug-whisperer": "Bug-fluisteraar",
+        "spreadsheet-wizard": "Spreadsheet-tovenarij",
+        "inbox-zero": "Elke dag een lege inbox",
+        "parallel-parking": "Inparkeren in één keer",
+        "remembering-names": "Ieders naam onthouden",
+        "never-burning-toast": "Nooit je toast laten aanbranden",
+        "explaining-tech": "Technologie uitleggen aan je ouders",
+        "finding-restaurants": "De beste restaurants vinden",
+        "staying-calm": "Kalm blijven in lange vergaderingen",
+        "other": "Iets heel anders"
+      },
+      "excitement": {
+        "take-my-money": "Neem mijn geld!",
+        "cant-wait": "Kan niet wachten om het te proberen",
+        "cautiously-optimistic": "Voorzichtig optimistisch",
+        "just-browsing": "Ik kijk alleen even rond",
+        "friend-made-me": "Een vriend heeft me aangemeld"
+      },
+      "errors": {
+        "waitlistNotEnabled": "De wachtlijst accepteert momenteel geen aanmeldingen. Probeer het later opnieuw.",
+        "invalidEmail": "Voer een geldig e-mailadres in.",
+        "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
+        "generic": "Er is iets misgegaan. Probeer het opnieuw."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "Projecten",
+    "noProjects": "Nog geen projecten",
+    "noProjectsDescription": "Maak een project aan om te beginnen.",
+    "projectNotFound": "Project niet gevonden",
+    "projectNotFoundDescription": "Dit project is mogelijk verwijderd.",
+    "tabs": {
+      "tasks": "Taken",
+      "attachments": "Bijlagen"
+    },
+    "security": "Beveiliging",
+    "sessions": {
+      "title": "Actieve sessies",
+      "description": "Beheer je actieve sessies op alle apparaten. Je kunt elke sessie uitloggen die je niet herkent.",
+      "currentSession": "Dit apparaat",
+      "otherSessions": "Andere apparaten",
+      "current": "Huidig",
+      "lastActive": "Actief {time}",
+      "noOtherSessions": "Geen andere actieve sessies. Je bent alleen op dit apparaat ingelogd.",
+      "revokeAll": "Alle anderen uitloggen",
+      "revokeAllTitle": "Alle andere apparaten uitloggen?",
+      "revokeAllDescription": "Dit logt je uit op alle andere apparaten en browsers. Alleen je huidige sessie blijft actief.",
+      "revokeAllConfirm": "Alles uitloggen",
+      "revokeTitle": "Dit apparaat uitloggen?",
+      "revokeDescription": "Dit beëindigt de sessie voor {device}. Er moet opnieuw worden ingelogd om toegang te krijgen tot het account.",
+      "backToDashboard": "Terug naar dashboard"
+    },
+    "account": "Instellingen",
+    "profile": {
+      "title": "Profiel",
+      "description": "Beheer je profielgegevens en voorkeuren.",
+      "name": "Weergavenaam",
+      "namePlaceholder": "Je naam",
+      "email": "E-mail",
+      "emailReadonly": "Neem contact op met support om je e-mail te wijzigen.",
+      "avatarColor": "Avatarkleur",
+      "saved": "Profiel bijgewerkt.",
+      "language": "Taal",
+      "timezone": "Tijdzone",
+      "timezonePlaceholder": "Selecteer je tijdzone",
+      "timezoneSearch": "Tijdzones zoeken...",
+      "timezoneDetected": "Gedetecteerd",
+      "noTimezoneResults": "Geen tijdzone gevonden.",
+      "theme": "Thema"
+    },
+    "changePassword": {
+      "title": "Wachtwoord wijzigen",
+      "currentPassword": "Huidig wachtwoord",
+      "newPassword": "Nieuw wachtwoord",
+      "confirmPassword": "Bevestig nieuw wachtwoord",
+      "revokeOtherSessions": "Alle andere apparaten uitloggen",
+      "cta": "Wachtwoord bijwerken",
+      "success": "Wachtwoord succesvol bijgewerkt.",
+      "errorCurrentPassword": "Huidig wachtwoord is onjuist."
+    },
+    "twoFactor": {
+      "title": "Tweefactorauthenticatie",
+      "description": "Voeg een extra beveiligingslaag toe aan je account.",
+      "enabled": "2FA is ingeschakeld",
+      "disabled": "2FA is niet ingeschakeld",
+      "enable": "2FA inschakelen",
+      "disable": "2FA uitschakelen",
+      "enterPassword": "Voer je wachtwoord in om door te gaan.",
+      "scanQrCode": "Scan deze QR-code met je authenticator-app (bijv. Google Authenticator, Authy).",
+      "manualEntry": "Kun je niet scannen? Voer deze sleutel handmatig in",
+      "manualEntryDescription": "Open je authenticator-app, kies \"Account toevoegen\", selecteer vervolgens \"Instelsleutel invoeren\" en plak de onderstaande sleutel.",
+      "secretKey": "Geheime sleutel",
+      "copied": "Gekopieerd naar klembord",
+      "enterCode": "Voer de 6-cijferige code van je authenticator-app in om de instelling te verifiëren.",
+      "verify": "Verifiëren",
+      "backupCodes": "Backupcodes",
+      "backupCodesDescription": "Bewaar deze codes op een veilige plek. Elke code kan maar één keer worden gebruikt.",
+      "viewBackupCodes": "Backupcodes bekijken",
+      "regenerateBackupCodes": "Backupcodes opnieuw genereren",
+      "disableConfirm": "Weet je zeker dat je 2FA wilt uitschakelen?",
+      "regenerateConfirm": "Dit vervangt uw bestaande back-upcodes. Ongebruikte codes werken niet meer.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "Nieuw project",
+    "createProject": "Project aanmaken",
+    "createFirst": "Maak je eerste project aan",
+    "noProjects": "Geen projecten",
+    "editProject": "Project bewerken",
+    "deleteProject": "Project verwijderen",
+    "deleteConfirmTitle": "Project verwijderen?",
+    "deleteConfirmDescription": "Dit verwijdert “{name}” en alle bijbehorende taken permanent. Deze actie kan niet ongedaan worden gemaakt.",
+    "fields": {
+      "name": "Naam",
+      "namePlaceholder": "Projectnaam",
+      "description": "Beschrijving",
+      "descriptionPlaceholder": "Waar gaat dit project over?"
+    }
+  },
+  "tasks": {
+    "title": "Taken",
+    "addTask": "Taak toevoegen",
+    "newTask": "Nieuwe taak",
+    "editTask": "Taak bewerken",
+    "deleteTask": "Taak verwijderen",
+    "confirmDelete": "Verwijdering bevestigen",
+    "createTask": "Taak aanmaken",
+    "noTasks": "Nog geen taken. Voeg er een toe om te beginnen.",
+    "noTasksSummary": "Nog geen taken",
+    "progress": "{doneCount} van {totalCount} taken klaar",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "Status",
+      "todo": "Te doen",
+      "inProgress": "Bezig",
+      "done": "Klaar",
+      "all": "Alles"
+    },
+    "fields": {
+      "title": "Titel",
+      "titlePlaceholder": "Wat moet er gedaan worden?",
+      "description": "Beschrijving",
+      "descriptionPlaceholder": "Details toevoegen...",
+      "deadline": "Deadline",
+      "deadlinePlaceholder": "Geen deadline",
+      "clearDeadline": "Deadline verwijderen"
+    },
+    "deadline": {
+      "overdue": "Achterstallig",
+      "dueToday": "Vandaag verlopen"
+    },
+    "aria": {
+      "changeStatus": "Status wijzigen van {status}"
+    },
+    "count": "{count, plural, =0 {Geen taken} one {# taak} other {# taken}}"
+  },
+  "uploads": {
+    "title": "Bijlagen",
+    "addFile": "Bestand toevoegen",
+    "uploading": "Uploaden...",
+    "processing": "Verwerken",
+    "view": "Bekijken",
+    "deleteFile": "Bestand verwijderen",
+    "emptyState": "Upload bestanden om de Convex-bestandsopslag in actie te zien.",
+    "errors": {
+      "tooLarge": "Bestand te groot (max. 1 MB)",
+      "uploadFailed": "Upload mislukt. Probeer het opnieuw.",
+      "generic": "Upload mislukt."
+    },
+    "count": "{count, plural, =0 {Geen bijlagen} one {# bijlage} other {# bijlagen}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "Niet ingelogd",
+    "PROJECT_NOT_FOUND": "Project niet gevonden",
+    "TASK_NOT_FOUND": "Taak niet gevonden",
+    "FILE_NOT_FOUND": "Bestand niet gevonden in opslag",
+    "FILE_TOO_LARGE": "Bestand te groot (max. 1 MB)",
+    "UPLOAD_NOT_FOUND": "Upload niet gevonden",
+    "convex": {
+      "rateLimited": "Te veel verzoeken. Wacht {seconds} seconden.",
+      "notAuthenticated": "Uw sessie is verlopen. Log opnieuw in.",
+      "connectionLost": "Kan geen verbinding maken met de server. Controleer uw verbinding.",
+      "serverError": "Er is iets misgegaan. Probeer het opnieuw.",
+      "projectNotFound": "Project niet gevonden.",
+      "taskNotFound": "Taak niet gevonden.",
+      "fileNotFound": "Bestand niet gevonden in opslag.",
+      "fileTooLarge": "Bestand te groot (max. 1 MB).",
+      "uploadNotFound": "Upload niet gevonden."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "Een Next.js-starter met Convex, Better Auth en Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "Over ons",
+      "description": "Meer informatie over Web App Starter en onze missie.",
+      "notice": "Dit is placeholder-inhoud. Vervang dit door je eigen inhoud voordat je start.",
+      "heading": "Over ons",
+      "mission": "Onze Missie",
+      "missionText": "Wij geloven dat ontwikkelaars hun tijd moeten besteden aan het bouwen van functies, niet aan het configureren van infrastructuur. Web App Starter biedt een productieklaar startpunt met real-time data synchronisatie, bestandsuploads en sessie-gebaseerde authenticatie, alles al aangesloten en klaar.",
+      "whatIncluded": "Wat is Inbegrepen",
+      "whatIncludedText": "De starterkit wordt geleverd met een landingspagina, een volledig geverifieerde webapplicatie, een admin-dashboard en een component-storybook. Elke app deelt een uniform designsysteem gebouwd op Radix UI-primitieven met Tailwind CSS.",
+      "openSource": "Open Source",
+      "openSourceText": "Dit project is open source en is ontworpen om te worden geforkt en aangepast.",
+      "intro": "Web App Starter is een volledige stack-basis voor het bouwen van moderne webapplicaties. Het combineert Next.js voor de frontend, Convex voor de backend en Better Auth voor veilige authenticatie — alles aangesloten en klaar om te verzenden."
+    },
+    "privacy": {
+      "title": "Privacybeleid",
+      "description": "Hoe we je gegevens verzamelen, gebruiken en beschermen.",
+      "notice": "Dit is een privacybeleidssjabloon. Pas dit aan voor je specifieke toepassing en rechtsgebied voordat je start.",
+      "heading": "Privacybeleid",
+      "lastUpdated": "Laatst bijgewerkt: {date}"
+    },
+    "terms": {
+      "title": "Servicevoorwaarden",
+      "description": "De regels en richtlijnen voor het gebruik van onze service.",
+      "notice": "Dit is een sjabloon van servicevoorwaarden. Pas dit aan voor je specifieke toepassing en rechtsgebied voordat je start.",
+      "heading": "Servicevoorwaarden",
+      "lastUpdated": "Laatst bijgewerkt: {date}"
+    }
+  },
+  "offline": {
+    "message": "Het lijkt erop dat je offline bent. Een actieve verbinding is nodig om door te gaan."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "Zeer zwak",
+      "weak": "Zwak",
+      "fair": "Redelijk",
+      "good": "Goed",
+      "strong": "Sterk"
+    },
+    "crackTimeLabel": "Geschatte kraaktijd: {time}",
+    "minLength": "Minimaal {count} tekens vereist.",
+    "strengthRequirement": "Het wachtwoord voldoet niet aan de sterkte-eisen.",
+    "warnings": {
+      "straightRow": "Rechte rijen toetsen op uw toetsenbord zijn makkelijk te raden.",
+      "keyPattern": "Korte toetsenbordpatronen zijn makkelijk te raden.",
+      "simpleRepeat": "Herhaalde tekens zoals \"aaa\" zijn makkelijk te raden.",
+      "extendedRepeat": "Herhaalde tekenpatronen zoals \"abcabcabc\" zijn makkelijk te raden.",
+      "sequences": "Veelvoorkomende tekenreeksen zoals \"abc\" zijn makkelijk te raden.",
+      "recentYears": "Recente jaren zijn makkelijk te raden.",
+      "dates": "Datums zijn makkelijk te raden.",
+      "topTen": "Dit is een veelgebruikt wachtwoord.",
+      "topHundred": "Dit is een vaak gebruikt wachtwoord.",
+      "common": "Dit is een algemeen gebruikt wachtwoord.",
+      "similarToCommon": "Dit lijkt op een algemeen gebruikt wachtwoord.",
+      "wordByItself": "Losse woorden zijn makkelijk te raden.",
+      "namesByThemselves": "Losse voor- of achternamen zijn makkelijk te raden.",
+      "commonNames": "Veelvoorkomende voor- en achternamen zijn makkelijk te raden.",
+      "userInputs": "Er mogen geen persoonlijke of paginagerelateerde gegevens in staan.",
+      "pwned": "Uw wachtwoord is blootgesteld bij een datalek op internet."
+    },
+    "suggestions": {
+      "l33t": "Vermijd voorspelbare lettersubstituties zoals \"@\" voor \"a\".",
+      "reverseWords": "Vermijd omgekeerde spellingen van veelvoorkomende woorden.",
+      "allUppercase": "Gebruik hoofdletters voor sommige, maar niet alle letters.",
+      "capitalization": "Gebruik hoofdletters voor meer dan alleen de eerste letter.",
+      "dates": "Vermijd data en jaren die met u verbonden zijn.",
+      "recentYears": "Vermijd recente jaren.",
+      "associatedYears": "Vermijd jaren die met u verbonden zijn.",
+      "sequences": "Vermijd veelvoorkomende tekenreeksen.",
+      "repeated": "Vermijd herhaalde woorden en tekens.",
+      "longerKeyboardPattern": "Gebruik langere toetsenbordpatronen en wissel van typrichting.",
+      "anotherWord": "Voeg minder gebruikelijke woorden toe.",
+      "useWords": "Gebruik meerdere woorden, maar vermijd veelgebruikte uitdrukkingen.",
+      "noNeed": "U kunt sterke wachtwoorden maken zonder symbolen, cijfers of hoofdletters.",
+      "pwned": "Als u dit wachtwoord elders gebruikt, moet u het wijzigen."
+    },
+    "timeEstimation": {
+      "ltSecond": "minder dan een seconde",
+      "second": "{base} seconde",
+      "seconds": "{base} seconden",
+      "minute": "{base} minuut",
+      "minutes": "{base} minuten",
+      "hour": "{base} uur",
+      "hours": "{base} uur",
+      "day": "{base} dag",
+      "days": "{base} dagen",
+      "month": "{base} maand",
+      "months": "{base} maanden",
+      "year": "{base} jaar",
+      "years": "{base} jaar",
+      "centuries": "eeuwen"
+    }
+  },
+  "forbidden": {
+    "title": "Toegang geweigerd",
+    "signedInAs": "U bent ingelogd als {email}.",
+    "description": "U heeft geen toestemming om toegang te krijgen tot deze bron. Als u denkt dat dit een fout is, neem dan contact op met de beheerder van uw organisatie.",
+    "backToSignIn": "Terug naar inloggen"
+  }
+}

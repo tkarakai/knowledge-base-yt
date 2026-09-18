@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "読み込み中...",
+    "cancel": "キャンセル",
+    "save": "変更を保存",
+    "saving": "保存中...",
+    "create": "作成",
+    "creating": "作成中...",
+    "delete": "削除",
+    "signOut": "ログアウト",
+    "error": "エラーが発生しました",
+    "backToHome": "ホームに戻る",
+    "note": "注記"
+  },
+  "theme": {
+    "light": "ライトテーマ",
+    "system": "システムテーマ",
+    "dark": "ダークテーマ",
+    "ariaLabel": "テーマ: {label}。クリックして切り替え。"
+  },
+  "language": {
+    "label": "言語",
+    "ariaLabel": "言語を選択"
+  },
+  "auth": {
+    "signIn": {
+      "title": "おかえりなさい",
+      "description": "ダッシュボードにアクセスするにはログインしてください。",
+      "cta": "ログイン",
+      "switchPrompt": "初めてですか？",
+      "switchLink": "アカウントを作成",
+      "pageHeading": "おかえりなさい。続きからどうぞ。",
+      "pageDescription": "Better Authがセッション管理を、Convexがリアルタイムデータを担当します。ログインしてプロジェクトとタスクにアクセスしましょう。"
+    },
+    "signUp": {
+      "title": "ワークスペースを作成",
+      "description": "1分以内で始められます。",
+      "cta": "アカウント作成",
+      "switchPrompt": "すでにアカウントをお持ちですか？",
+      "switchLink": "ログイン",
+      "pageHeading": "アカウントを作成して構築を始めましょう。",
+      "pageDescription": "Convex + Better Authは設定済みなので、アカウントはすぐに本番環境で使えます。"
+    },
+    "badge": "アカウント",
+    "fields": {
+      "name": "名前",
+      "namePlaceholder": "山田 太郎",
+      "email": "メールアドレス",
+      "emailPlaceholder": "you@example.com",
+      "password": "パスワード",
+      "passwordPlaceholder": "パスワードを入力",
+      "passwordSignUpPlaceholder": "12文字以上",
+      "confirmPassword": "パスワード確認",
+      "confirmPasswordPlaceholder": "パスワードを再入力"
+    },
+    "errors": {
+      "passwordMismatch": "パスワードが一致しません",
+      "passwordCompromised": "入力されたパスワードは漏洩しています。別のパスワードを選択してください。",
+      "rateLimited": "試行回数が多すぎます。しばらく待ってからもう一度お試しください。",
+      "invalidCredentials": "メールアドレスまたはパスワードが無効です",
+      "generic": "エラーが発生しました"
+    },
+    "twoFactorVerify": {
+      "title": "二要素認証",
+      "description": "認証アプリの6桁のコードを入力してください。",
+      "cta": "認証",
+      "invalidCode": "無効なコードです。もう一度お試しください。",
+      "useBackupCode": "バックアップコードを使用する",
+      "backupCodeTitle": "バックアップコード",
+      "backupCodeDescription": "バックアップコードを入力してログインしてください。",
+      "backupCodePlaceholder": "バックアップコードを入力",
+      "useAuthenticator": "認証アプリを使用する"
+    },
+    "footer": "安全なメール + パスワード認証",
+    "working": "処理中...",
+    "legal": {
+      "prefix": "続行することで、当社の",
+      "termsOfService": "利用規約",
+      "and": "および",
+      "privacyPolicy": "プライバシーポリシー"
+    },
+    "invitation": {
+      "badge": "招待",
+      "title": "登録を完了",
+      "description": "招待されました！以下でアカウントを作成してください。",
+      "cta": "アカウントを作成",
+      "pageHeading": "ようこそ。招待されました。",
+      "pageDescription": "登録を完了して始めましょう。",
+      "invalidTitle": "この招待について",
+      "noToken": "招待トークンが提供されていません。招待メールのリンクをご使用ください。",
+      "tokenExpired": "この招待は期限切れです。新しい招待についてチームにお問い合わせください。",
+      "tokenUsed": "この招待はすでに引き換え済みです。",
+      "tokenInvalid": "この招待リンクは無効です。",
+      "signupBlocked": "現在、登録は招待制のみです。",
+      "signupBlockedDescription": "ホームページのウェイトリストに参加してアクセスをリクエストしてください。",
+      "goToWaitlist": "ウェイトリストに参加",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "パスワードの復旧",
+      "title": "パスワードをお忘れですか？",
+      "description": "メールアドレスを入力してください。パスワード再設定用のリンクをお送りします。",
+      "cta": "再設定リンクを送信",
+      "emailSent": "メールをご確認ください",
+      "emailSentDescription": "{email} のアカウントが存在する場合、パスワード再設定リンクを送信しました。受信トレイと迷惑メールフォルダをご確認ください。",
+      "backToSignIn": "ログインに戻る",
+      "pageHeading": "パスワードを再設定しましょう。",
+      "pageDescription": "アカウントに関連付けられたメールアドレスを入力してください。新しいパスワードを作成するためのリンクをお送りします。"
+    },
+    "resetPassword": {
+      "badge": "パスワードの復旧",
+      "title": "新しいパスワードを設定",
+      "description": "アカウント用の強力なパスワードを選択してください。",
+      "newPassword": "新しいパスワード",
+      "cta": "パスワードを再設定",
+      "invalidTitle": "無効な再設定リンク",
+      "tokenExpired": "このパスワード再設定リンクは期限切れです。新しいリンクをリクエストしてください。",
+      "tokenInvalid": "このパスワード再設定リンクは無効か、すでに使用されています。",
+      "requestNewLink": "新しいリンクをリクエスト",
+      "backToSignIn": "ログインに戻る",
+      "successTitle": "パスワードを更新しました",
+      "successDescription": "パスワードが正常に再設定されました。新しいパスワードでログインできます。",
+      "signInNow": "今すぐログイン",
+      "pageHeading": "あと少しです。新しいパスワードを設定しましょう。",
+      "pageDescription": "以前使用したことのない強力なパスワードを選択してください。新しいパスワードは12文字以上である必要があります。"
+    },
+    "verifyEmail": {
+      "badge": "メール認証",
+      "title": "メールをご確認ください",
+      "description": "メールアドレスに認証リンクを送信しました。リンクをクリックしてアカウントを認証してください。",
+      "descriptionWithEmail": "{email} に認証リンクを送信しました。リンクをクリックしてアカウントを認証してください。",
+      "resend": "認証メールを再送信",
+      "resent": "認証メールを送信しました！受信トレイをご確認ください。",
+      "recentlySentJustNow": "認証メールはたった今送信されました。受信トレイと迷惑メールフォルダをご確認ください。",
+      "recentlySentSecondsAgo": "認証メールは数秒前に送信されました。受信トレイと迷惑メールフォルダをご確認ください。",
+      "recentlySentMinutesAgo": "認証メールは {minutes} {minutes, plural, one {分} other {分}}前に送信されました。受信トレイと迷惑メールフォルダをご確認ください。",
+      "backToSignIn": "ログインに戻る",
+      "pageHeading": "最後のステップです。メールを認証してください。",
+      "pageDescription": "認証リンクを送信しました。クリックしてアカウントを有効化し、アプリの使用を開始してください。",
+      "verificationSuccessTitle": "メールアドレスの確認ありがとうございます。",
+      "verificationSuccessDescription": "メールアドレスの確認が完了しました。",
+      "verificationErrorTitle": "メール認証に失敗しました",
+      "verificationErrorUnknown": "このメール認証リンクを確認できませんでした。新しい認証メールをリクエストしてください。",
+      "verificationErrorTokenExpired": "この認証リンクの有効期限が切れています。新しいリンクをリクエストしてください。",
+      "verificationErrorInvalidToken": "この認証リンクは無効か、すでに使用されています。",
+      "verificationErrorUserNotFound": "この認証リンクに対応するアカウントが見つかりません。",
+      "verificationErrorUnauthorized": "このアカウントの認証リクエストを完了できませんでした。",
+      "sessionStatusChecking": "セッションの状態を確認しています...",
+      "sessionStatusSignedInOnDevice": "{device} でサインインしています。",
+      "sessionStatusNoSession": "アプリを利用するにはサインインしてください。",
+      "goToSignIn": "サインインページへ",
+      "closeWindow": "このウィンドウを閉じる"
+    },
+    "forgotPasswordLink": "パスワードをお忘れですか？"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "あなたのスタートライン。",
+    "headingLine2": "ここから始めよう。",
+    "description": "認証、データベース、リアルタイム同期、ファイルアップロード — すべて接続済みですぐに使えます。",
+    "getStarted": "始める",
+    "signIn": "ログイン",
+    "footer": {
+      "about": "について",
+      "privacyPolicy": "プライバシーポリシー",
+      "termsOfService": "利用規約"
+    },
+    "waitlist": {
+      "title": "ウェイトリストに参加",
+      "description": "ウェイトリストに参加して、アクセスをリクエストしましょう。",
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "you@example.jp",
+      "superpowersLabel": "あなたの超能力は？",
+      "superpowersPlaceholder": "超能力を選んでね",
+      "excitementLabel": "どのくらいワクワクしてる？",
+      "excitementPlaceholder": "気持ちを教えてください",
+      "selectedCount": "{count}件選択中",
+      "submit": "ウェイトリストに参加",
+      "submitting": "登録中...",
+      "successTitle": "リストに登録されました！",
+      "successDescription": "順番が来ましたら招待メールをお送りします。",
+      "alreadySignedUp": "すでにアカウントをお持ちですか？",
+      "signIn": "ログイン",
+      "superpowers": {
+        "coffee-to-code": "コーヒーをコードに変える",
+        "pixel-perfect": "ピクセルを完璧に仕上げる",
+        "bug-whisperer": "バグとささやき合う",
+        "spreadsheet-wizard": "スプレッドシートの魔術師",
+        "inbox-zero": "毎日受信トレイをゼロにする",
+        "parallel-parking": "一発で縦列駐車を決める",
+        "remembering-names": "全員の名前を覚えている",
+        "never-burning-toast": "トーストを絶対に焦がさない",
+        "explaining-tech": "親にテクノロジーを説明する",
+        "finding-restaurants": "最高のレストランを見つける",
+        "staying-calm": "長い会議でも冷静でいられる",
+        "other": "まったく別の何か"
+      },
+      "excitement": {
+        "take-my-money": "お金を受け取って！",
+        "cant-wait": "待ちきれない！",
+        "cautiously-optimistic": "慎重に期待している",
+        "just-browsing": "ちょっと見てるだけ",
+        "friend-made-me": "友達に登録させられた"
+      },
+      "errors": {
+        "waitlistNotEnabled": "現在ウェイトリストへの登録を受け付けておりません。後ほどお試しください。",
+        "invalidEmail": "有効なメールアドレスを入力してください。",
+        "rateLimited": "リクエストが多すぎます。しばらく待ってからもう一度お試しください。",
+        "generic": "エラーが発生しました。もう一度お試しください。"
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "プロジェクト",
+    "noProjects": "プロジェクトはまだありません",
+    "noProjectsDescription": "プロジェクトを作成して始めましょう。",
+    "projectNotFound": "プロジェクトが見つかりません",
+    "projectNotFoundDescription": "このプロジェクトは削除された可能性があります。",
+    "tabs": {
+      "tasks": "タスク",
+      "attachments": "添付ファイル"
+    },
+    "security": "セキュリティ",
+    "sessions": {
+      "title": "アクティブなセッション",
+      "description": "すべてのデバイスでのアクティブなセッションを管理します。覚えのないセッションはログアウトできます。",
+      "currentSession": "このデバイス",
+      "otherSessions": "その他のデバイス",
+      "current": "現在",
+      "lastActive": "{time}にアクティブ",
+      "noOtherSessions": "他にアクティブなセッションはありません。このデバイスでのみログインしています。",
+      "revokeAll": "他のすべてをログアウト",
+      "revokeAllTitle": "他のすべてのデバイスからログアウトしますか？",
+      "revokeAllDescription": "他のすべてのデバイスとブラウザからログアウトされます。現在のセッションのみアクティブのまま残ります。",
+      "revokeAllConfirm": "すべてログアウト",
+      "revokeTitle": "このデバイスからログアウトしますか？",
+      "revokeDescription": "{device}のセッションが終了します。アカウントにアクセスするには再度ログインが必要です。",
+      "backToDashboard": "ダッシュボードに戻る"
+    },
+    "account": "設定",
+    "profile": {
+      "title": "プロフィール",
+      "description": "プロフィール情報と設定を管理します。",
+      "name": "表示名",
+      "namePlaceholder": "あなたの名前",
+      "email": "メールアドレス",
+      "emailReadonly": "メールアドレスの変更はサポートにお問い合わせください。",
+      "avatarColor": "アバターの色",
+      "saved": "プロフィールを更新しました。",
+      "language": "言語",
+      "timezone": "タイムゾーン",
+      "timezonePlaceholder": "タイムゾーンを選択",
+      "timezoneSearch": "タイムゾーンを検索...",
+      "timezoneDetected": "検出済み",
+      "noTimezoneResults": "タイムゾーンが見つかりません。",
+      "theme": "テーマ"
+    },
+    "changePassword": {
+      "title": "パスワード変更",
+      "currentPassword": "現在のパスワード",
+      "newPassword": "新しいパスワード",
+      "confirmPassword": "新しいパスワードの確認",
+      "revokeOtherSessions": "他のすべてのデバイスからログアウト",
+      "cta": "パスワードを更新",
+      "success": "パスワードを更新しました。",
+      "errorCurrentPassword": "現在のパスワードが正しくありません。"
+    },
+    "twoFactor": {
+      "title": "二要素認証",
+      "description": "アカウントにセキュリティレイヤーを追加します。",
+      "enabled": "2FAは有効です",
+      "disabled": "2FAは無効です",
+      "enable": "2FAを有効にする",
+      "disable": "2FAを無効にする",
+      "enterPassword": "続行するにはパスワードを入力してください。",
+      "scanQrCode": "認証アプリ（Google Authenticator、Authyなど）でこのQRコードをスキャンしてください。",
+      "manualEntry": "スキャンできませんか？このキーを手動で入力してください",
+      "manualEntryDescription": "認証アプリを開き、「アカウントを追加」を選択してから「セットアップキーを入力」を選び、以下のキーを貼り付けてください。",
+      "secretKey": "シークレットキー",
+      "copied": "クリップボードにコピーしました",
+      "enterCode": "設定を確認するため、認証アプリの6桁のコードを入力してください。",
+      "verify": "認証",
+      "backupCodes": "バックアップコード",
+      "backupCodesDescription": "これらのコードを安全な場所に保管してください。各コードは一度だけ使用できます。",
+      "viewBackupCodes": "バックアップコードを表示",
+      "regenerateBackupCodes": "バックアップコードを再生成",
+      "disableConfirm": "2FAを無効にしてもよろしいですか？",
+      "regenerateConfirm": "既存のバックアップコードが置き換えられます。未使用のコードは使用できなくなります。",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "新規プロジェクト",
+    "createProject": "プロジェクト作成",
+    "createFirst": "最初のプロジェクトを作成",
+    "noProjects": "プロジェクトなし",
+    "editProject": "プロジェクトを編集",
+    "deleteProject": "プロジェクトを削除",
+    "deleteConfirmTitle": "プロジェクトを削除しますか？",
+    "deleteConfirmDescription": "“{name}”とすべてのタスクが完全に削除されます。この操作は元に戻せません。",
+    "fields": {
+      "name": "名前",
+      "namePlaceholder": "プロジェクト名",
+      "description": "説明",
+      "descriptionPlaceholder": "このプロジェクトについて"
+    }
+  },
+  "tasks": {
+    "title": "タスク",
+    "addTask": "タスクを追加",
+    "newTask": "新規タスク",
+    "editTask": "タスクを編集",
+    "deleteTask": "タスクを削除",
+    "confirmDelete": "削除を確認",
+    "createTask": "タスク作成",
+    "noTasks": "タスクはまだありません。追加して始めましょう。",
+    "noTasksSummary": "タスクはまだありません",
+    "progress": "{totalCount}件中{doneCount}件完了",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "ステータス",
+      "todo": "未着手",
+      "inProgress": "進行中",
+      "done": "完了",
+      "all": "すべて"
+    },
+    "fields": {
+      "title": "タイトル",
+      "titlePlaceholder": "何をする必要がありますか？",
+      "description": "説明",
+      "descriptionPlaceholder": "詳細を追加...",
+      "deadline": "期限",
+      "deadlinePlaceholder": "期限なし",
+      "clearDeadline": "期限を削除"
+    },
+    "deadline": {
+      "overdue": "期限超過",
+      "dueToday": "本日期限"
+    },
+    "aria": {
+      "changeStatus": "{status}からステータスを変更"
+    },
+    "count": "{count, plural, =0 {タスクはまだありません} other {#件のタスク}}"
+  },
+  "uploads": {
+    "title": "添付ファイル",
+    "addFile": "ファイルを追加",
+    "uploading": "アップロード中...",
+    "processing": "処理中",
+    "view": "表示",
+    "deleteFile": "ファイルを削除",
+    "emptyState": "ファイルをアップロードしてConvexのストレージフローを確認しましょう。",
+    "errors": {
+      "tooLarge": "ファイルが大きすぎます（最大1MB）",
+      "uploadFailed": "アップロードに失敗しました。もう一度お試しください。",
+      "generic": "アップロードに失敗しました。"
+    },
+    "count": "{count, plural, =0 {添付ファイルなし} other {#件の添付ファイル}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "認証されていません",
+    "PROJECT_NOT_FOUND": "プロジェクトが見つかりません",
+    "TASK_NOT_FOUND": "タスクが見つかりません",
+    "FILE_NOT_FOUND": "ストレージにファイルが見つかりません",
+    "FILE_TOO_LARGE": "ファイルが大きすぎます（最大1MB）",
+    "UPLOAD_NOT_FOUND": "アップロードが見つかりません",
+    "convex": {
+      "rateLimited": "リクエストが多すぎます。{seconds}秒お待ちください。",
+      "notAuthenticated": "セッションの有効期限が切れました。再度サインインしてください。",
+      "connectionLost": "サーバーに接続できません。接続を確認してください。",
+      "serverError": "エラーが発生しました。もう一度お試しください。",
+      "projectNotFound": "プロジェクトが見つかりません。",
+      "taskNotFound": "タスクが見つかりません。",
+      "fileNotFound": "ストレージにファイルが見つかりません。",
+      "fileTooLarge": "ファイルが大きすぎます（最大1MB）。",
+      "uploadNotFound": "アップロードが見つかりません。"
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "Convex、Better Auth、Bunを使ったNext.jsスターター。"
+  },
+  "legal": {
+    "about": {
+      "title": "について",
+      "description": "Web App Starterと私たちのミッションについて知りましょう。",
+      "notice": "これはプレースホルダーコンテンツです。起動前に自分のコンテンツで置き換えてください。",
+      "heading": "について",
+      "mission": "私たちのミッション",
+      "missionText": "開発者は基盤構築ではなく機能開発に時間を費やすべきだと私たちは考えています。Web App Starterは、リアルタイムデータ同期、ファイルアップロード、セッションベースの認証がすべて組み込まれた本番環境対応のスタートポイントを提供します。",
+      "whatIncluded": "含まれる内容",
+      "whatIncludedText": "スターターキットには、ランディングページ、完全に認証されたウェブアプリケーション、管理ダッシュボード、およびコンポーネントストーリーブックが含まれています。各アプリはRadix UIプリミティブとTailwind CSSで構築された統一されたデザインシステムを共有しています。",
+      "openSource": "オープンソース",
+      "openSourceText": "このプロジェクトはオープンソースであり、フォークとカスタマイズが想定されています。",
+      "intro": "Web App Starterは、モダンなウェブアプリケーション構築のための完全なスタック基盤です。フロントエンドのNext.js、バックエンドのConvex、セキュアな認証のBetter Authを統合 — すべて接続済みで発送準備完了です。"
+    },
+    "privacy": {
+      "title": "プライバシーポリシー",
+      "description": "データの収集、使用、保護方法について。",
+      "notice": "これはプライバシーポリシーのテンプレートです。起動前に特定のアプリケーションと法域に合わせてカスタマイズしてください。",
+      "heading": "プライバシーポリシー",
+      "lastUpdated": "最終更新日: {date}"
+    },
+    "terms": {
+      "title": "利用規約",
+      "description": "当サービス利用のルールとガイドライン。",
+      "notice": "これは利用規約のテンプレートです。起動前に特定のアプリケーションと法域に合わせてカスタマイズしてください。",
+      "heading": "利用規約",
+      "lastUpdated": "最終更新日: {date}"
+    }
+  },
+  "offline": {
+    "message": "オフラインのようです。続行するにはインターネット接続が必要です。"
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "非常に弱い",
+      "weak": "弱い",
+      "fair": "普通",
+      "good": "良い",
+      "strong": "強い"
+    },
+    "crackTimeLabel": "推定解読時間：{time}",
+    "minLength": "最低 {count} 文字必要です。",
+    "strengthRequirement": "パスワードが強度の要件を満たしていません。",
+    "warnings": {
+      "straightRow": "キーボードの連続したキーの並びは推測されやすいです。",
+      "keyPattern": "短いキーボードパターンは推測されやすいです。",
+      "simpleRepeat": "\"aaa\" のような繰り返し文字は推測されやすいです。",
+      "extendedRepeat": "\"abcabcabc\" のような繰り返しパターンは推測されやすいです。",
+      "sequences": "\"abc\" のような一般的な文字列は推測されやすいです。",
+      "recentYears": "最近の年号は推測されやすいです。",
+      "dates": "日付は推測されやすいです。",
+      "topTen": "これは非常に多く使われているパスワードです。",
+      "topHundred": "これは頻繁に使われているパスワードです。",
+      "common": "これはよく使われているパスワードです。",
+      "similarToCommon": "これはよく使われているパスワードに似ています。",
+      "wordByItself": "単一の単語は推測されやすいです。",
+      "namesByThemselves": "単独の名前や姓は推測されやすいです。",
+      "commonNames": "よくある名前や姓は推測されやすいです。",
+      "userInputs": "個人情報やページに関連するデータを含めないでください。",
+      "pwned": "あなたのパスワードはインターネット上のデータ漏洩で流出しています。"
+    },
+    "suggestions": {
+      "l33t": "\"@\" を \"a\" の代わりに使うなど、予測可能な文字の置き換えは避けてください。",
+      "reverseWords": "一般的な単語の逆綴りは避けてください。",
+      "allUppercase": "すべてではなく、一部の文字を大文字にしてください。",
+      "capitalization": "最初の文字だけでなく、他の文字も大文字にしてください。",
+      "dates": "自分に関連する日付や年号は避けてください。",
+      "recentYears": "最近の年号は避けてください。",
+      "associatedYears": "自分に関連する年号は避けてください。",
+      "sequences": "一般的な文字列は避けてください。",
+      "repeated": "繰り返しの単語や文字は避けてください。",
+      "longerKeyboardPattern": "より長いキーボードパターンを使用し、入力方向を複数回変えてください。",
+      "anotherWord": "あまり一般的でない単語を追加してください。",
+      "useWords": "複数の単語を使用してください。ただし、よくあるフレーズは避けてください。",
+      "noNeed": "記号、数字、大文字を使わなくても強力なパスワードを作成できます。",
+      "pwned": "このパスワードを他の場所でも使用している場合は、変更することをお勧めします。"
+    },
+    "timeEstimation": {
+      "ltSecond": "1秒未満",
+      "second": "{base} 秒",
+      "seconds": "{base} 秒",
+      "minute": "{base} 分",
+      "minutes": "{base} 分",
+      "hour": "{base} 時間",
+      "hours": "{base} 時間",
+      "day": "{base} 日",
+      "days": "{base} 日",
+      "month": "{base} か月",
+      "months": "{base} か月",
+      "year": "{base} 年",
+      "years": "{base} 年",
+      "centuries": "数百年"
+    }
+  },
+  "forbidden": {
+    "title": "アクセスが拒否されました",
+    "signedInAs": "{email} としてサインインしています。",
+    "description": "このリソースへのアクセス権限がありません。これが誤りであると思われる場合は、組織の管理者にお問い合わせください。",
+    "backToSignIn": "サインインに戻る"
+  }
+}

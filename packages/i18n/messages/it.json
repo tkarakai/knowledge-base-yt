@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "Caricamento...",
+    "cancel": "Annulla",
+    "save": "Salva modifiche",
+    "saving": "Salvataggio...",
+    "create": "Crea",
+    "creating": "Creazione...",
+    "delete": "Elimina",
+    "signOut": "Esci",
+    "error": "Si è verificato un errore",
+    "backToHome": "Torna alla home",
+    "note": "Nota"
+  },
+  "theme": {
+    "light": "Tema chiaro",
+    "system": "Tema di sistema",
+    "dark": "Tema scuro",
+    "ariaLabel": "Tema: {label}. Clicca per cambiare."
+  },
+  "language": {
+    "label": "Lingua",
+    "ariaLabel": "Seleziona lingua"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Bentornato",
+      "description": "Accedi per continuare alla tua dashboard.",
+      "cta": "Accedi",
+      "switchPrompt": "Sei nuovo?",
+      "switchLink": "Crea un account",
+      "pageHeading": "Bentornato. Riprendi da dove avevi interrotto.",
+      "pageDescription": "Better Auth gestisce i flussi di sessione, mentre Convex mantiene i dati in tempo reale. Accedi per raggiungere i tuoi progetti e le tue attività."
+    },
+    "signUp": {
+      "title": "Crea il tuo spazio di lavoro",
+      "description": "Inizia in meno di un minuto.",
+      "cta": "Crea account",
+      "switchPrompt": "Hai già un account?",
+      "switchLink": "Accedi",
+      "pageHeading": "Crea il tuo account e inizia a costruire.",
+      "pageDescription": "Convex + Better Auth sono già configurati, quindi il tuo account è subito pronto per la produzione."
+    },
+    "badge": "Account",
+    "fields": {
+      "name": "Nome",
+      "namePlaceholder": "Avery Quinn",
+      "email": "E-mail",
+      "emailPlaceholder": "tu@esempio.com",
+      "password": "Password",
+      "passwordPlaceholder": "La tua password",
+      "passwordSignUpPlaceholder": "Almeno 12 caratteri",
+      "confirmPassword": "Conferma password",
+      "confirmPasswordPlaceholder": "Conferma la tua password"
+    },
+    "errors": {
+      "passwordMismatch": "Le password non corrispondono",
+      "passwordCompromised": "La password inserita è stata compromessa. Scegli una password diversa.",
+      "rateLimited": "Troppi tentativi. Attendi un momento prima di riprovare.",
+      "invalidCredentials": "Email o password non validi",
+      "generic": "Si è verificato un errore"
+    },
+    "twoFactorVerify": {
+      "title": "Autenticazione a due fattori",
+      "description": "Inserisci il codice a 6 cifre dalla tua app di autenticazione.",
+      "cta": "Verifica",
+      "invalidCode": "Codice non valido. Riprova.",
+      "useBackupCode": "Usa un codice di backup",
+      "backupCodeTitle": "Codice di backup",
+      "backupCodeDescription": "Inserisci uno dei tuoi codici di backup per accedere.",
+      "backupCodePlaceholder": "Inserisci il codice di backup",
+      "useAuthenticator": "Usa l'app di autenticazione"
+    },
+    "footer": "E-mail + password sicuri",
+    "working": "Elaborazione...",
+    "legal": {
+      "prefix": "Continuando, accetti i nostri",
+      "termsOfService": "Termini di servizio",
+      "and": "e",
+      "privacyPolicy": "Informativa sulla privacy"
+    },
+    "invitation": {
+      "badge": "Invito",
+      "title": "Completa la registrazione",
+      "description": "Sei stato invitato! Crea il tuo account qui sotto.",
+      "cta": "Crea account",
+      "pageHeading": "Benvenuto. Sei stato invitato.",
+      "pageDescription": "Completa la registrazione per iniziare.",
+      "invalidTitle": "Informazioni su questo invito",
+      "noToken": "Non è stato fornito un token di invito. Utilizza il link dalla tua e-mail di invito.",
+      "tokenExpired": "Questo invito è scaduto. Contatta il team per ottenerne uno nuovo.",
+      "tokenUsed": "Questo invito è già stato riscattato.",
+      "tokenInvalid": "Questo link di invito non è valido.",
+      "signupBlocked": "La registrazione è attualmente solo su invito.",
+      "signupBlockedDescription": "Iscriviti alla lista d'attesa sulla nostra homepage per richiedere l'accesso.",
+      "goToWaitlist": "Iscriviti alla lista d'attesa",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "Recupero password",
+      "title": "Hai dimenticato la password?",
+      "description": "Inserisci la tua e-mail e ti invieremo un link per reimpostare la password.",
+      "cta": "Invia link di reimpostazione",
+      "emailSent": "Controlla la tua e-mail",
+      "emailSentDescription": "Se esiste un account per {email}, abbiamo inviato un link per reimpostare la password. Controlla la posta in arrivo e la cartella spam.",
+      "backToSignIn": "Torna all'accesso",
+      "pageHeading": "Reimposta la tua password. Torna in pista.",
+      "pageDescription": "Inserisci l'indirizzo e-mail associato al tuo account e ti invieremo un link per creare una nuova password."
+    },
+    "resetPassword": {
+      "badge": "Recupero password",
+      "title": "Imposta una nuova password",
+      "description": "Scegli una password sicura per il tuo account.",
+      "newPassword": "Nuova password",
+      "cta": "Reimposta password",
+      "invalidTitle": "Link di reimpostazione non valido",
+      "tokenExpired": "Questo link di reimpostazione è scaduto. Richiedine uno nuovo.",
+      "tokenInvalid": "Questo link di reimpostazione non è valido o è già stato utilizzato.",
+      "requestNewLink": "Richiedi un nuovo link",
+      "backToSignIn": "Torna all'accesso",
+      "successTitle": "Password aggiornata",
+      "successDescription": "La tua password è stata reimpostata con successo. Ora puoi accedere con la nuova password.",
+      "signInNow": "Accedi ora",
+      "pageHeading": "Ci siamo quasi. Scegli una nuova password.",
+      "pageDescription": "Scegli una password sicura che non hai mai usato prima. La nuova password deve essere di almeno 12 caratteri."
+    },
+    "verifyEmail": {
+      "badge": "Verifica e-mail",
+      "title": "Controlla la tua e-mail",
+      "description": "Abbiamo inviato un link di verifica al tuo indirizzo e-mail. Clicca il link per verificare il tuo account.",
+      "descriptionWithEmail": "Abbiamo inviato un link di verifica a {email}. Clicca il link per verificare il tuo account.",
+      "resend": "Invia di nuovo l'e-mail di verifica",
+      "resent": "E-mail di verifica inviata! Controlla la posta in arrivo.",
+      "recentlySentJustNow": "Un'e-mail di verifica è stata appena inviata. Controlla la posta in arrivo e la cartella spam.",
+      "recentlySentSecondsAgo": "Un'e-mail di verifica è stata inviata pochi secondi fa. Controlla la posta in arrivo e la cartella spam.",
+      "recentlySentMinutesAgo": "Un'e-mail di verifica è stata inviata {minutes} {minutes, plural, one {minuto} other {minuti}} fa. Controlla la posta in arrivo e la cartella spam.",
+      "backToSignIn": "Torna all'accesso",
+      "pageHeading": "Ultimo passaggio. Verifica la tua e-mail.",
+      "pageDescription": "Ti abbiamo inviato un link di verifica. Cliccalo per attivare il tuo account e iniziare a usare l'app.",
+      "verificationSuccessTitle": "Grazie per aver verificato la tua e-mail.",
+      "verificationSuccessDescription": "La tua e-mail è stata verificata con successo.",
+      "verificationErrorTitle": "Verifica e-mail non riuscita",
+      "verificationErrorUnknown": "Non siamo riusciti a verificare questo link e-mail. Richiedi una nuova e-mail di verifica.",
+      "verificationErrorTokenExpired": "Questo link di verifica è scaduto. Richiedine uno nuovo.",
+      "verificationErrorInvalidToken": "Questo link di verifica non è valido o è già stato usato.",
+      "verificationErrorUserNotFound": "Non abbiamo trovato un account per questo link di verifica.",
+      "verificationErrorUnauthorized": "Non è stato possibile completare questa richiesta di verifica per il tuo account.",
+      "sessionStatusChecking": "Verifica dello stato della sessione in corso...",
+      "sessionStatusSignedInOnDevice": "Ora hai effettuato l'accesso su {device}.",
+      "sessionStatusNoSession": "Accedi per usare l'app.",
+      "goToSignIn": "Vai alla pagina di accesso",
+      "closeWindow": "Chiudi questa finestra"
+    },
+    "forgotPasswordLink": "Hai dimenticato la password?"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "Il tuo punto di partenza.",
+    "headingLine2": "Costruisci da qui.",
+    "description": "Autenticazione, database, sincronizzazione in tempo reale e caricamento file — tutto collegato e pronto.",
+    "getStarted": "Inizia",
+    "signIn": "Accedi",
+    "footer": {
+      "about": "Chi Siamo",
+      "privacyPolicy": "Informativa sulla privacy",
+      "termsOfService": "Termini di servizio"
+    },
+    "waitlist": {
+      "title": "Iscriviti alla lista d'attesa",
+      "description": "Richiedi l'accesso iscrivendoti alla lista d'attesa.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "tu@esempio.it",
+      "superpowersLabel": "Qual è il tuo superpotere?",
+      "superpowersPlaceholder": "Scegli i tuoi superpoteri",
+      "excitementLabel": "Quanto sei entusiasta?",
+      "excitementPlaceholder": "Dicci come ti senti",
+      "selectedCount": "{count} selezionato/i",
+      "submit": "Iscriviti alla lista",
+      "submitting": "Iscrizione...",
+      "successTitle": "Sei nella lista!",
+      "successDescription": "Ti invieremo un invito quando sarà il tuo turno.",
+      "alreadySignedUp": "Hai già un account?",
+      "signIn": "Accedi",
+      "superpowers": {
+        "coffee-to-code": "Trasformare il caffè in codice",
+        "pixel-perfect": "Rendere i pixel perfetti",
+        "bug-whisperer": "Sussurratore di bug",
+        "spreadsheet-wizard": "Magia dei fogli di calcolo",
+        "inbox-zero": "Posta in arrivo vuota ogni giorno",
+        "parallel-parking": "Parcheggio parallelo al primo colpo",
+        "remembering-names": "Ricordare il nome di tutti",
+        "never-burning-toast": "Non bruciare mai il toast",
+        "explaining-tech": "Spiegare la tecnologia ai genitori",
+        "finding-restaurants": "Trovare i ristoranti migliori",
+        "staying-calm": "Restare calmi nelle riunioni infinite",
+        "other": "Qualcosa di completamente diverso"
+      },
+      "excitement": {
+        "take-my-money": "Prendi i miei soldi!",
+        "cant-wait": "Non vedo l'ora di provarlo",
+        "cautiously-optimistic": "Cautamente ottimista",
+        "just-browsing": "Sto solo dando un'occhiata",
+        "friend-made-me": "Un amico mi ha costretto a iscrivermi"
+      },
+      "errors": {
+        "waitlistNotEnabled": "La lista d'attesa non accetta iscrizioni al momento. Riprova più tardi.",
+        "invalidEmail": "Inserisci un indirizzo e-mail valido.",
+        "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
+        "generic": "Qualcosa è andato storto. Riprova."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "Progetti",
+    "noProjects": "Nessun progetto ancora",
+    "noProjectsDescription": "Crea un progetto per iniziare.",
+    "projectNotFound": "Progetto non trovato",
+    "projectNotFoundDescription": "Questo progetto potrebbe essere stato eliminato.",
+    "tabs": {
+      "tasks": "Attività",
+      "attachments": "Allegati"
+    },
+    "security": "Sicurezza",
+    "sessions": {
+      "title": "Sessioni attive",
+      "description": "Gestisci le tue sessioni attive su tutti i dispositivi. Puoi disconnettere qualsiasi sessione che non riconosci.",
+      "currentSession": "Questo dispositivo",
+      "otherSessions": "Altri dispositivi",
+      "current": "Corrente",
+      "lastActive": "Attivo {time}",
+      "noOtherSessions": "Nessun'altra sessione attiva. Sei connesso solo su questo dispositivo.",
+      "revokeAll": "Disconnetti tutti gli altri",
+      "revokeAllTitle": "Disconnettere tutti gli altri dispositivi?",
+      "revokeAllDescription": "Questo ti disconnetterà da tutti gli altri dispositivi e browser. Solo la sessione corrente rimarrà attiva.",
+      "revokeAllConfirm": "Disconnetti tutti",
+      "revokeTitle": "Disconnettere questo dispositivo?",
+      "revokeDescription": "Questo terminerà la sessione per {device}. Sarà necessario accedere di nuovo per utilizzare l'account.",
+      "backToDashboard": "Torna alla dashboard"
+    },
+    "account": "Impostazioni",
+    "profile": {
+      "title": "Profilo",
+      "description": "Gestisci le informazioni del tuo profilo e le preferenze.",
+      "name": "Nome visualizzato",
+      "namePlaceholder": "Il tuo nome",
+      "email": "E-mail",
+      "emailReadonly": "Contatta il supporto per cambiare la tua e-mail.",
+      "avatarColor": "Colore avatar",
+      "saved": "Profilo aggiornato.",
+      "language": "Lingua",
+      "timezone": "Fuso orario",
+      "timezonePlaceholder": "Seleziona il tuo fuso orario",
+      "timezoneSearch": "Cerca fusi orari...",
+      "timezoneDetected": "Rilevato",
+      "noTimezoneResults": "Nessun fuso orario trovato.",
+      "theme": "Tema"
+    },
+    "changePassword": {
+      "title": "Cambia password",
+      "currentPassword": "Password attuale",
+      "newPassword": "Nuova password",
+      "confirmPassword": "Conferma nuova password",
+      "revokeOtherSessions": "Disconnetti tutti gli altri dispositivi",
+      "cta": "Aggiorna password",
+      "success": "Password aggiornata con successo.",
+      "errorCurrentPassword": "La password attuale non è corretta."
+    },
+    "twoFactor": {
+      "title": "Autenticazione a due fattori",
+      "description": "Aggiungi un ulteriore livello di sicurezza al tuo account.",
+      "enabled": "2FA è attivata",
+      "disabled": "2FA non è attivata",
+      "enable": "Attiva 2FA",
+      "disable": "Disattiva 2FA",
+      "enterPassword": "Inserisci la tua password per continuare.",
+      "scanQrCode": "Scansiona questo codice QR con la tua app di autenticazione (es. Google Authenticator, Authy).",
+      "manualEntry": "Non riesci a scansionare? Inserisci questa chiave manualmente",
+      "manualEntryDescription": "Apri la tua app di autenticazione, scegli \"Aggiungi account\", quindi seleziona \"Inserisci chiave di configurazione\" e incolla la chiave qui sotto.",
+      "secretKey": "Chiave segreta",
+      "copied": "Copiato negli appunti",
+      "enterCode": "Inserisci il codice a 6 cifre dalla tua app di autenticazione per verificare la configurazione.",
+      "verify": "Verifica",
+      "backupCodes": "Codici di backup",
+      "backupCodesDescription": "Salva questi codici in un luogo sicuro. Ogni codice può essere usato una sola volta.",
+      "viewBackupCodes": "Visualizza codici di backup",
+      "regenerateBackupCodes": "Rigenera codici di backup",
+      "disableConfirm": "Sei sicuro di voler disattivare la 2FA?",
+      "regenerateConfirm": "Questo sostituirà i tuoi codici di backup esistenti. I codici non utilizzati non funzioneranno più.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "Nuovo progetto",
+    "createProject": "Crea progetto",
+    "createFirst": "Crea il tuo primo progetto",
+    "noProjects": "Nessun progetto",
+    "editProject": "Modifica progetto",
+    "deleteProject": "Elimina progetto",
+    "deleteConfirmTitle": "Eliminare il progetto?",
+    "deleteConfirmDescription": "Questo eliminerà definitivamente “{name}” e tutte le sue attività. Questa azione non può essere annullata.",
+    "fields": {
+      "name": "Nome",
+      "namePlaceholder": "Nome del progetto",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Di cosa tratta questo progetto?"
+    }
+  },
+  "tasks": {
+    "title": "Attività",
+    "addTask": "Aggiungi attività",
+    "newTask": "Nuova attività",
+    "editTask": "Modifica attività",
+    "deleteTask": "Elimina attività",
+    "confirmDelete": "Conferma eliminazione",
+    "createTask": "Crea attività",
+    "noTasks": "Nessuna attività ancora. Aggiungine una per iniziare.",
+    "noTasksSummary": "Nessuna attività ancora",
+    "progress": "{doneCount} di {totalCount} attività completate",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "Stato",
+      "todo": "Da fare",
+      "inProgress": "In corso",
+      "done": "Completato",
+      "all": "Tutte"
+    },
+    "fields": {
+      "title": "Titolo",
+      "titlePlaceholder": "Cosa bisogna fare?",
+      "description": "Descrizione",
+      "descriptionPlaceholder": "Aggiungi dettagli...",
+      "deadline": "Scadenza",
+      "deadlinePlaceholder": "Nessuna scadenza",
+      "clearDeadline": "Rimuovi scadenza"
+    },
+    "deadline": {
+      "overdue": "Scaduta",
+      "dueToday": "Scade oggi"
+    },
+    "aria": {
+      "changeStatus": "Cambia stato da {status}"
+    },
+    "count": "{count, plural, =0 {Nessuna attività} one {# attività} other {# attività}}"
+  },
+  "uploads": {
+    "title": "Allegati",
+    "addFile": "Aggiungi file",
+    "uploading": "Caricamento...",
+    "processing": "Elaborazione",
+    "view": "Visualizza",
+    "deleteFile": "Elimina file",
+    "emptyState": "Carica file per vedere il flusso di archiviazione Convex.",
+    "errors": {
+      "tooLarge": "File troppo grande (max 1 MB)",
+      "uploadFailed": "Caricamento fallito. Riprova.",
+      "generic": "Caricamento fallito."
+    },
+    "count": "{count, plural, =0 {Nessun allegato} one {# allegato} other {# allegati}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "Non autenticato",
+    "PROJECT_NOT_FOUND": "Progetto non trovato",
+    "TASK_NOT_FOUND": "Attività non trovata",
+    "FILE_NOT_FOUND": "File non trovato nell'archivio",
+    "FILE_TOO_LARGE": "File troppo grande (max 1 MB)",
+    "UPLOAD_NOT_FOUND": "Caricamento non trovato",
+    "convex": {
+      "rateLimited": "Troppe richieste. Attendere {seconds} secondi.",
+      "notAuthenticated": "La sessione è scaduta. Effettua nuovamente l'accesso.",
+      "connectionLost": "Impossibile connettersi al server. Controlla la connessione.",
+      "serverError": "Qualcosa è andato storto. Riprova.",
+      "projectNotFound": "Progetto non trovato.",
+      "taskNotFound": "Attività non trovata.",
+      "fileNotFound": "File non trovato nell'archivio.",
+      "fileTooLarge": "File troppo grande (max 1 MB).",
+      "uploadNotFound": "Caricamento non trovato."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "Uno starter Next.js con Convex, Better Auth e Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "Chi Siamo",
+      "description": "Scopri Web App Starter e la nostra missione.",
+      "notice": "Questo è contenuto segnaposto. Sostituiscilo con il tuo contenuto prima del lancio.",
+      "heading": "Chi Siamo",
+      "mission": "La Nostra Missione",
+      "missionText": "Crediamo che i sviluppatori dovrebbero dedicare il loro tempo alla costruzione di funzionalità, non alla configurazione dell'infrastruttura. Web App Starter fornisce un punto di partenza pronto per la produzione con sincronizzazione dati in tempo reale, caricamenti di file e autenticazione basata su sessioni, tutto già collegato e pronto.",
+      "whatIncluded": "Cosa è Incluso",
+      "whatIncludedText": "Il kit di avvio include una pagina di atterraggio, un'applicazione web completamente autenticata, un dashboard di amministrazione e uno storybook di componenti. Ogni app condivide un sistema di design unificato costruito su primitive Radix UI con Tailwind CSS.",
+      "openSource": "Open Source",
+      "openSourceText": "Questo progetto è open source ed è progettato per essere biforcato e personalizzato.",
+      "intro": "Web App Starter è una base full-stack per costruire applicazioni web moderne. Combina Next.js per il frontend, Convex per il backend e Better Auth per l'autenticazione sicura — tutto collegato e pronto per il lancio."
+    },
+    "privacy": {
+      "title": "Informativa sulla Privacy",
+      "description": "Come raccogliamo, utilizziamo e proteggiamo i tuoi dati.",
+      "notice": "Questa è una politica sulla privacy template. Personalizzala per la tua applicazione specifica e la tua giurisdizione prima del lancio.",
+      "heading": "Informativa sulla Privacy",
+      "lastUpdated": "Ultimo aggiornamento: {date}"
+    },
+    "terms": {
+      "title": "Termini di Servizio",
+      "description": "Le regole e le linee guida per l'utilizzo del nostro servizio.",
+      "notice": "Questi sono termini di servizio template. Personalizzali per la tua applicazione specifica e la tua giurisdizione prima del lancio.",
+      "heading": "Termini di Servizio",
+      "lastUpdated": "Ultimo aggiornamento: {date}"
+    }
+  },
+  "offline": {
+    "message": "Sembra che tu sia offline. È necessaria una connessione attiva per continuare."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "Molto debole",
+      "weak": "Debole",
+      "fair": "Discreta",
+      "good": "Buona",
+      "strong": "Forte"
+    },
+    "crackTimeLabel": "Tempo stimato di violazione: {time}",
+    "minLength": "Sono richiesti almeno {count} caratteri.",
+    "strengthRequirement": "La password non soddisfa i requisiti di sicurezza.",
+    "warnings": {
+      "straightRow": "Le sequenze diritte di tasti sulla tastiera sono facili da indovinare.",
+      "keyPattern": "I pattern brevi della tastiera sono facili da indovinare.",
+      "simpleRepeat": "I caratteri ripetuti come \"aaa\" sono facili da indovinare.",
+      "extendedRepeat": "I pattern ripetuti come \"abcabcabc\" sono facili da indovinare.",
+      "sequences": "Le sequenze comuni come \"abc\" sono facili da indovinare.",
+      "recentYears": "Gli anni recenti sono facili da indovinare.",
+      "dates": "Le date sono facili da indovinare.",
+      "topTen": "Questa è una password molto utilizzata.",
+      "topHundred": "Questa è una password frequentemente utilizzata.",
+      "common": "Questa è una password di uso comune.",
+      "similarToCommon": "È simile a una password di uso comune.",
+      "wordByItself": "Le parole singole sono facili da indovinare.",
+      "namesByThemselves": "I nomi o cognomi singoli sono facili da indovinare.",
+      "commonNames": "I nomi e cognomi comuni sono facili da indovinare.",
+      "userInputs": "Non deve contenere dati personali o relativi alla pagina.",
+      "pwned": "La tua password è stata esposta in una violazione di dati su Internet."
+    },
+    "suggestions": {
+      "l33t": "Evita sostituzioni prevedibili come \"@\" per \"a\".",
+      "reverseWords": "Evita di scrivere parole comuni al contrario.",
+      "allUppercase": "Metti in maiuscolo alcune lettere, ma non tutte.",
+      "capitalization": "Metti in maiuscolo più della prima lettera.",
+      "dates": "Evita date e anni associati a te.",
+      "recentYears": "Evita anni recenti.",
+      "associatedYears": "Evita anni associati a te.",
+      "sequences": "Evita sequenze di caratteri comuni.",
+      "repeated": "Evita parole e caratteri ripetuti.",
+      "longerKeyboardPattern": "Usa pattern di tastiera più lunghi e cambia direzione di digitazione.",
+      "anotherWord": "Aggiungi parole meno comuni.",
+      "useWords": "Usa più parole, ma evita frasi comuni.",
+      "noNeed": "Puoi creare password sicure senza simboli, numeri o maiuscole.",
+      "pwned": "Se usi questa password altrove, dovresti cambiarla."
+    },
+    "timeEstimation": {
+      "ltSecond": "meno di un secondo",
+      "second": "{base} secondo",
+      "seconds": "{base} secondi",
+      "minute": "{base} minuto",
+      "minutes": "{base} minuti",
+      "hour": "{base} ora",
+      "hours": "{base} ore",
+      "day": "{base} giorno",
+      "days": "{base} giorni",
+      "month": "{base} mese",
+      "months": "{base} mesi",
+      "year": "{base} anno",
+      "years": "{base} anni",
+      "centuries": "secoli"
+    }
+  },
+  "forbidden": {
+    "title": "Accesso negato",
+    "signedInAs": "Hai effettuato l'accesso come {email}.",
+    "description": "Non hai il permesso di accedere a questa risorsa. Se ritieni che si tratti di un errore, contatta l'amministratore della tua organizzazione.",
+    "backToSignIn": "Torna all'accesso"
+  }
+}
