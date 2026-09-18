@@ -1,0 +1,20 @@
+{
+  "name": "@repo/kb",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/kb-shared": "workspace:*",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.6"
+  }
+}

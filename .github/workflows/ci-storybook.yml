@@ -1,0 +1,152 @@
+name: CI Storybook
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-storybook-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+jobs:
+  # ============================================================
+  # CHANGE DETECTION
+  # ============================================================
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.act-all.outputs.should_run || steps.evaluate.outputs.should_run }}
+    steps:
+      - name: Run all jobs in act
+        if: ${{ env.ACT }}
+        id: act-all
+        run: |
+          echo "Running in act — skipping change detection"
+          echo "should_run=true" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        if: ${{ !env.ACT }}
+        uses: actions/checkout@v4
+
+      - name: Detect file changes
+        if: ${{ !env.ACT }}
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            storybook:
+              - 'apps/storybook/**'
+            design-system:
+              - 'packages/design-system/**'
+            root:
+              - 'package.json'
+              - 'bun.lock'
+              - 'turbo.json'
+              - 'tsconfig.base.json'
+              - 'eslint.config.mjs'
+              - 'scripts/**'
+
+      - name: Evaluate changes
+        if: ${{ !env.ACT }}
+        id: evaluate
+        run: |
+          if [[ "${{ steps.filter.outputs.storybook }}" == "true" ]] || \
+             [[ "${{ steps.filter.outputs.design-system }}" == "true" ]] || \
+             [[ "${{ steps.filter.outputs.root }}" == "true" ]]; then
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "should_run=false" >> $GITHUB_OUTPUT
+            echo "Skipping storybook — no relevant changes"
+          fi
+
+  # ============================================================
+  # BUILD
+  # ============================================================
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: needs.changes.outputs.should_run == 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+
+      - name: Build
+        run: bunx turbo build --filter=@repo/storybook...
+
+  # ============================================================
+  # E2E TESTS
+  # ============================================================
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    needs: [changes, build]
+    if: vars.SKIP_E2E != 'true' && needs.changes.outputs.should_run == 'true' && github.event.pull_request.draft == false
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/setup-playwright
+
+      - name: Run Playwright tests
+        run: cd apps/storybook && bunx playwright test --project=chromium
+        env:
+          CI: true
+
+      - name: Show dev logs on failure
+        if: failure()
+        run: |
+          echo "=== Next.js Dev Log (storybook) ==="
+          cat .next-storybook.log 2>/dev/null || echo "No Next.js log found"
+
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ always() && !env.ACT }}
+        continue-on-error: true
+        with:
+          name: playwright-report-storybook
+          path: apps/storybook/qa/playwright-report/
+          retention-days: 7
+
+      - name: Save job outputs (act)
+        if: ${{ always() && env.ACT }}
+        run: |
+          JOB_DIR="/act-artifacts/storybook/e2e"
+          mkdir -p "$JOB_DIR/artifacts"
+          [ -d "apps/storybook/qa/playwright-report" ] && cp -r "apps/storybook/qa/playwright-report" "$JOB_DIR/artifacts/playwright-report-storybook" 2>/dev/null || true
+
+  # ============================================================
+  # SUMMARY
+  # ============================================================
+  ci-storybook-complete:
+    name: CI Storybook Complete
+    runs-on: ubuntu-latest
+    needs: [changes, build, e2e]
+    if: always()
+    steps:
+      - name: Check all jobs passed
+        run: |
+          echo "Changes should_run: ${{ needs.changes.outputs.should_run }}"
+          echo "Build: ${{ needs.build.result }}"
+          echo "E2E: ${{ needs.e2e.result }}"
+
+          if [[ "${{ needs.changes.outputs.should_run }}" != "true" ]]; then
+            echo "No relevant changes — skipping storybook CI"
+            exit 0
+          fi
+
+          if [[ "${{ needs.build.result }}" != "success" ]]; then
+            echo "Build failed: ${{ needs.build.result }}"
+            exit 1
+          fi
+
+          E2E="${{ needs.e2e.result }}"
+          if [[ "$E2E" != "success" && "$E2E" != "skipped" ]]; then
+            echo "E2E failed: $E2E"
+            exit 1
+          fi
+
+          echo "All storybook CI jobs passed"

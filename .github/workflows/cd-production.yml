@@ -1,0 +1,333 @@
+name: Deploy Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      git_sha:
+        description: "Git SHA to deploy (must have been deployed to staging)"
+        required: true
+        type: string
+      confirm:
+        description: "Type 'deploy-production' to confirm"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  actions: read
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  # ─── Validate inputs and staging deployment ──────────────────────
+  validate:
+    name: Validate Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify confirmation string
+        if: inputs.confirm != 'deploy-production'
+        run: |
+          echo "::error::Confirmation failed. You must type 'deploy-production' to confirm."
+          exit 1
+
+      - name: Verify SHA was deployed to staging
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = '${{ inputs.git_sha }}';
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            // Check for staging deployment tag (paginate to avoid missing older tags)
+            try {
+              const tags = await github.paginate(github.rest.git.listMatchingRefs, {
+                owner,
+                repo,
+                ref: `tags/deploy/staging/`,
+              });
+
+              const stagingTag = tags.find(tag => tag.object.sha === sha || tag.ref.endsWith(`/${sha}`));
+
+              if (!stagingTag) {
+                // Also check short SHA matches
+                const shortSha = sha.substring(0, 7);
+                const tagWithShort = tags.find(tag => tag.ref.includes(shortSha));
+                if (!tagWithShort) {
+                  core.setFailed(`SHA ${sha} has no staging deployment tag. Deploy to staging first.`);
+                  return;
+                }
+              }
+
+              console.log(`Verified: ${sha} was deployed to staging`);
+            } catch (error) {
+              core.setFailed(`Failed to verify staging deployment: ${error.message}`);
+            }
+
+      - name: Verify CI gate passed
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const sha = '${{ inputs.git_sha }}';
+            const { data: { statuses } } = await github.rest.repos.getCombinedStatusForRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: sha,
+            });
+
+            const gate = statuses.find(s => s.context === 'ci/gate-passed');
+            if (!gate || gate.state !== 'success') {
+              core.setFailed(`CI gate has not passed for SHA ${sha}`);
+              return;
+            }
+            console.log('CI gate verified');
+
+  # ─── Build all three apps for production ─────────────────────────
+  build-web:
+    name: Build Web (Production)
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/build-app
+        id: build
+        with:
+          app: web
+          environment: production
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
+
+  build-admin:
+    name: Build Admin (Production)
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/build-app
+        id: build
+        with:
+          app: admin
+          environment: production
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+
+  build-landing:
+    name: Build Landing (Production)
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/build-app
+        id: build
+        with:
+          app: landing
+          environment: production
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_LANDING }}
+
+  # ─── Attest build provenance ─────────────────────────────────────
+  attest:
+    name: Attest Build Provenance
+    needs: [build-web, build-admin, build-landing]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Attest web artifact
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/web-production-${{ inputs.git_sha }}/web-production.tar.gz
+
+      - name: Attest admin artifact
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/admin-production-${{ inputs.git_sha }}/admin-production.tar.gz
+
+      - name: Attest landing artifact
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: artifacts/landing-production-${{ inputs.git_sha }}/landing-production.tar.gz
+
+  # ─── Deploy Convex backend (before frontend) ────────────────────
+  deploy-convex:
+    name: Deploy Convex (Production)
+    needs: [build-web, build-admin, build-landing]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-convex
+        with:
+          deploy-key: ${{ secrets.CONVEX_DEPLOY_KEY }}
+          environment: production
+
+  # ─── Deploy all three apps to Vercel ─────────────────────────────
+  deploy-web:
+    name: Deploy Web (Production)
+    needs: deploy-convex
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-vercel
+        id: deploy
+        with:
+          app: web
+          environment: production
+          artifact-name: web-production-${{ inputs.git_sha }}
+          tarball: web-production.tar.gz
+          checksum-file: web-production.tar.gz.sha256
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WEB }}
+
+  deploy-admin:
+    name: Deploy Admin (Production)
+    needs: deploy-convex
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-vercel
+        id: deploy
+        with:
+          app: admin
+          environment: production
+          artifact-name: admin-production-${{ inputs.git_sha }}
+          tarball: admin-production.tar.gz
+          checksum-file: admin-production.tar.gz.sha256
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+
+  deploy-landing:
+    name: Deploy Landing (Production)
+    needs: deploy-convex
+    runs-on: ubuntu-latest
+    outputs:
+      deployment-url: ${{ steps.deploy.outputs.deployment-url }}
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.deployment-url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+      - uses: ./.github/actions/setup-bun
+      - uses: ./.github/actions/deploy-vercel
+        id: deploy
+        with:
+          app: landing
+          environment: production
+          artifact-name: landing-production-${{ inputs.git_sha }}
+          tarball: landing-production.tar.gz
+          checksum-file: landing-production.tar.gz.sha256
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_LANDING }}
+
+  # ─── Post-deploy health checks and tagging ───────────────────────
+  post-deploy:
+    name: Post-Deploy Verification
+    needs: [deploy-web, deploy-admin, deploy-landing]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.git_sha }}
+
+      - name: Health check all production apps
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const apps = [
+              { name: 'web', url: '${{ needs.deploy-web.outputs.deployment-url }}' },
+              { name: 'admin', url: '${{ needs.deploy-admin.outputs.deployment-url }}' },
+              { name: 'landing', url: '${{ needs.deploy-landing.outputs.deployment-url }}' },
+            ];
+
+            const results = [];
+            for (const app of apps) {
+              if (!app.url) {
+                results.push(`❌ ${app.name}: No deployment URL`);
+                continue;
+              }
+              try {
+                const response = await fetch(app.url, {
+                  method: 'GET',
+                  redirect: 'follow',
+                  signal: AbortSignal.timeout(30000),
+                });
+                if (response.ok) {
+                  results.push(`✅ ${app.name}: ${response.status} (${app.url})`);
+                } else {
+                  results.push(`⚠️ ${app.name}: ${response.status} (${app.url})`);
+                }
+              } catch (error) {
+                results.push(`❌ ${app.name}: ${error.message}`);
+              }
+            }
+
+            const summary = results.join('\n');
+            console.log(summary);
+
+            core.summary.addHeading('Production Health Checks', 3);
+            core.summary.addCodeBlock(summary);
+            await core.summary.write();
+
+            const failed = results.filter(r => r.startsWith('❌'));
+            if (failed.length > 0) {
+              core.setFailed(`${failed.length} health check(s) failed`);
+            }
+
+      - name: Create production deployment tag
+        run: |
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "${{ github.actor }}"
+
+          TIMESTAMP=$(date -u +%Y-%m-%dT%H-%M-%SZ)
+          TAG="deploy/production/${TIMESTAMP}/${{ inputs.git_sha }}"
+          git tag -a "${TAG}" "${{ inputs.git_sha }}" \
+            -m "Production deployment at ${TIMESTAMP}" \
+            -m "Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git push origin "${TAG}"
+
+          echo "### Production Deployment Complete" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **SHA:** ${{ inputs.git_sha }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Tag:** ${TAG}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- **Timestamp:** ${TIMESTAMP}" >> "$GITHUB_STEP_SUMMARY"

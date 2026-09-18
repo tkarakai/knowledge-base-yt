@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "Betöltés...",
+    "cancel": "Mégse",
+    "save": "Változások mentése",
+    "saving": "Mentés...",
+    "create": "Létrehozás",
+    "creating": "Létrehozás...",
+    "delete": "Törlés",
+    "signOut": "Kijelentkezés",
+    "error": "Hiba történt",
+    "backToHome": "Vissza a kezdőlapra",
+    "note": "Megjegyzés"
+  },
+  "theme": {
+    "light": "Világos téma",
+    "system": "Rendszertéma",
+    "dark": "Sötét téma",
+    "ariaLabel": "Téma: {label}. Kattints a váltáshoz."
+  },
+  "language": {
+    "label": "Nyelv",
+    "ariaLabel": "Nyelv kiválasztása"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Üdv újra",
+      "description": "Jelentkezz be a vezérlőpultod eléréséhez.",
+      "cta": "Bejelentkezés",
+      "switchPrompt": "Új vagy itt?",
+      "switchLink": "Fiók létrehozása",
+      "pageHeading": "Üdv újra! Folytasd ott, ahol abbahagytad.",
+      "pageDescription": "A Better Auth kezeli a munkamenet-folyamatokat, a Convex pedig valós időben tartja az adatokat. Jelentkezz be a projektjeid és feladataid eléréséhez."
+    },
+    "signUp": {
+      "title": "Munkaterület létrehozása",
+      "description": "Kezdj el kevesebb mint egy perc alatt.",
+      "cta": "Fiók létrehozása",
+      "switchPrompt": "Már van fiókod?",
+      "switchLink": "Bejelentkezés",
+      "pageHeading": "Hozd létre a fiókodat és kezdj el építeni.",
+      "pageDescription": "A Convex + Better Auth már be van kötve, így a fiókod azonnal éles használatra kész."
+    },
+    "badge": "Fiók",
+    "fields": {
+      "name": "Név",
+      "namePlaceholder": "Kovács Anna",
+      "email": "E-mail",
+      "emailPlaceholder": "te@pelda.hu",
+      "password": "Jelszó",
+      "passwordPlaceholder": "Jelszavad",
+      "passwordSignUpPlaceholder": "Legalább 12 karakter",
+      "confirmPassword": "Jelszó megerősítése",
+      "confirmPasswordPlaceholder": "Jelszó újra"
+    },
+    "errors": {
+      "passwordMismatch": "A jelszavak nem egyeznek",
+      "passwordCompromised": "A megadott jelszó kompromittálódott. Kérjük, válasszon másik jelszót.",
+      "rateLimited": "Túl sok próbálkozás. Kérjük, várjon egy pillanatot, mielőtt újra próbálkozna.",
+      "invalidCredentials": "Érvénytelen e-mail cím vagy jelszó",
+      "generic": "Hiba történt"
+    },
+    "twoFactorVerify": {
+      "title": "Kétlépcsős hitelesítés",
+      "description": "Add meg a 6 jegyű kódot a hitelesítő alkalmazásodból.",
+      "cta": "Ellenőrzés",
+      "invalidCode": "Érvénytelen kód. Kérlek, próbáld újra.",
+      "useBackupCode": "Tartalék kód használata",
+      "backupCodeTitle": "Tartalék kód",
+      "backupCodeDescription": "Add meg az egyik tartalék kódodat a bejelentkezéshez.",
+      "backupCodePlaceholder": "Tartalék kód megadása",
+      "useAuthenticator": "Hitelesítő alkalmazás használata"
+    },
+    "footer": "Biztonságos e-mail + jelszó",
+    "working": "Feldolgozás...",
+    "legal": {
+      "prefix": "Folytatással elfogadod",
+      "termsOfService": "Felhasználási feltételeinket",
+      "and": "és",
+      "privacyPolicy": "Adatvédelmi irányelveinket"
+    },
+    "invitation": {
+      "badge": "Meghívó",
+      "title": "Regisztráció befejezése",
+      "description": "Meghívást kapott! Hozza létre fiókját alább.",
+      "cta": "Fiók létrehozása",
+      "pageHeading": "Üdvözöljük. Meghívást kapott.",
+      "pageDescription": "Fejezze be a regisztrációt a kezdéshez.",
+      "invalidTitle": "Erről a meghívóról",
+      "noToken": "Nem lett megadva meghívó token. Kérjük, használja a meghívó e-mailben található linket.",
+      "tokenExpired": "Ez a meghívó lejárt. Kérjük, lépjen kapcsolatba a csapattal egy újért.",
+      "tokenUsed": "Ezt a meghívót már igényelték.",
+      "tokenInvalid": "Ez a meghívó link érvénytelen.",
+      "signupBlocked": "A regisztráció jelenleg csak meghívóval lehetséges.",
+      "signupBlockedDescription": "Iratkozzon fel a várólistára a főoldalunkon a hozzáférés igényléséhez.",
+      "goToWaitlist": "Csatlakozás a várólistához",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "Jelszó-visszaállítás",
+      "title": "Elfelejtetted a jelszavadat?",
+      "description": "Add meg az e-mail-címedet, és küldünk egy linket a jelszó visszaállításához.",
+      "cta": "Link küldése",
+      "emailSent": "Ellenőrizd az e-mailjeidet",
+      "emailSentDescription": "Ha létezik fiók a(z) {email} címhez, küldtünk egy jelszó-visszaállító linket. Ellenőrizd a beérkezett és a spam mappát.",
+      "backToSignIn": "Vissza a bejelentkezéshez",
+      "pageHeading": "Állítsd vissza a jelszavadat. Térj vissza a nyomvonalra.",
+      "pageDescription": "Add meg a fiókodhoz tartozó e-mail-címet, és küldünk egy linket az új jelszó létrehozásához."
+    },
+    "resetPassword": {
+      "badge": "Jelszó-visszaállítás",
+      "title": "Új jelszó beállítása",
+      "description": "Válassz egy erős jelszót a fiókodhoz.",
+      "newPassword": "Új jelszó",
+      "cta": "Jelszó visszaállítása",
+      "invalidTitle": "Érvénytelen visszaállító link",
+      "tokenExpired": "Ez a jelszó-visszaállító link lejárt. Kérj egy újat.",
+      "tokenInvalid": "Ez a jelszó-visszaállító link érvénytelen vagy már felhasználták.",
+      "requestNewLink": "Új link kérése",
+      "backToSignIn": "Vissza a bejelentkezéshez",
+      "successTitle": "Jelszó frissítve",
+      "successDescription": "A jelszavad sikeresen visszaállítva. Most már bejelentkezhetsz az új jelszavaddal.",
+      "signInNow": "Bejelentkezés most",
+      "pageHeading": "Majdnem kész. Válassz új jelszót.",
+      "pageDescription": "Válassz egy erős jelszót, amelyet korábban nem használtál. Az új jelszónak legalább 12 karakterből kell állnia."
+    },
+    "verifyEmail": {
+      "badge": "E-mail-megerősítés",
+      "title": "Ellenőrizd az e-mailjeidet",
+      "description": "Megerősítő linket küldtünk az e-mail-címedre. Kattints a linkre a fiókod megerősítéséhez.",
+      "descriptionWithEmail": "Megerősítő linket küldtünk a {email} címre. Kattints a linkre a fiókod megerősítéséhez.",
+      "resend": "Megerősítő e-mail újraküldése",
+      "resent": "Megerősítő e-mail elküldve! Ellenőrizd a bejövő üzeneteidet.",
+      "recentlySentJustNow": "Egy megerősítő e-mail éppen most lett elküldve. Kérjük, ellenőrizd a bejövő üzeneteidet és a spam mappát.",
+      "recentlySentSecondsAgo": "Egy megerősítő e-mail néhány másodperce lett elküldve. Kérjük, ellenőrizd a bejövő üzeneteidet és a spam mappát.",
+      "recentlySentMinutesAgo": "Egy megerősítő e-mail {minutes} {minutes, plural, one {perccel} other {perccel}} ezelőtt lett elküldve. Kérjük, ellenőrizd a bejövő üzeneteidet és a spam mappát.",
+      "backToSignIn": "Vissza a bejelentkezéshez",
+      "pageHeading": "Utolsó lépés. Erősítsd meg az e-mail-címedet.",
+      "pageDescription": "Küldtünk egy megerősítő linket. Kattints rá a fiókod aktiválásához és az alkalmazás használatának megkezdéséhez.",
+      "verificationSuccessTitle": "Köszönjük, hogy megerősítetted az e-mail-címedet.",
+      "verificationSuccessDescription": "Az e-mail-címed megerősítése sikeres.",
+      "verificationErrorTitle": "Az e-mail megerősítése sikertelen",
+      "verificationErrorUnknown": "Ezt az e-mailes hivatkozást nem tudtuk megerősíteni. Kérj új megerősítő e-mailt.",
+      "verificationErrorTokenExpired": "Ennek a megerősítő hivatkozásnak lejárt az érvényessége. Kérj újat.",
+      "verificationErrorInvalidToken": "Ez a megerősítő hivatkozás érvénytelen vagy már felhasználták.",
+      "verificationErrorUserNotFound": "Ehhez a megerősítő hivatkozáshoz nem találtunk fiókot.",
+      "verificationErrorUnauthorized": "Ezt a megerősítési kérést nem sikerült befejezni a fiókodhoz.",
+      "sessionStatusChecking": "A munkamenet állapotának ellenőrzése...",
+      "sessionStatusSignedInOnDevice": "Most be vagy jelentkezve ezen az eszközön: {device}.",
+      "sessionStatusNoSession": "Kérjük, jelentkezz be az alkalmazás használatához.",
+      "goToSignIn": "Ugrás a bejelentkezési oldalra",
+      "closeWindow": "Ablak bezárása"
+    },
+    "forgotPasswordLink": "Elfelejtetted a jelszavadat?"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "A kiindulópontod.",
+    "headingLine2": "Építs innen tovább.",
+    "description": "Hitelesítés, adatbázis, valós idejű szinkronizáció és fájlfeltöltés — bekötve és használatra készen.",
+    "getStarted": "Kezdés",
+    "signIn": "Bejelentkezés",
+    "footer": {
+      "about": "Rólunk",
+      "privacyPolicy": "Adatvédelmi irányelvek",
+      "termsOfService": "Felhasználási feltételek"
+    },
+    "waitlist": {
+      "title": "Csatlakozás a várólistához",
+      "description": "Kérjen hozzáférést a várólistára való feliratkozással.",
+      "emailLabel": "E-mail",
+      "emailPlaceholder": "on@pelda.hu",
+      "superpowersLabel": "Mi a szuperképességed?",
+      "superpowersPlaceholder": "Válaszd ki a szuperképességeidet",
+      "excitementLabel": "Mennyire vagy izgatott?",
+      "excitementPlaceholder": "Mondd el, mit érzel",
+      "selectedCount": "{count} kiválasztva",
+      "submit": "Feliratkozás",
+      "submitting": "Feliratkozás...",
+      "successTitle": "Felkerült a listára!",
+      "successDescription": "Meghívót küldünk, amikor Önre kerül a sor.",
+      "alreadySignedUp": "Már van fiókja?",
+      "signIn": "Bejelentkezés",
+      "superpowers": {
+        "coffee-to-code": "Kávéból kódot varázsolok",
+        "pixel-perfect": "Pixelre pontos munkát végzek",
+        "bug-whisperer": "Bugsuttogó",
+        "spreadsheet-wizard": "Táblázatvarázsló",
+        "inbox-zero": "Minden nap üres postafiók",
+        "parallel-parking": "Párhuzamos parkolás elsőre",
+        "remembering-names": "Mindenki nevére emlékszem",
+        "never-burning-toast": "Soha nem égetem meg a pirítóst",
+        "explaining-tech": "Elmagyarázom a technikát a szüleimnek",
+        "finding-restaurants": "Megtalálom a legjobb éttermeket",
+        "staying-calm": "Nyugodt maradok a hosszú meetingeken",
+        "other": "Valami egészen más"
+      },
+      "excitement": {
+        "take-my-money": "Vedd el a pénzem!",
+        "cant-wait": "Alig várom, hogy kipróbáljam",
+        "cautiously-optimistic": "Óvatosan optimista",
+        "just-browsing": "Csak nézelődök",
+        "friend-made-me": "A barátom íratott fel"
+      },
+      "errors": {
+        "waitlistNotEnabled": "A várólista jelenleg nem fogad regisztrációkat. Kérjük, próbálja újra később.",
+        "invalidEmail": "Kérjük, adjon meg egy érvényes e-mail-címet.",
+        "rateLimited": "Túl sok kérés. Kérjük, várjon egy pillanatot, és próbálja újra.",
+        "generic": "Valami hiba történt. Kérjük, próbálja újra."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "Projektek",
+    "noProjects": "Még nincsenek projektek",
+    "noProjectsDescription": "Hozz létre egy projektet a kezdéshez.",
+    "projectNotFound": "Projekt nem található",
+    "projectNotFoundDescription": "Ez a projekt lehet, hogy törölve lett.",
+    "tabs": {
+      "tasks": "Feladatok",
+      "attachments": "Mellékletek"
+    },
+    "security": "Biztonság",
+    "sessions": {
+      "title": "Aktív munkamenetek",
+      "description": "Kezeld az aktív munkameneteidet az összes eszközön. Kijelentkezhetsz bármely munkamenetből, amelyet nem ismersz fel.",
+      "currentSession": "Ez az eszköz",
+      "otherSessions": "Egyéb eszközök",
+      "current": "Jelenlegi",
+      "lastActive": "Aktív {time}",
+      "noOtherSessions": "Nincs más aktív munkamenet. Csak ezen az eszközön vagy bejelentkezve.",
+      "revokeAll": "Összes többi kijelentkeztetése",
+      "revokeAllTitle": "Kijelentkezés az összes többi eszközről?",
+      "revokeAllDescription": "Kijelentkezteted magadat az összes többi eszközről és böngészőből. Csak a jelenlegi munkameneted marad aktív.",
+      "revokeAllConfirm": "Összes kijelentkeztetése",
+      "revokeTitle": "Kijelentkezés erről az eszközről?",
+      "revokeDescription": "Ez befejezi a munkamenetet a(z) {device} eszközön. Újra be kell jelentkezni a fiókhoz való hozzáféréshez.",
+      "backToDashboard": "Vissza az irányítópulthoz"
+    },
+    "account": "Beállítások",
+    "profile": {
+      "title": "Profil",
+      "description": "Kezeld a profiladataidat és beállításaidat.",
+      "name": "Megjelenítési név",
+      "namePlaceholder": "A neved",
+      "email": "E-mail",
+      "emailReadonly": "Az e-mail módosításához lépj kapcsolatba az ügyfélszolgálattal.",
+      "avatarColor": "Avatar színe",
+      "saved": "Profil frissítve.",
+      "language": "Nyelv",
+      "timezone": "Időzóna",
+      "timezonePlaceholder": "Válaszd ki az időzónádat",
+      "timezoneSearch": "Időzónák keresése...",
+      "timezoneDetected": "Felismert",
+      "noTimezoneResults": "Nem található időzóna.",
+      "theme": "Téma"
+    },
+    "changePassword": {
+      "title": "Jelszó módosítása",
+      "currentPassword": "Jelenlegi jelszó",
+      "newPassword": "Új jelszó",
+      "confirmPassword": "Új jelszó megerősítése",
+      "revokeOtherSessions": "Kijelentkezés az összes többi eszközről",
+      "cta": "Jelszó frissítése",
+      "success": "A jelszó sikeresen frissítve.",
+      "errorCurrentPassword": "A jelenlegi jelszó helytelen."
+    },
+    "twoFactor": {
+      "title": "Kétlépcsős hitelesítés",
+      "description": "Adj hozzá egy extra biztonsági réteget a fiókodhoz.",
+      "enabled": "A 2FA be van kapcsolva",
+      "disabled": "A 2FA nincs bekapcsolva",
+      "enable": "2FA bekapcsolása",
+      "disable": "2FA kikapcsolása",
+      "enterPassword": "Add meg a jelszavadat a folytatáshoz.",
+      "scanQrCode": "Olvasd be ezt a QR-kódot a hitelesítő alkalmazásoddal (pl. Google Authenticator, Authy).",
+      "manualEntry": "Nem tudod beolvasni? Írd be ezt a kulcsot kézzel",
+      "manualEntryDescription": "Nyisd meg a hitelesítő alkalmazásodat, válaszd a „Fiók hozzáadása” lehetőséget, majd válaszd a „Beállítási kulcs megadása” opciót, és illeszd be az alábbi kulcsot.",
+      "secretKey": "Titkos kulcs",
+      "copied": "Vágólapra másolva",
+      "enterCode": "Add meg a 6 jegyű kódot a hitelesítő alkalmazásodból a beállítás ellenőrzéséhez.",
+      "verify": "Ellenőrzés",
+      "backupCodes": "Tartalék kódok",
+      "backupCodesDescription": "Mentsd el ezeket a kódokat biztonságos helyre. Minden kód csak egyszer használható.",
+      "viewBackupCodes": "Tartalék kódok megtekintése",
+      "regenerateBackupCodes": "Tartalék kódok újragenerálása",
+      "disableConfirm": "Biztosan ki szeretnéd kapcsolni a 2FA-t?",
+      "regenerateConfirm": "Ez lecseréli a meglévő biztonsági kódjaidat. A fel nem használt kódok többé nem fognak működni.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "Új projekt",
+    "createProject": "Projekt létrehozása",
+    "createFirst": "Hozd létre az első projektedet",
+    "noProjects": "Nincsenek projektek",
+    "editProject": "Projekt szerkesztése",
+    "deleteProject": "Projekt törlése",
+    "deleteConfirmTitle": "Projekt törlése?",
+    "deleteConfirmDescription": "Ez véglegesen törli a(z) “{name}” projektet és az összes feladatát. Ez a művelet nem vonható vissza.",
+    "fields": {
+      "name": "Név",
+      "namePlaceholder": "Projekt neve",
+      "description": "Leírás",
+      "descriptionPlaceholder": "Miről szól ez a projekt?"
+    }
+  },
+  "tasks": {
+    "title": "Feladatok",
+    "addTask": "Feladat hozzáadása",
+    "newTask": "Új feladat",
+    "editTask": "Feladat szerkesztése",
+    "deleteTask": "Feladat törlése",
+    "confirmDelete": "Törlés megerősítése",
+    "createTask": "Feladat létrehozása",
+    "noTasks": "Még nincsenek feladatok. Adj hozzá egyet a kezdéshez.",
+    "noTasksSummary": "Még nincsenek feladatok",
+    "progress": "{doneCount}/{totalCount} feladat kész",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "Állapot",
+      "todo": "Teendő",
+      "inProgress": "Folyamatban",
+      "done": "Kész",
+      "all": "Összes"
+    },
+    "fields": {
+      "title": "Cím",
+      "titlePlaceholder": "Mit kell megcsinálni?",
+      "description": "Leírás",
+      "descriptionPlaceholder": "Részletek hozzáadása...",
+      "deadline": "Határidő",
+      "deadlinePlaceholder": "Nincs határidő",
+      "clearDeadline": "Határidő törlése"
+    },
+    "deadline": {
+      "overdue": "Lejárt",
+      "dueToday": "Ma esedékes"
+    },
+    "aria": {
+      "changeStatus": "Állapot módosítása innen: {status}"
+    },
+    "count": "{count, plural, =0 {Még nincsenek feladatok} one {# feladat} other {# feladat}}"
+  },
+  "uploads": {
+    "title": "Mellékletek",
+    "addFile": "Fájl hozzáadása",
+    "uploading": "Feltöltés...",
+    "processing": "Feldolgozás",
+    "view": "Megtekintés",
+    "deleteFile": "Fájl törlése",
+    "emptyState": "Tölts fel fájlokat a Convex tárhelyfolyamat megtekintéséhez.",
+    "errors": {
+      "tooLarge": "A fájl túl nagy (max. 1 MB)",
+      "uploadFailed": "A feltöltés sikertelen. Próbáld újra.",
+      "generic": "A feltöltés sikertelen."
+    },
+    "count": "{count, plural, =0 {Nincsenek mellékletek} one {# melléklet} other {# melléklet}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "Nincs hitelesítve",
+    "PROJECT_NOT_FOUND": "Projekt nem található",
+    "TASK_NOT_FOUND": "Feladat nem található",
+    "FILE_NOT_FOUND": "Fájl nem található a tárhelyen",
+    "FILE_TOO_LARGE": "A fájl túl nagy (max. 1 MB)",
+    "UPLOAD_NOT_FOUND": "Feltöltés nem található",
+    "convex": {
+      "rateLimited": "Túl sok kérés. Kérjük, várjon {seconds} másodpercet.",
+      "notAuthenticated": "A munkamenete lejárt. Kérjük, jelentkezzen be újra.",
+      "connectionLost": "Nem sikerült csatlakozni a szerverhez. Kérjük, ellenőrizze a kapcsolatot.",
+      "serverError": "Valami hiba történt. Kérjük, próbálja újra.",
+      "projectNotFound": "Projekt nem található.",
+      "taskNotFound": "Feladat nem található.",
+      "fileNotFound": "Fájl nem található a tárhelyen.",
+      "fileTooLarge": "A fájl túl nagy (max. 1 MB).",
+      "uploadNotFound": "Feltöltés nem található."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "Next.js starter Convex, Better Auth és Bun támogatással."
+  },
+  "legal": {
+    "about": {
+      "title": "Rólunk",
+      "description": "Tudj meg többet a Web App Starterről és a mi küldetésünkről.",
+      "notice": "Ez a tartalom helyőrző. Indítás előtt cseréld le a saját tartalomra.",
+      "heading": "Rólunk",
+      "mission": "A mi küldetésünk",
+      "missionText": "Úgy gondoljuk, hogy a fejlesztőknek az alkalmazások fejlesztésére kell fordítaniuk az idejüket, nem az infrastruktúra konfigurálására. A Web App Starter egy éles használatra kész kiindulópontot biztosít valós idejű adatszinkronizálással, fájlfeltöltésekkel és munkamenet-alapú hitelesítéssel, melyből már minden be van kötve.",
+      "whatIncluded": "Mi van benne",
+      "whatIncludedText": "A kezdőcsomag tartalmaz egy leszálló oldalt, egy teljes mértékben hitelesített webalkalmazást, egy admin irányítópultot és egy komponens-vitrin könyvet. Mindegyik alkalmazás egy egységes tervezési rendszert használ, amely a Radix UI primitívekből és Tailwind CSS-ből épül fel.",
+      "openSource": "Nyílt forráskód",
+      "openSourceText": "Ez a projekt nyílt forráskódú és úgy lett megtervezve, hogy fel lehessen osztani és testre lehessen szabni.",
+      "intro": "A Web App Starter egy teljes veremű alapja a modern webalkalmazások építésének. A Next.js-t használja az előoldalhoz, a Convexet a háttéroldalhoz, és a Better Auth-ot a biztonságos hitelesítéshez — mindegyik be van kötve és készen áll az indulásra."
+    },
+    "privacy": {
+      "title": "Adatvédelmi irányelvek",
+      "description": "Hogyan gyűjtjük, használjuk és védjük az adataidat.",
+      "notice": "Ez egy sablon adatvédelmi irányelv. A bevezetés előtt szabd testre az alkalmazásodnak és a te joghatóságodnak megfelelően.",
+      "heading": "Adatvédelmi irányelvek",
+      "lastUpdated": "Utolsó frissítés: {date}"
+    },
+    "terms": {
+      "title": "Felhasználási feltételek",
+      "description": "A szolgáltatás használatára vonatkozó szabályok és irányelvek.",
+      "notice": "Ez egy sablon felhasználási feltételek. A bevezetés előtt szabd testre az alkalmazásodnak és a te joghatóságodnak megfelelően.",
+      "heading": "Felhasználási feltételek",
+      "lastUpdated": "Utolsó frissítés: {date}"
+    }
+  },
+  "offline": {
+    "message": "Úgy tűnik, offline vagy. Az alkalmazás használatához aktív internetkapcsolat szükséges."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "Nagyon gyenge",
+      "weak": "Gyenge",
+      "fair": "Elfogadható",
+      "good": "Jó",
+      "strong": "Erős"
+    },
+    "crackTimeLabel": "Becsült feltörési idő: {time}",
+    "minLength": "Legalább {count} karakter szükséges.",
+    "strengthRequirement": "A jelszó nem felel meg az erősségi követelményeknek.",
+    "warnings": {
+      "straightRow": "Az egyenes billentyűsorok könnyen kitalálhatók.",
+      "keyPattern": "A rövid billentyűzetminták könnyen kitalálhatók.",
+      "simpleRepeat": "Az ismétlődő karakterek, mint az \"aaa\", könnyen kitalálhatók.",
+      "extendedRepeat": "Az ismétlődő minták, mint az \"abcabcabc\", könnyen kitalálhatók.",
+      "sequences": "A gyakori karaktersorozatok, mint az \"abc\", könnyen kitalálhatók.",
+      "recentYears": "A közelmúlt évszámai könnyen kitalálhatók.",
+      "dates": "A dátumok könnyen kitalálhatók.",
+      "topTen": "Ez egy rendkívül gyakran használt jelszó.",
+      "topHundred": "Ez egy gyakran használt jelszó.",
+      "common": "Ez egy általánosan használt jelszó.",
+      "similarToCommon": "Ez hasonlít egy általánosan használt jelszóhoz.",
+      "wordByItself": "Az egyedülálló szavak könnyen kitalálhatók.",
+      "namesByThemselves": "Az önálló nevek vagy vezetéknevek könnyen kitalálhatók.",
+      "commonNames": "A gyakori nevek és vezetéknevek könnyen kitalálhatók.",
+      "userInputs": "Ne tartalmazzon személyes vagy oldalhoz kapcsolódó adatokat.",
+      "pwned": "A jelszava adatszivárgás során nyilvánosságra került az interneten."
+    },
+    "suggestions": {
+      "l33t": "Kerülje a kiszámítható betűcseréket, mint a \"@\" az \"a\" helyett.",
+      "reverseWords": "Kerülje a gyakori szavak visszafelé írását.",
+      "allUppercase": "Néhány betűt írjon nagybetűvel, de ne az összeset.",
+      "capitalization": "Ne csak az első betűt írja nagybetűvel.",
+      "dates": "Kerülje az Önhöz kapcsolódó dátumokat és évszámokat.",
+      "recentYears": "Kerülje a közelmúlt évszámait.",
+      "associatedYears": "Kerülje az Önhöz kapcsolódó évszámokat.",
+      "sequences": "Kerülje a gyakori karaktersorozatokat.",
+      "repeated": "Kerülje az ismétlődő szavakat és karaktereket.",
+      "longerKeyboardPattern": "Használjon hosszabb billentyűzetmintákat és változtasson irányt.",
+      "anotherWord": "Adjon hozzá kevésbé gyakori szavakat.",
+      "useWords": "Használjon több szót, de kerülje a gyakori kifejezéseket.",
+      "noNeed": "Erős jelszavakat szimbólumok, számok vagy nagybetűk nélkül is létrehozhat.",
+      "pwned": "Ha ezt a jelszót máshol is használja, változtassa meg."
+    },
+    "timeEstimation": {
+      "ltSecond": "kevesebb mint egy másodperc",
+      "second": "{base} másodperc",
+      "seconds": "{base} másodperc",
+      "minute": "{base} perc",
+      "minutes": "{base} perc",
+      "hour": "{base} óra",
+      "hours": "{base} óra",
+      "day": "{base} nap",
+      "days": "{base} nap",
+      "month": "{base} hónap",
+      "months": "{base} hónap",
+      "year": "{base} év",
+      "years": "{base} év",
+      "centuries": "évszázadok"
+    }
+  },
+  "forbidden": {
+    "title": "Hozzáférés megtagadva",
+    "signedInAs": "Bejelentkezve mint {email}.",
+    "description": "Nincs engedélye ehhez az erőforráshoz való hozzáféréshez. Ha úgy gondolja, hogy ez tévedés, kérjük, lépjen kapcsolatba szervezete rendszergazdájával.",
+    "backToSignIn": "Vissza a bejelentkezéshez"
+  }
+}

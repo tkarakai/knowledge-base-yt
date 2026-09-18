@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "Laden...",
+    "cancel": "Abbrechen",
+    "save": "Änderungen speichern",
+    "saving": "Speichern...",
+    "create": "Erstellen",
+    "creating": "Wird erstellt...",
+    "delete": "Löschen",
+    "signOut": "Abmelden",
+    "error": "Ein Fehler ist aufgetreten",
+    "backToHome": "Zurück zur Startseite",
+    "note": "Hinweis"
+  },
+  "theme": {
+    "light": "Helles Design",
+    "system": "Systemdesign",
+    "dark": "Dunkles Design",
+    "ariaLabel": "Design: {label}. Klicken zum Wechseln."
+  },
+  "language": {
+    "label": "Sprache",
+    "ariaLabel": "Sprache auswählen"
+  },
+  "auth": {
+    "signIn": {
+      "title": "Willkommen zurück",
+      "description": "Melden Sie sich an, um zu Ihrem Dashboard zu gelangen.",
+      "cta": "Anmelden",
+      "switchPrompt": "Neu hier?",
+      "switchLink": "Konto erstellen",
+      "pageHeading": "Willkommen zurück. Machen Sie dort weiter, wo Sie aufgehört haben.",
+      "pageDescription": "Better Auth steuert die Sitzungsabläufe, während Convex die Daten in Echtzeit hält. Melden Sie sich an, um auf Ihre Projekte und Aufgaben zuzugreifen."
+    },
+    "signUp": {
+      "title": "Erstellen Sie Ihren Arbeitsbereich",
+      "description": "Starten Sie in weniger als einer Minute.",
+      "cta": "Konto erstellen",
+      "switchPrompt": "Haben Sie bereits Zugang?",
+      "switchLink": "Anmelden",
+      "pageHeading": "Erstellen Sie Ihr Konto und legen Sie los.",
+      "pageDescription": "Convex + Better Auth sind bereits eingerichtet, sodass Ihr Konto sofort produktionsbereit ist."
+    },
+    "badge": "Konto",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Avery Quinn",
+      "email": "E-Mail",
+      "emailPlaceholder": "sie@beispiel.de",
+      "password": "Passwort",
+      "passwordPlaceholder": "Ihr Passwort",
+      "passwordSignUpPlaceholder": "Mindestens 12 Zeichen",
+      "confirmPassword": "Passwort bestätigen",
+      "confirmPasswordPlaceholder": "Bestätigen Sie Ihr Passwort"
+    },
+    "errors": {
+      "passwordMismatch": "Die Passwörter stimmen nicht überein",
+      "passwordCompromised": "Das eingegebene Passwort wurde kompromittiert. Bitte wählen Sie ein anderes Passwort.",
+      "rateLimited": "Zu viele Versuche. Bitte warten Sie einen Moment, bevor Sie es erneut versuchen.",
+      "invalidCredentials": "Ungültige E-Mail-Adresse oder Passwort",
+      "generic": "Ein Fehler ist aufgetreten"
+    },
+    "twoFactorVerify": {
+      "title": "Zwei-Faktor-Authentifizierung",
+      "description": "Geben Sie den 6-stelligen Code aus Ihrer Authentifizierungs-App ein.",
+      "cta": "Überprüfen",
+      "invalidCode": "Ungültiger Code. Bitte versuchen Sie es erneut.",
+      "useBackupCode": "Backup-Code verwenden",
+      "backupCodeTitle": "Backup-Code",
+      "backupCodeDescription": "Geben Sie einen Ihrer Backup-Codes ein, um sich anzumelden.",
+      "backupCodePlaceholder": "Backup-Code eingeben",
+      "useAuthenticator": "Authentifizierungs-App verwenden"
+    },
+    "footer": "Sichere E-Mail + Passwort",
+    "working": "Wird verarbeitet...",
+    "legal": {
+      "prefix": "Indem Sie fortfahren, stimmen Sie unseren",
+      "termsOfService": "Nutzungsbedingungen",
+      "and": "und",
+      "privacyPolicy": "Datenschutzrichtlinie"
+    },
+    "invitation": {
+      "badge": "Einladung",
+      "title": "Registrierung abschließen",
+      "description": "Sie wurden eingeladen! Erstellen Sie Ihr Konto unten.",
+      "cta": "Konto erstellen",
+      "pageHeading": "Willkommen. Sie wurden eingeladen.",
+      "pageDescription": "Schließen Sie die Registrierung ab, um zu beginnen.",
+      "invalidTitle": "Zu dieser Einladung",
+      "noToken": "Es wurde kein Einladungs-Token angegeben. Bitte verwenden Sie den Link aus Ihrer Einladungs-E-Mail.",
+      "tokenExpired": "Diese Einladung ist abgelaufen. Bitte kontaktieren Sie das Team für eine neue.",
+      "tokenUsed": "Diese Einladung wurde bereits beansprucht.",
+      "tokenInvalid": "Dieser Einladungslink ist ungültig.",
+      "signupBlocked": "Die Registrierung ist derzeit nur mit Einladung möglich.",
+      "signupBlockedDescription": "Treten Sie der Warteliste auf unserer Startseite bei, um Zugang anzufordern.",
+      "goToWaitlist": "Zur Warteliste",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "Passwort-Wiederherstellung",
+      "title": "Passwort vergessen?",
+      "description": "Geben Sie Ihre E-Mail-Adresse ein und wir senden Ihnen einen Link zum Zurücksetzen Ihres Passworts.",
+      "cta": "Link senden",
+      "emailSent": "Überprüfen Sie Ihre E-Mails",
+      "emailSentDescription": "Falls ein Konto für {email} existiert, haben wir einen Link zum Zurücksetzen des Passworts gesendet. Überprüfen Sie Ihren Posteingang und Spam-Ordner.",
+      "backToSignIn": "Zurück zur Anmeldung",
+      "pageHeading": "Setzen Sie Ihr Passwort zurück. Kommen Sie zurück auf Kurs.",
+      "pageDescription": "Geben Sie die mit Ihrem Konto verknüpfte E-Mail-Adresse ein und wir senden Ihnen einen Link zum Erstellen eines neuen Passworts."
+    },
+    "resetPassword": {
+      "badge": "Passwort-Wiederherstellung",
+      "title": "Neues Passwort festlegen",
+      "description": "Wählen Sie ein sicheres Passwort für Ihr Konto.",
+      "newPassword": "Neues Passwort",
+      "cta": "Passwort zurücksetzen",
+      "invalidTitle": "Ungültiger Link",
+      "tokenExpired": "Dieser Link zum Zurücksetzen des Passworts ist abgelaufen. Bitte fordern Sie einen neuen an.",
+      "tokenInvalid": "Dieser Link zum Zurücksetzen des Passworts ist ungültig oder wurde bereits verwendet.",
+      "requestNewLink": "Neuen Link anfordern",
+      "backToSignIn": "Zurück zur Anmeldung",
+      "successTitle": "Passwort aktualisiert",
+      "successDescription": "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich jetzt mit Ihrem neuen Passwort anmelden.",
+      "signInNow": "Jetzt anmelden",
+      "pageHeading": "Fast geschafft. Wählen Sie ein neues Passwort.",
+      "pageDescription": "Wählen Sie ein sicheres Passwort, das Sie noch nicht verwendet haben. Ihr neues Passwort muss mindestens 12 Zeichen lang sein."
+    },
+    "verifyEmail": {
+      "badge": "E-Mail-Verifizierung",
+      "title": "Überprüfen Sie Ihre E-Mails",
+      "description": "Wir haben einen Bestätigungslink an Ihre E-Mail-Adresse gesendet. Klicken Sie auf den Link, um Ihr Konto zu verifizieren.",
+      "descriptionWithEmail": "Wir haben einen Bestätigungslink an {email} gesendet. Klicken Sie auf den Link, um Ihr Konto zu verifizieren.",
+      "resend": "Bestätigungs-E-Mail erneut senden",
+      "resent": "Bestätigungs-E-Mail gesendet! Überprüfen Sie Ihren Posteingang.",
+      "recentlySentJustNow": "Eine Bestätigungs-E-Mail wurde gerade gesendet. Bitte überprüfen Sie Ihren Posteingang und Spam-Ordner.",
+      "recentlySentSecondsAgo": "Eine Bestätigungs-E-Mail wurde vor wenigen Sekunden gesendet. Bitte überprüfen Sie Ihren Posteingang und Spam-Ordner.",
+      "recentlySentMinutesAgo": "Eine Bestätigungs-E-Mail wurde vor {minutes} {minutes, plural, one {Minute} other {Minuten}} gesendet. Bitte überprüfen Sie Ihren Posteingang und Spam-Ordner.",
+      "backToSignIn": "Zurück zur Anmeldung",
+      "pageHeading": "Letzter Schritt. Verifizieren Sie Ihre E-Mail.",
+      "pageDescription": "Wir haben Ihnen einen Bestätigungslink gesendet. Klicken Sie darauf, um Ihr Konto zu aktivieren und die App zu nutzen.",
+      "verificationSuccessTitle": "Danke für die Verifizierung Ihrer E-Mail.",
+      "verificationSuccessDescription": "Ihre E-Mail-Adresse wurde erfolgreich verifiziert.",
+      "verificationErrorTitle": "E-Mail-Verifizierung fehlgeschlagen",
+      "verificationErrorUnknown": "Dieser Verifizierungslink konnte nicht überprüft werden. Bitte fordern Sie eine neue Verifizierungs-E-Mail an.",
+      "verificationErrorTokenExpired": "Dieser Verifizierungslink ist abgelaufen. Bitte fordern Sie einen neuen an.",
+      "verificationErrorInvalidToken": "Dieser Verifizierungslink ist ungültig oder wurde bereits verwendet.",
+      "verificationErrorUserNotFound": "Für diesen Verifizierungslink wurde kein Konto gefunden.",
+      "verificationErrorUnauthorized": "Diese Verifizierungsanfrage konnte für Ihr Konto nicht abgeschlossen werden.",
+      "sessionStatusChecking": "Der Sitzungsstatus wird geprüft...",
+      "sessionStatusSignedInOnDevice": "Sie sind jetzt auf {device} angemeldet.",
+      "sessionStatusNoSession": "Bitte melden Sie sich an, um die App zu nutzen.",
+      "goToSignIn": "Zur Anmeldeseite",
+      "closeWindow": "Dieses Fenster schließen"
+    },
+    "forgotPasswordLink": "Passwort vergessen?"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "Ihre Startlinie.",
+    "headingLine2": "Bauen Sie von hier aus.",
+    "description": "Authentifizierung, Datenbank, Echtzeit-Synchronisation und Datei-Uploads — alles verbunden und einsatzbereit.",
+    "getStarted": "Loslegen",
+    "signIn": "Anmelden",
+    "footer": {
+      "about": "Über uns",
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "termsOfService": "Nutzungsbedingungen"
+    },
+    "waitlist": {
+      "title": "Warteliste beitreten",
+      "description": "Fordern Sie Zugang an, indem Sie sich auf die Warteliste setzen.",
+      "emailLabel": "E-Mail",
+      "emailPlaceholder": "sie@beispiel.de",
+      "superpowersLabel": "Was ist deine Superkraft?",
+      "superpowersPlaceholder": "Wähle deine Superkräfte",
+      "excitementLabel": "Wie aufgeregt bist du?",
+      "excitementPlaceholder": "Sag uns, wie du dich fühlst",
+      "selectedCount": "{count} ausgewählt",
+      "submit": "Auf die Warteliste",
+      "submitting": "Wird eingetragen...",
+      "successTitle": "Sie sind auf der Liste!",
+      "successDescription": "Wir senden Ihnen eine Einladung, wenn Sie an der Reihe sind.",
+      "alreadySignedUp": "Bereits ein Konto?",
+      "signIn": "Anmelden",
+      "superpowers": {
+        "coffee-to-code": "Kaffee in Code verwandeln",
+        "pixel-perfect": "Pixel perfekt machen",
+        "bug-whisperer": "Bug-Flüsterer",
+        "spreadsheet-wizard": "Tabellenkalkulations-Zauberei",
+        "inbox-zero": "Posteingang jeden Tag auf null",
+        "parallel-parking": "Einparken beim ersten Versuch",
+        "remembering-names": "Sich an jeden Namen erinnern",
+        "never-burning-toast": "Nie den Toast anbrennen lassen",
+        "explaining-tech": "Technik den Eltern erklären",
+        "finding-restaurants": "Die besten Restaurants finden",
+        "staying-calm": "Ruhe bewahren in langen Meetings",
+        "other": "Etwas ganz anderes"
+      },
+      "excitement": {
+        "take-my-money": "Nimm mein Geld!",
+        "cant-wait": "Kann es kaum erwarten",
+        "cautiously-optimistic": "Vorsichtig optimistisch",
+        "just-browsing": "Schaue mich nur um",
+        "friend-made-me": "Ein Freund hat mich angemeldet"
+      },
+      "errors": {
+        "waitlistNotEnabled": "Die Warteliste nimmt derzeit keine Anmeldungen an. Bitte versuchen Sie es später erneut.",
+        "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "rateLimited": "Zu viele Anfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut.",
+        "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "Projekte",
+    "noProjects": "Noch keine Projekte",
+    "noProjectsDescription": "Erstellen Sie ein Projekt, um zu beginnen.",
+    "projectNotFound": "Projekt nicht gefunden",
+    "projectNotFoundDescription": "Dieses Projekt wurde möglicherweise gelöscht.",
+    "tabs": {
+      "tasks": "Aufgaben",
+      "attachments": "Anhänge"
+    },
+    "security": "Sicherheit",
+    "sessions": {
+      "title": "Aktive Sitzungen",
+      "description": "Verwalten Sie Ihre aktiven Sitzungen auf allen Geräten. Sie können sich von jeder Sitzung abmelden, die Sie nicht erkennen.",
+      "currentSession": "Dieses Gerät",
+      "otherSessions": "Andere Geräte",
+      "current": "Aktuell",
+      "lastActive": "Aktiv {time}",
+      "noOtherSessions": "Keine weiteren aktiven Sitzungen. Sie sind nur auf diesem Gerät angemeldet.",
+      "revokeAll": "Alle anderen abmelden",
+      "revokeAllTitle": "Von allen anderen Geräten abmelden?",
+      "revokeAllDescription": "Sie werden von allen anderen Geräten und Browsern abgemeldet. Nur Ihre aktuelle Sitzung bleibt aktiv.",
+      "revokeAllConfirm": "Alle abmelden",
+      "revokeTitle": "Von diesem Gerät abmelden?",
+      "revokeDescription": "Dies beendet die Sitzung für {device}. Eine erneute Anmeldung ist erforderlich, um auf das Konto zuzugreifen.",
+      "backToDashboard": "Zurück zum Dashboard"
+    },
+    "account": "Einstellungen",
+    "profile": {
+      "title": "Profil",
+      "description": "Verwalten Sie Ihre Profilinformationen und Einstellungen.",
+      "name": "Anzeigename",
+      "namePlaceholder": "Ihr Name",
+      "email": "E-Mail",
+      "emailReadonly": "Kontaktieren Sie den Support, um Ihre E-Mail zu ändern.",
+      "avatarColor": "Avatar-Farbe",
+      "saved": "Profil aktualisiert.",
+      "language": "Sprache",
+      "timezone": "Zeitzone",
+      "timezonePlaceholder": "Zeitzone auswählen",
+      "timezoneSearch": "Zeitzonen durchsuchen...",
+      "timezoneDetected": "Erkannt",
+      "noTimezoneResults": "Keine Zeitzone gefunden.",
+      "theme": "Design"
+    },
+    "changePassword": {
+      "title": "Passwort ändern",
+      "currentPassword": "Aktuelles Passwort",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Neues Passwort bestätigen",
+      "revokeOtherSessions": "Alle anderen Geräte abmelden",
+      "cta": "Passwort aktualisieren",
+      "success": "Passwort erfolgreich aktualisiert.",
+      "errorCurrentPassword": "Das aktuelle Passwort ist falsch."
+    },
+    "twoFactor": {
+      "title": "Zwei-Faktor-Authentifizierung",
+      "description": "Fügen Sie Ihrem Konto eine zusätzliche Sicherheitsebene hinzu.",
+      "enabled": "2FA ist aktiviert",
+      "disabled": "2FA ist nicht aktiviert",
+      "enable": "2FA aktivieren",
+      "disable": "2FA deaktivieren",
+      "enterPassword": "Geben Sie Ihr Passwort ein, um fortzufahren.",
+      "scanQrCode": "Scannen Sie diesen QR-Code mit Ihrer Authentifizierungs-App (z. B. Google Authenticator, Authy).",
+      "manualEntry": "Scannen nicht möglich? Geben Sie diesen Schlüssel manuell ein",
+      "manualEntryDescription": "Öffnen Sie Ihre Authentifizierungs-App, wählen Sie „Konto hinzufügen“, dann „Einrichtungsschlüssel eingeben“ und fügen Sie den Schlüssel unten ein.",
+      "secretKey": "Geheimer Schlüssel",
+      "copied": "In die Zwischenablage kopiert",
+      "enterCode": "Geben Sie den 6-stelligen Code aus Ihrer Authentifizierungs-App ein, um die Einrichtung zu bestätigen.",
+      "verify": "Überprüfen",
+      "backupCodes": "Backup-Codes",
+      "backupCodesDescription": "Bewahren Sie diese Codes an einem sicheren Ort auf. Jeder Code kann nur einmal verwendet werden.",
+      "viewBackupCodes": "Backup-Codes anzeigen",
+      "regenerateBackupCodes": "Backup-Codes neu generieren",
+      "disableConfirm": "Sind Sie sicher, dass Sie 2FA deaktivieren möchten?",
+      "regenerateConfirm": "Dadurch werden Ihre bestehenden Backup-Codes ersetzt. Nicht verwendete Codes funktionieren nicht mehr.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "Neues Projekt",
+    "createProject": "Projekt erstellen",
+    "createFirst": "Erstellen Sie Ihr erstes Projekt",
+    "noProjects": "Keine Projekte",
+    "editProject": "Projekt bearbeiten",
+    "deleteProject": "Projekt löschen",
+    "deleteConfirmTitle": "Projekt löschen?",
+    "deleteConfirmDescription": "Dies löscht “{name}” und alle zugehörigen Aufgaben dauerhaft. Diese Aktion kann nicht rückgängig gemacht werden.",
+    "fields": {
+      "name": "Name",
+      "namePlaceholder": "Projektname",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Worum geht es in diesem Projekt?"
+    }
+  },
+  "tasks": {
+    "title": "Aufgaben",
+    "addTask": "Aufgabe hinzufügen",
+    "newTask": "Neue Aufgabe",
+    "editTask": "Aufgabe bearbeiten",
+    "deleteTask": "Aufgabe löschen",
+    "confirmDelete": "Löschen bestätigen",
+    "createTask": "Aufgabe erstellen",
+    "noTasks": "Noch keine Aufgaben. Fügen Sie eine hinzu, um zu beginnen.",
+    "noTasksSummary": "Noch keine Aufgaben",
+    "progress": "{doneCount} von {totalCount} Aufgaben erledigt",
+    "progressPercent": "{percent} %",
+    "status": {
+      "label": "Status",
+      "todo": "Zu erledigen",
+      "inProgress": "In Bearbeitung",
+      "done": "Erledigt",
+      "all": "Alle"
+    },
+    "fields": {
+      "title": "Titel",
+      "titlePlaceholder": "Was muss erledigt werden?",
+      "description": "Beschreibung",
+      "descriptionPlaceholder": "Details hinzufügen...",
+      "deadline": "Frist",
+      "deadlinePlaceholder": "Keine Frist",
+      "clearDeadline": "Frist entfernen"
+    },
+    "deadline": {
+      "overdue": "Überfällig",
+      "dueToday": "Heute fällig"
+    },
+    "aria": {
+      "changeStatus": "Status ändern von {status}"
+    },
+    "count": "{count, plural, =0 {Noch keine Aufgaben} one {# Aufgabe} other {# Aufgaben}}"
+  },
+  "uploads": {
+    "title": "Anhänge",
+    "addFile": "Datei hinzufügen",
+    "uploading": "Wird hochgeladen...",
+    "processing": "Verarbeitung",
+    "view": "Anzeigen",
+    "deleteFile": "Datei löschen",
+    "emptyState": "Laden Sie Dateien hoch, um den Convex-Speicherablauf zu sehen.",
+    "errors": {
+      "tooLarge": "Datei zu groß (max. 1 MB)",
+      "uploadFailed": "Upload fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "generic": "Upload fehlgeschlagen."
+    },
+    "count": "{count, plural, =0 {Keine Anhänge} one {# Anhang} other {# Anhänge}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "Nicht authentifiziert",
+    "PROJECT_NOT_FOUND": "Projekt nicht gefunden",
+    "TASK_NOT_FOUND": "Aufgabe nicht gefunden",
+    "FILE_NOT_FOUND": "Datei nicht im Speicher gefunden",
+    "FILE_TOO_LARGE": "Datei zu groß (max. 1 MB)",
+    "UPLOAD_NOT_FOUND": "Upload nicht gefunden",
+    "convex": {
+      "rateLimited": "Zu viele Anfragen. Bitte warten Sie {seconds} Sekunden.",
+      "notAuthenticated": "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
+      "connectionLost": "Verbindung zum Server nicht möglich. Bitte überprüfen Sie Ihre Verbindung.",
+      "serverError": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "projectNotFound": "Projekt nicht gefunden.",
+      "taskNotFound": "Aufgabe nicht gefunden.",
+      "fileNotFound": "Datei nicht im Speicher gefunden.",
+      "fileTooLarge": "Datei zu groß (max. 1 MB).",
+      "uploadNotFound": "Upload nicht gefunden."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "Ein Next.js-Starter mit Convex, Better Auth und Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "Über uns",
+      "description": "Erfahren Sie mehr über Web App Starter und unsere Mission.",
+      "notice": "Dies ist Platzhalterinhalt. Ersetzen Sie ihn vor dem Start durch Ihren eigenen.",
+      "heading": "Über uns",
+      "mission": "Unsere Mission",
+      "missionText": "Wir glauben, dass Entwickler ihre Zeit für die Erstellung von Funktionen aufwenden sollten, nicht für die Konfiguration von Infrastruktur. Web App Starter bietet einen produktionsreifen Ausgangspunkt mit Echtzeitdatensynchronisierung, Dateiuploads und sitzungsbasierter Authentifizierung, alles bereits verdrahtet und einsatzbereit.",
+      "whatIncluded": "Was ist enthalten",
+      "whatIncludedText": "Das Starter-Kit wird mit einer Landingpage, einer vollständig authentifizierten Webanwendung, einem Admin-Dashboard und einem Component-Storybook geliefert. Jede App teilt ein einheitliches Design-System, das auf Radix UI-Primitiven mit Tailwind CSS aufgebaut ist.",
+      "openSource": "Open Source",
+      "openSourceText": "Dieses Projekt ist Open Source und soll geforkt und angepasst werden.",
+      "intro": "Web App Starter ist eine vollständige Grundlage für die Erstellung moderner Webanwendungen. Sie kombiniert Next.js für das Frontend, Convex für das Backend und Better Auth für sichere Authentifizierung – alles verdrahtet und versandbereit."
+    },
+    "privacy": {
+      "title": "Datenschutzrichtlinie",
+      "description": "Wie wir Ihre Daten erfassen, verwenden und schützen.",
+      "notice": "Dies ist eine Vorlage für eine Datenschutzrichtlinie. Passen Sie sie vor dem Start an Ihre spezifische Anwendung und Gerichtsbarkeit an.",
+      "heading": "Datenschutzrichtlinie",
+      "lastUpdated": "Zuletzt aktualisiert: {date}"
+    },
+    "terms": {
+      "title": "Nutzungsbedingungen",
+      "description": "Die Regeln und Richtlinien für die Nutzung unseres Dienstes.",
+      "notice": "Dies ist eine Vorlage für Nutzungsbedingungen. Passen Sie sie vor dem Start an Ihre spezifische Anwendung und Gerichtsbarkeit an.",
+      "heading": "Nutzungsbedingungen",
+      "lastUpdated": "Zuletzt aktualisiert: {date}"
+    }
+  },
+  "offline": {
+    "message": "Sie scheinen offline zu sein. Eine aktive Verbindung ist erforderlich, um fortzufahren."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "Sehr schwach",
+      "weak": "Schwach",
+      "fair": "Ausreichend",
+      "good": "Gut",
+      "strong": "Stark"
+    },
+    "crackTimeLabel": "Geschätzte Knackzeit: {time}",
+    "minLength": "Mindestens {count} Zeichen erforderlich.",
+    "strengthRequirement": "Das Passwort erfüllt nicht die Stärkeanforderungen.",
+    "warnings": {
+      "straightRow": "Gerade Tastenreihen auf Ihrer Tastatur sind leicht zu erraten.",
+      "keyPattern": "Kurze Tastaturmuster sind leicht zu erraten.",
+      "simpleRepeat": "Wiederholte Zeichen wie \"aaa\" sind leicht zu erraten.",
+      "extendedRepeat": "Wiederholte Zeichenmuster wie \"abcabcabc\" sind leicht zu erraten.",
+      "sequences": "Häufige Zeichenfolgen wie \"abc\" sind leicht zu erraten.",
+      "recentYears": "Aktuelle Jahreszahlen sind leicht zu erraten.",
+      "dates": "Datumsangaben sind leicht zu erraten.",
+      "topTen": "Dies ist ein sehr häufig verwendetes Passwort.",
+      "topHundred": "Dies ist ein häufig verwendetes Passwort.",
+      "common": "Dies ist ein gängiges Passwort.",
+      "similarToCommon": "Dies ähnelt einem gängigen Passwort.",
+      "wordByItself": "Einzelne Wörter sind leicht zu erraten.",
+      "namesByThemselves": "Einzelne Vor- oder Nachnamen sind leicht zu erraten.",
+      "commonNames": "Häufige Vor- und Nachnamen sind leicht zu erraten.",
+      "userInputs": "Es sollten keine persönlichen oder seitenbezogenen Daten enthalten sein.",
+      "pwned": "Ihr Passwort wurde bei einem Datenleck im Internet offengelegt."
+    },
+    "suggestions": {
+      "l33t": "Vermeiden Sie vorhersehbare Buchstabenersetzungen wie \"@\" für \"a\".",
+      "reverseWords": "Vermeiden Sie umgekehrte Schreibweisen gängiger Wörter.",
+      "allUppercase": "Schreiben Sie einige, aber nicht alle Buchstaben groß.",
+      "capitalization": "Schreiben Sie mehr als nur den ersten Buchstaben groß.",
+      "dates": "Vermeiden Sie Daten und Jahre, die mit Ihnen in Verbindung stehen.",
+      "recentYears": "Vermeiden Sie aktuelle Jahreszahlen.",
+      "associatedYears": "Vermeiden Sie Jahre, die mit Ihnen in Verbindung stehen.",
+      "sequences": "Vermeiden Sie häufige Zeichenfolgen.",
+      "repeated": "Vermeiden Sie wiederholte Wörter und Zeichen.",
+      "longerKeyboardPattern": "Verwenden Sie längere Tastaturmuster und ändern Sie die Tipprichtung.",
+      "anotherWord": "Fügen Sie weniger gebräuchliche Wörter hinzu.",
+      "useWords": "Verwenden Sie mehrere Wörter, aber vermeiden Sie gängige Redewendungen.",
+      "noNeed": "Sie können starke Passwörter ohne Symbole, Zahlen oder Großbuchstaben erstellen.",
+      "pwned": "Wenn Sie dieses Passwort anderswo verwenden, sollten Sie es ändern."
+    },
+    "timeEstimation": {
+      "ltSecond": "weniger als eine Sekunde",
+      "second": "{base} Sekunde",
+      "seconds": "{base} Sekunden",
+      "minute": "{base} Minute",
+      "minutes": "{base} Minuten",
+      "hour": "{base} Stunde",
+      "hours": "{base} Stunden",
+      "day": "{base} Tag",
+      "days": "{base} Tage",
+      "month": "{base} Monat",
+      "months": "{base} Monate",
+      "year": "{base} Jahr",
+      "years": "{base} Jahre",
+      "centuries": "Jahrhunderte"
+    }
+  },
+  "forbidden": {
+    "title": "Zugriff verweigert",
+    "signedInAs": "Sie sind angemeldet als {email}.",
+    "description": "Sie haben keine Berechtigung, auf diese Ressource zuzugreifen. Wenn Sie glauben, dass dies ein Fehler ist, wenden Sie sich bitte an den Administrator Ihrer Organisation.",
+    "backToSignIn": "Zurück zur Anmeldung"
+  }
+}

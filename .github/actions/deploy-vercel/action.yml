@@ -1,0 +1,121 @@
+name: "Deploy to Vercel"
+description: "Deploy a prebuilt app artifact to Vercel"
+
+inputs:
+  app:
+    description: "App name (web, admin, or landing)"
+    required: true
+  environment:
+    description: "Target environment (preview or production)"
+    required: true
+  artifact-name:
+    description: "Name of the artifact to download"
+    required: true
+  tarball:
+    description: "Filename of the tarball within the artifact"
+    required: true
+  checksum-file:
+    description: "Filename of the checksum file within the artifact"
+    required: true
+  vercel-token:
+    description: "Vercel API token"
+    required: true
+  vercel-org-id:
+    description: "Vercel organization ID"
+    required: true
+  vercel-project-id:
+    description: "Vercel project ID for this app"
+    required: true
+
+outputs:
+  deployment-url:
+    description: "URL of the Vercel deployment"
+    value: ${{ steps.deploy.outputs.url }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: ${{ inputs.artifact-name }}
+        path: deploy-artifacts
+
+    - name: Verify checksum
+      shell: bash
+      working-directory: deploy-artifacts
+      run: |
+        echo "Verifying checksum for ${{ inputs.tarball }}..."
+        sha256sum -c "${{ inputs.checksum-file }}"
+        echo "Checksum verified successfully"
+
+    - name: Extract artifact into workspace root
+      shell: bash
+      run: |
+        # Extract .vercel/output into the workspace root (same layout as the
+        # build step). The prebuilt output contains .nft.json trace files with
+        # paths relative to the monorepo root, so node_modules must be
+        # reachable from the same relative location.
+        tar -xzf "deploy-artifacts/${{ inputs.tarball }}"
+
+    - name: Install Vercel CLI
+      shell: bash
+      run: bun add -g vercel@latest
+
+    - name: Create Vercel project link
+      shell: bash
+      run: |
+        mkdir -p ".vercel"
+        printf '{"orgId":"%s","projectId":"%s"}' \
+          "${{ inputs.vercel-org-id }}" \
+          "${{ inputs.vercel-project-id }}" \
+          > ".vercel/project.json"
+
+    - name: Deploy to Vercel
+      id: deploy
+      shell: bash
+      env:
+        VERCEL_TOKEN: ${{ inputs.vercel-token }}
+      run: |
+        DEPLOY_FLAGS="--prebuilt --token=${VERCEL_TOKEN}"
+
+        if [ "${{ inputs.environment }}" = "production" ]; then
+          DEPLOY_FLAGS="${DEPLOY_FLAGS} --prod"
+        fi
+
+        echo "::group::Debug: deploy directory contents"
+        ls -la .vercel/
+        cat .vercel/project.json
+        echo ""
+        if [ -d ".vercel/output" ]; then
+          echo ".vercel/output exists:"
+          ls -la .vercel/output/
+        else
+          echo "WARNING: .vercel/output does not exist"
+        fi
+        echo "::endgroup::"
+
+        # Disable -e so we can capture the error output before exiting
+        set +e
+        DEPLOY_OUTPUT=$(vercel deploy ${DEPLOY_FLAGS} 2>&1)
+        DEPLOY_EXIT=$?
+        set -e
+
+        if [ $DEPLOY_EXIT -ne 0 ]; then
+          echo "::error::Vercel deploy failed with exit code ${DEPLOY_EXIT}"
+          echo "${DEPLOY_OUTPUT}"
+          exit $DEPLOY_EXIT
+        fi
+
+        # Vercel prints info messages after the URL, so tail -1 grabs the
+        # wrong line. Extract the actual https:// deployment URL instead.
+        DEPLOYMENT_URL=$(echo "${DEPLOY_OUTPUT}" | grep -oE 'https://[^ ]+\.vercel\.app[^ ]*' | head -1)
+        if [ -z "${DEPLOYMENT_URL}" ]; then
+          echo "::error::Could not extract deployment URL from Vercel output:"
+          echo "${DEPLOY_OUTPUT}"
+          exit 1
+        fi
+        echo "url=${DEPLOYMENT_URL}" >> "$GITHUB_OUTPUT"
+
+        echo "### Deployed: ${{ inputs.app }} (${{ inputs.environment }})" >> "$GITHUB_STEP_SUMMARY"
+        echo "URL: ${DEPLOYMENT_URL}" >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,487 @@
+{
+  "common": {
+    "appName": "Web App Starter",
+    "loading": "טוען...",
+    "cancel": "ביטול",
+    "save": "שמור שינויים",
+    "saving": "שומר...",
+    "create": "צור",
+    "creating": "יוצר...",
+    "delete": "מחק",
+    "signOut": "התנתקות",
+    "error": "אירעה שגיאה",
+    "backToHome": "חזור לעמוד הבית",
+    "note": "הערה"
+  },
+  "theme": {
+    "light": "ערכת נושא בהירה",
+    "system": "ערכת נושא מערכת",
+    "dark": "ערכת נושא כהה",
+    "ariaLabel": "ערכת נושא: {label}. לחץ כדי להחליף."
+  },
+  "language": {
+    "label": "שפה",
+    "ariaLabel": "בחר שפה"
+  },
+  "auth": {
+    "signIn": {
+      "title": "ברוך שובך",
+      "description": "התחבר כדי להמשיך ללוח הבקרה.",
+      "cta": "התחברות",
+      "switchPrompt": "חדש כאן?",
+      "switchLink": "צור חשבון",
+      "pageHeading": "ברוך שובך. המשך מאיפה שהפסקת.",
+      "pageDescription": "Better Auth מנהל את זרימות הסשן, בעוד Convex שומר על הנתונים מעודכנים. התחבר כדי לגשת לפרויקטים ולמשימות שלך."
+    },
+    "signUp": {
+      "title": "צור את סביבת העבודה שלך",
+      "description": "התחל תוך פחות מדקה.",
+      "cta": "צור חשבון",
+      "switchPrompt": "כבר יש לך חשבון?",
+      "switchLink": "התחברות",
+      "pageHeading": "צור את החשבון שלך והתחל לבנות.",
+      "pageDescription": "Convex + Better Auth כבר מוגדרים, כך שהחשבון שלך מוכן לייצור מיידית."
+    },
+    "badge": "חשבון",
+    "fields": {
+      "name": "שם",
+      "namePlaceholder": "ישראל ישראלי",
+      "email": "דוא״ל",
+      "emailPlaceholder": "you@example.com",
+      "password": "סיסמה",
+      "passwordPlaceholder": "הסיסמה שלך",
+      "passwordSignUpPlaceholder": "לפחות 12 תווים",
+      "confirmPassword": "אישור סיסמה",
+      "confirmPasswordPlaceholder": "אשר את הסיסמה שלך"
+    },
+    "errors": {
+      "passwordMismatch": "הסיסמאות אינן תואמות",
+      "passwordCompromised": "הסיסמה שהזנת נחשפה. אנא בחר/י סיסמה אחרת.",
+      "rateLimited": "יותר מדי ניסיונות. אנא המתן/י רגע לפני שתנסה/י שוב.",
+      "invalidCredentials": "כתובת אימייל או סיסמה שגויים",
+      "generic": "אירעה שגיאה"
+    },
+    "twoFactorVerify": {
+      "title": "אימות דו-שלבי",
+      "description": "הזן את הקוד בן 6 הספרות מאפליקציית האימות.",
+      "cta": "אמת",
+      "invalidCode": "קוד לא תקין. אנא נסה שוב.",
+      "useBackupCode": "השתמש בקוד גיבוי במקום",
+      "backupCodeTitle": "קוד גיבוי",
+      "backupCodeDescription": "הזן אחד מקודי הגיבוי שלך כדי להתחבר.",
+      "backupCodePlaceholder": "הזן קוד גיבוי",
+      "useAuthenticator": "השתמש באפליקציית אימות במקום"
+    },
+    "footer": "דוא״ל + סיסמה מאובטחים",
+    "working": "מעבד...",
+    "legal": {
+      "prefix": "בהמשך, אתה מסכים לשלנו",
+      "termsOfService": "תנאי השירות",
+      "and": "ו",
+      "privacyPolicy": "מדיניות הפרטיות"
+    },
+    "invitation": {
+      "badge": "הזמנה",
+      "title": "השלימו את ההרשמה",
+      "description": "הוזמנתם! צרו את החשבון שלכם למטה.",
+      "cta": "יצירת חשבון",
+      "pageHeading": "ברוכים הבאים. הוזמנתם.",
+      "pageDescription": "השלימו את ההרשמה כדי להתחיל.",
+      "invalidTitle": "על ההזמנה הזו",
+      "noToken": "לא סופק טוקן הזמנה. אנא השתמשו בקישור מאימייל ההזמנה.",
+      "tokenExpired": "פג תוקף הזמנה זו. אנא צרו קשר עם הצוות לקבלת הזמנה חדשה.",
+      "tokenUsed": "הזמנה זו כבר נתבעה.",
+      "tokenInvalid": "קישור הזמנה זה אינו תקין.",
+      "signupBlocked": "ההרשמה כרגע בהזמנה בלבד.",
+      "signupBlockedDescription": "הצטרפו לרשימת ההמתנה בדף הבית שלנו כדי לבקש גישה.",
+      "goToWaitlist": "הצטרפות לרשימת ההמתנה",
+      "sessionConflictTitle": "Different Account Signed In",
+      "sessionConflictDescription": "You are currently signed in as {email}. This invitation is for a different account.",
+      "signOutAndContinue": "Sign out and onboard new account",
+      "cancel": "Cancel"
+    },
+    "forgotPassword": {
+      "badge": "שחזור סיסמה",
+      "title": "שכחת את הסיסמה?",
+      "description": "הזן את כתובת הדוא״ל שלך ונשלח לך קישור לאיפוס הסיסמה.",
+      "cta": "שלח קישור איפוס",
+      "emailSent": "בדוק את הדוא״ל שלך",
+      "emailSentDescription": "אם קיים חשבון עבור {email}, שלחנו קישור לאיפוס סיסמה. בדוק את תיבת הדואר הנכנס ותיקיית הספאם.",
+      "backToSignIn": "חזרה להתחברות",
+      "pageHeading": "אפס את הסיסמה שלך. חזור למסלול.",
+      "pageDescription": "הזן את כתובת הדוא״ל המשויכת לחשבון שלך ונשלח לך קישור ליצירת סיסמה חדשה."
+    },
+    "resetPassword": {
+      "badge": "שחזור סיסמה",
+      "title": "הגדר סיסמה חדשה",
+      "description": "בחר סיסמה חזקה לחשבון שלך.",
+      "newPassword": "סיסמה חדשה",
+      "cta": "אפס סיסמה",
+      "invalidTitle": "קישור איפוס לא תקין",
+      "tokenExpired": "פג תוקף קישור איפוס הסיסמה. אנא בקש קישור חדש.",
+      "tokenInvalid": "קישור איפוס הסיסמה אינו תקין או שכבר נעשה בו שימוש.",
+      "requestNewLink": "בקש קישור חדש",
+      "backToSignIn": "חזרה להתחברות",
+      "successTitle": "הסיסמה עודכנה",
+      "successDescription": "הסיסמה שלך אופסה בהצלחה. כעת תוכל להתחבר עם הסיסמה החדשה.",
+      "signInNow": "התחבר עכשיו",
+      "pageHeading": "כמעט שם. בחר סיסמה חדשה.",
+      "pageDescription": "בחר סיסמה חזקה שלא השתמשת בה בעבר. הסיסמה החדשה חייבת להכיל לפחות 12 תווים."
+    },
+    "verifyEmail": {
+      "badge": "אימות דוא״ל",
+      "title": "בדוק את הדוא״ל שלך",
+      "description": "שלחנו קישור אימות לכתובת הדוא״ל שלך. לחץ על הקישור כדי לאמת את חשבונך.",
+      "descriptionWithEmail": "שלחנו קישור אימות ל-{email}. לחץ על הקישור כדי לאמת את חשבונך.",
+      "resend": "שלח שוב דוא״ל אימות",
+      "resent": "דוא״ל אימות נשלח! בדוק את תיבת הדואר הנכנס.",
+      "recentlySentJustNow": "דוא״ל אימות נשלח הרגע. אנא בדוק את תיבת הדואר הנכנס ותיקיית הספאם.",
+      "recentlySentSecondsAgo": "דוא״ל אימות נשלח לפני שניות. אנא בדוק את תיבת הדואר הנכנס ותיקיית הספאם.",
+      "recentlySentMinutesAgo": "דוא״ל אימות נשלח לפני {minutes} {minutes, plural, one {דקה} other {דקות}}. אנא בדוק את תיבת הדואר הנכנס ותיקיית הספאם.",
+      "backToSignIn": "חזרה להתחברות",
+      "pageHeading": "שלב אחרון. אמת את הדוא״ל שלך.",
+      "pageDescription": "שלחנו לך קישור אימות. לחץ עליו כדי להפעיל את חשבונך ולהתחיל להשתמש באפליקציה.",
+      "verificationSuccessTitle": "תודה שאימתת את כתובת הדוא״ל שלך.",
+      "verificationSuccessDescription": "כתובת הדוא״ל שלך אומתה בהצלחה.",
+      "verificationErrorTitle": "אימות הדוא״ל נכשל",
+      "verificationErrorUnknown": "לא הצלחנו לאמת את קישור הדוא״ל הזה. נא לבקש הודעת אימות חדשה.",
+      "verificationErrorTokenExpired": "תוקף קישור האימות הזה פג. נא לבקש קישור חדש.",
+      "verificationErrorInvalidToken": "קישור האימות הזה לא תקין או שכבר נעשה בו שימוש.",
+      "verificationErrorUserNotFound": "לא מצאנו חשבון עבור קישור האימות הזה.",
+      "verificationErrorUnauthorized": "לא ניתן היה להשלים את בקשת האימות עבור החשבון שלך.",
+      "sessionStatusChecking": "בודקים את מצב ההתחברות שלך...",
+      "sessionStatusSignedInOnDevice": "כעת אתה מחובר ב-{device}.",
+      "sessionStatusNoSession": "נא להתחבר כדי להשתמש באפליקציה.",
+      "goToSignIn": "מעבר לעמוד ההתחברות",
+      "closeWindow": "סגור חלון זה"
+    },
+    "forgotPasswordLink": "שכחת סיסמה?"
+  },
+  "landing": {
+    "badge": "Next.js + Convex + Better Auth",
+    "heading": "קו ההתחלה שלך.",
+    "headingLine2": "בנה מכאן.",
+    "description": "אימות, מסד נתונים, סנכרון בזמן אמת והעלאת קבצים — הכל מחובר ומוכן.",
+    "getStarted": "התחל",
+    "signIn": "התחברות",
+    "footer": {
+      "about": "אודות",
+      "privacyPolicy": "מדיניות הפרטיות",
+      "termsOfService": "תנאי השירות"
+    },
+    "waitlist": {
+      "title": "הצטרפות לרשימת ההמתנה",
+      "description": "בקשו גישה על ידי הצטרפות לרשימת ההמתנה.",
+      "emailLabel": "אימייל",
+      "emailPlaceholder": "you@example.co.il",
+      "superpowersLabel": "מה כוח העל שלך?",
+      "superpowersPlaceholder": "בחרו את כוחות העל שלכם",
+      "excitementLabel": "כמה אתם מתרגשים?",
+      "excitementPlaceholder": "ספרו לנו מה אתם מרגישים",
+      "selectedCount": "{count} נבחרו",
+      "submit": "הצטרפות לרשימה",
+      "submitting": "נרשם...",
+      "successTitle": "אתם ברשימה!",
+      "successDescription": "נשלח לכם הזמנה כשיגיע תורכם.",
+      "alreadySignedUp": "כבר יש לכם חשבון?",
+      "signIn": "התחברות",
+      "superpowers": {
+        "coffee-to-code": "הפיכת קפה לקוד",
+        "pixel-perfect": "שליטה מושלמת בפיקסלים",
+        "bug-whisperer": "לוחש לבאגים",
+        "spreadsheet-wizard": "קוסם גיליונות אלקטרוניים",
+        "inbox-zero": "תיבת דואר ריקה כל יום",
+        "parallel-parking": "חנייה מקבילה בניסיון ראשון",
+        "remembering-names": "זוכר את השמות של כולם",
+        "never-burning-toast": "אף פעם לא שורף טוסט",
+        "explaining-tech": "מסביר טכנולוגיה להורים",
+        "finding-restaurants": "מוצא את המסעדות הכי טובות",
+        "staying-calm": "שומר על קור רוח בישיבות ארוכות",
+        "other": "משהו אחר לגמרי"
+      },
+      "excitement": {
+        "take-my-money": "קחו את הכסף שלי!",
+        "cant-wait": "לא יכול לחכות לנסות",
+        "cautiously-optimistic": "אופטימי בזהירות",
+        "just-browsing": "סתם מסתכל",
+        "friend-made-me": "חבר שלי גרם לי להירשם"
+      },
+      "errors": {
+        "waitlistNotEnabled": "רשימת ההמתנה אינה מקבלת הרשמות כרגע. אנא נסו שוב מאוחר יותר.",
+        "invalidEmail": "אנא הזינו כתובת אימייל תקינה.",
+        "rateLimited": "יותר מדי בקשות. אנא המתינו רגע ונסו שוב.",
+        "generic": "משהו השתבש. אנא נסו שוב."
+      }
+    }
+  },
+  "dashboard": {
+    "projects": "פרויקטים",
+    "noProjects": "אין עדיין פרויקטים",
+    "noProjectsDescription": "צור פרויקט כדי להתחיל.",
+    "projectNotFound": "הפרויקט לא נמצא",
+    "projectNotFoundDescription": "ייתכן שפרויקט זה נמחק.",
+    "tabs": {
+      "tasks": "משימות",
+      "attachments": "קבצים מצורפים"
+    },
+    "security": "אבטחה",
+    "sessions": {
+      "title": "סשנים פעילים",
+      "description": "נהל את הסשנים הפעילים שלך בכל המכשירים. ניתן להתנתק מכל סשן שאינך מזהה.",
+      "currentSession": "מכשיר זה",
+      "otherSessions": "מכשירים אחרים",
+      "current": "נוכחי",
+      "lastActive": "פעיל {time}",
+      "noOtherSessions": "אין סשנים פעילים אחרים. אתה מחובר רק במכשיר זה.",
+      "revokeAll": "התנתק מכל האחרים",
+      "revokeAllTitle": "להתנתק מכל המכשירים האחרים?",
+      "revokeAllDescription": "תתנתק מכל המכשירים והדפדפנים האחרים. רק הסשן הנוכחי שלך יישאר פעיל.",
+      "revokeAllConfirm": "התנתק מהכל",
+      "revokeTitle": "להתנתק ממכשיר זה?",
+      "revokeDescription": "פעולה זו תסיים את הסשן עבור {device}. יהיה צורך להתחבר מחדש כדי לגשת לחשבון.",
+      "backToDashboard": "חזרה ללוח הבקרה"
+    },
+    "account": "הגדרות",
+    "profile": {
+      "title": "פרופיל",
+      "description": "נהל את פרטי הפרופיל וההעדפות שלך.",
+      "name": "שם תצוגה",
+      "namePlaceholder": "השם שלך",
+      "email": "דוא״ל",
+      "emailReadonly": "פנה לתמיכה כדי לשנות את הדוא״ל.",
+      "avatarColor": "צבע אווטר",
+      "saved": "הפרופיל עודכן.",
+      "language": "שפה",
+      "timezone": "אזור זמן",
+      "timezonePlaceholder": "בחר את אזור הזמן שלך",
+      "timezoneSearch": "חיפוש אזורי זמן...",
+      "timezoneDetected": "זוהה",
+      "noTimezoneResults": "לא נמצא אזור זמן.",
+      "theme": "ערכת נושא"
+    },
+    "changePassword": {
+      "title": "שינוי סיסמה",
+      "currentPassword": "סיסמה נוכחית",
+      "newPassword": "סיסמה חדשה",
+      "confirmPassword": "אשר סיסמה חדשה",
+      "revokeOtherSessions": "התנתק מכל המכשירים האחרים",
+      "cta": "עדכן סיסמה",
+      "success": "הסיסמה עודכנה בהצלחה.",
+      "errorCurrentPassword": "הסיסמה הנוכחית שגויה."
+    },
+    "twoFactor": {
+      "title": "אימות דו-שלבי",
+      "description": "הוסף שכבת אבטחה נוספת לחשבון שלך.",
+      "enabled": "אימות דו-שלבי מופעל",
+      "disabled": "אימות דו-שלבי אינו מופעל",
+      "enable": "הפעל אימות דו-שלבי",
+      "disable": "השבת אימות דו-שלבי",
+      "enterPassword": "הזן את הסיסמה שלך כדי להמשיך.",
+      "scanQrCode": "סרוק את קוד ה-QR באמצעות אפליקציית האימות (למשל Google Authenticator, Authy).",
+      "manualEntry": "לא ניתן לסרוק? הזן מפתח זה ידנית",
+      "manualEntryDescription": "פתח את אפליקציית האימות, בחר \"הוספת חשבון\", לאחר מכן בחר \"הזנת מפתח הגדרה\" והדבק את המפתח למטה.",
+      "secretKey": "מפתח סודי",
+      "copied": "הועתק ללוח",
+      "enterCode": "הזן את הקוד בן 6 הספרות מאפליקציית האימות לאימות ההגדרה.",
+      "verify": "אמת",
+      "backupCodes": "קודי גיבוי",
+      "backupCodesDescription": "שמור קודים אלה במקום בטוח. ניתן להשתמש בכל קוד פעם אחת בלבד.",
+      "viewBackupCodes": "הצג קודי גיבוי",
+      "regenerateBackupCodes": "חדש קודי גיבוי",
+      "disableConfirm": "האם אתה בטוח שברצונך להשבית את האימות הדו-שלבי?",
+      "regenerateConfirm": "פעולה זו תחליף את קודי הגיבוי הקיימים שלך. קודים שלא נעשה בהם שימוש לא יעבדו יותר.",
+      "codePlaceholder": "000000"
+    }
+  },
+  "projects": {
+    "newProject": "פרויקט חדש",
+    "createProject": "צור פרויקט",
+    "createFirst": "צור את הפרויקט הראשון שלך",
+    "noProjects": "אין פרויקטים",
+    "editProject": "ערוך פרויקט",
+    "deleteProject": "מחק פרויקט",
+    "deleteConfirmTitle": "למחוק את הפרויקט?",
+    "deleteConfirmDescription": "פעולה זו תמחק לצמיתות את “{name}” ואת כל המשימות שלו. לא ניתן לבטל פעולה זו.",
+    "fields": {
+      "name": "שם",
+      "namePlaceholder": "שם הפרויקט",
+      "description": "תיאור",
+      "descriptionPlaceholder": "על מה הפרויקט הזה?"
+    }
+  },
+  "tasks": {
+    "title": "משימות",
+    "addTask": "הוסף משימה",
+    "newTask": "משימה חדשה",
+    "editTask": "ערוך משימה",
+    "deleteTask": "מחק משימה",
+    "confirmDelete": "אשר מחיקה",
+    "createTask": "צור משימה",
+    "noTasks": "אין עדיין משימות. הוסף אחת כדי להתחיל.",
+    "noTasksSummary": "אין עדיין משימות",
+    "progress": "{doneCount} מתוך {totalCount} משימות הושלמו",
+    "progressPercent": "{percent}%",
+    "status": {
+      "label": "סטטוס",
+      "todo": "לביצוע",
+      "inProgress": "בתהליך",
+      "done": "הושלם",
+      "all": "הכל"
+    },
+    "fields": {
+      "title": "כותרת",
+      "titlePlaceholder": "מה צריך לעשות?",
+      "description": "תיאור",
+      "descriptionPlaceholder": "הוסף פרטים...",
+      "deadline": "תאריך יעד",
+      "deadlinePlaceholder": "ללא תאריך יעד",
+      "clearDeadline": "הסר תאריך יעד"
+    },
+    "deadline": {
+      "overdue": "באיחור",
+      "dueToday": "נדרש היום"
+    },
+    "aria": {
+      "changeStatus": "שנה סטטוס מ-{status}"
+    },
+    "count": "{count, plural, =0 {אין עדיין משימות} one {משימה אחת} two {# משימות} other {# משימות}}"
+  },
+  "uploads": {
+    "title": "קבצים מצורפים",
+    "addFile": "הוסף קובץ",
+    "uploading": "מעלה...",
+    "processing": "מעבד",
+    "view": "צפה",
+    "deleteFile": "מחק קובץ",
+    "emptyState": "העלה קבצים כדי לראות את זרימת האחסון של Convex.",
+    "errors": {
+      "tooLarge": "הקובץ גדול מדי (מקסימום 1MB)",
+      "uploadFailed": "ההעלאה נכשלה. נסה שוב.",
+      "generic": "ההעלאה נכשלה."
+    },
+    "count": "{count, plural, =0 {אין קבצים מצורפים} one {קובץ מצורף אחד} two {# קבצים מצורפים} other {# קבצים מצורפים}}"
+  },
+  "errors": {
+    "NOT_AUTHENTICATED": "לא מאומת",
+    "PROJECT_NOT_FOUND": "הפרויקט לא נמצא",
+    "TASK_NOT_FOUND": "המשימה לא נמצאה",
+    "FILE_NOT_FOUND": "הקובץ לא נמצא באחסון",
+    "FILE_TOO_LARGE": "הקובץ גדול מדי (מקסימום 1MB)",
+    "UPLOAD_NOT_FOUND": "ההעלאה לא נמצאה",
+    "convex": {
+      "rateLimited": "יותר מדי בקשות. אנא המתן {seconds} שניות.",
+      "notAuthenticated": "פג תוקף ההפעלה שלך. אנא התחבר שוב.",
+      "connectionLost": "לא ניתן להתחבר לשרת. אנא בדוק את החיבור שלך.",
+      "serverError": "משהו השתבש. אנא נסה שוב.",
+      "projectNotFound": "הפרויקט לא נמצא.",
+      "taskNotFound": "המשימה לא נמצאה.",
+      "fileNotFound": "הקובץ לא נמצא באחסון.",
+      "fileTooLarge": "הקובץ גדול מדי (מקסימום 1 מ\"ב).",
+      "uploadNotFound": "ההעלאה לא נמצאה."
+    }
+  },
+  "metadata": {
+    "title": "Web App Starter",
+    "description": "תבנית Next.js עם Convex, Better Auth ו-Bun."
+  },
+  "legal": {
+    "about": {
+      "title": "אודות",
+      "description": "למד על Web App Starter ועל משימתנו.",
+      "notice": "זה תוכן של מציין מקום. החלף אותו בתוכן משלך לפני הִשׁקָה.",
+      "heading": "אודות",
+      "mission": "המשימה שלנו",
+      "missionText": "אנו מאמינים שמפתחים צריכים להקדיש את זמנם לבניית תכונות, לא לתצורת תשתית. Web App Starter מספק נקודת התחלה המוכנה לייצור עם סינכרון נתונים בזמן אמת, העלאת קבצים והוראות מבוססות על מושב, הכל כבר מחובר וריady.",
+      "whatIncluded": "מה כלול",
+      "whatIncludedText": "ערכת ההתחלה מגיעה עם עמוד נחיתה, יישום אינטרנט מאומת במלואו, לוח בקרה של מנהל וספר סיפורים של רכיבים. כל אפליקציה חולקת מערכת עיצוב אחידה שנבנתה על בסיס פרימיטיביים של Radix UI עם Tailwind CSS.",
+      "openSource": "קוד פתוח",
+      "openSourceText": "פרויקט זה הוא קוד פתוח והוא תוכנן ליהיות מופעל ומותאם.",
+      "intro": "Web App Starter הוא בסיס מסדר מלא לבניית יישומי אינטרנט מודרניים. הוא משלב Next.js עבור הקצה החזקה, Convex עבור הקצה האחורי ו-Better Auth להוראה מאובטחת — הכל מחובר וריady להשלחה."
+    },
+    "privacy": {
+      "title": "מדיניות פרטיות",
+      "description": "כיצד אנו אוספים, משתמשים וברים בנתונים שלך.",
+      "notice": "זו תבנית של מדיניות פרטיות. התאם אותה ליישום הספציפי שלך ולתחום השיפוט שלך לפני הִשׁקָה.",
+      "heading": "מדיניות פרטיות",
+      "lastUpdated": "עדכון אחרון: {date}"
+    },
+    "terms": {
+      "title": "תנאי השירות",
+      "description": "הכללים וההנחיות לשימוש בשירות שלנו.",
+      "notice": "אלה תנאי שירות של תבנית. התאם אותם ליישום הספציפי שלך ולתחום השיפוט שלך לפני הִשׁקָה.",
+      "heading": "תנאי השירות",
+      "lastUpdated": "עדכון אחרון: {date}"
+    }
+  },
+  "offline": {
+    "message": "נראה שאינך מחובר לאינטרנט. נדרש חיבור פעיל כדי להמשיך."
+  },
+  "passwordStrength": {
+    "labels": {
+      "veryWeak": "חלשה מאוד",
+      "weak": "חלשה",
+      "fair": "סבירה",
+      "good": "טובה",
+      "strong": "חזקה"
+    },
+    "crackTimeLabel": "זמן פריצה משוער: {time}",
+    "minLength": "נדרשים לפחות {count} תווים.",
+    "strengthRequirement": "הסיסמה אינה עומדת בדרישות החוזק.",
+    "warnings": {
+      "straightRow": "שורות ישרות של מקשים במקלדת קלות לניחוש.",
+      "keyPattern": "דפוסי מקלדת קצרים קלים לניחוש.",
+      "simpleRepeat": "תווים חוזרים כמו \"aaa\" קלים לניחוש.",
+      "extendedRepeat": "דפוסי תווים חוזרים כמו \"abcabcabc\" קלים לניחוש.",
+      "sequences": "רצפי תווים נפוצים כמו \"abc\" קלים לניחוש.",
+      "recentYears": "שנים אחרונות קלות לניחוש.",
+      "dates": "תאריכים קלים לניחוש.",
+      "topTen": "זוהי סיסמה בשימוש נרחב מאוד.",
+      "topHundred": "זוהי סיסמה בשימוש תדיר.",
+      "common": "זוהי סיסמה נפוצה.",
+      "similarToCommon": "זו דומה לסיסמה נפוצה.",
+      "wordByItself": "מילים בודדות קלות לניחוש.",
+      "namesByThemselves": "שמות פרטיים או משפחה בודדים קלים לניחוש.",
+      "commonNames": "שמות פרטיים ומשפחה נפוצים קלים לניחוש.",
+      "userInputs": "אין לכלול נתונים אישיים או הקשורים לדף.",
+      "pwned": "הסיסמה שלך נחשפה בדליפת נתונים באינטרנט."
+    },
+    "suggestions": {
+      "l33t": "הימנע מהחלפות אותיות צפויות כמו \"@\" במקום \"a\".",
+      "reverseWords": "הימנע מאיות הפוך של מילים נפוצות.",
+      "allUppercase": "הפוך חלק מהאותיות לגדולות, אך לא את כולן.",
+      "capitalization": "הפוך יותר מהאות הראשונה לגדולה.",
+      "dates": "הימנע מתאריכים ושנים הקשורים אליך.",
+      "recentYears": "הימנע משנים אחרונות.",
+      "associatedYears": "הימנע משנים הקשורות אליך.",
+      "sequences": "הימנע מרצפי תווים נפוצים.",
+      "repeated": "הימנע ממילים ותווים חוזרים.",
+      "longerKeyboardPattern": "השתמש בדפוסי מקלדת ארוכים יותר ושנה כיוון הקלדה מספר פעמים.",
+      "anotherWord": "הוסף מילים פחות נפוצות.",
+      "useWords": "השתמש במספר מילים, אך הימנע מביטויים נפוצים.",
+      "noNeed": "ניתן ליצור סיסמאות חזקות ללא שימוש בסמלים, מספרים או אותיות גדולות.",
+      "pwned": "אם אתה משתמש בסיסמה זו במקום אחר, כדאי לשנות אותה."
+    },
+    "timeEstimation": {
+      "ltSecond": "פחות משנייה",
+      "second": "{base} שנייה",
+      "seconds": "{base} שניות",
+      "minute": "{base} דקה",
+      "minutes": "{base} דקות",
+      "hour": "{base} שעה",
+      "hours": "{base} שעות",
+      "day": "{base} יום",
+      "days": "{base} ימים",
+      "month": "{base} חודש",
+      "months": "{base} חודשים",
+      "year": "{base} שנה",
+      "years": "{base} שנים",
+      "centuries": "מאות שנים"
+    }
+  },
+  "forbidden": {
+    "title": "הגישה נדחתה",
+    "signedInAs": "אתה מחובר בתור {email}.",
+    "description": "אין לך הרשאה לגשת למשאב זה. אם אתה סבור שמדובר בטעות, אנא פנה למנהל הארגון שלך.",
+    "backToSignIn": "חזרה להתחברות"
+  }
+}

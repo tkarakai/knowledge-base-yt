@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="178 265 668 668" role="img" aria-label="Matte sprout icon (transparent background)">
+  <defs>
+    <!-- Matte leaf gradient (subtle contrast) -->
+    <linearGradient id="leafGradMatte" x1="300" y1="320" x2="720" y2="560" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#B9FF46"/>
+      <stop offset="0.55" stop-color="#5EEA55"/>
+      <stop offset="1" stop-color="#16B975"/>
+    </linearGradient>
+
+    <!-- Matte stem gradient -->
+    <linearGradient id="stemGradMatte" x1="500" y1="380" x2="560" y2="720" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8CF25B"/>
+      <stop offset="0.6" stop-color="#34D27A"/>
+      <stop offset="1" stop-color="#12B981"/>
+    </linearGradient>
+
+    <!-- Soil (matte) -->
+    <radialGradient id="soilGradMatte" cx="46%" cy="38%" r="90%">
+      <stop offset="0" stop-color="#A46A55"/>
+      <stop offset="0.55" stop-color="#7A4A3E"/>
+      <stop offset="1" stop-color="#50302A"/>
+    </radialGradient>
+
+    <!-- Very soft shadow (less glossy than before) -->
+    <filter id="softShadowMatte" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+
+  <!-- Transparent background (no rect) -->
+
+  <!-- Sprout -->
+  <g filter="url(#softShadowMatte)">
+
+    <!-- Leaves (no veins / no specular highlights) -->
+    <g>
+      <!-- Left leaf (moved halfway down the stem) -->
+      <g transform="translate(0 120)">
+        <path d="M512 420
+                 C458 350 354 322 270 336
+                 C210 346 188 382 206 420
+                 C234 480 336 520 430 512
+                 C484 508 512 476 512 420Z"
+              fill="url(#leafGradMatte)"/>
+
+        <!-- Left leaf inner shading (moved with leaf) -->
+        <path d="M512 420
+                 C470 372 392 352 320 360
+                 C268 366 248 388 260 412
+                 C280 452 356 476 428 472
+                 C472 470 500 450 512 420Z"
+              fill="#0A2B1D" opacity="0.08"/>
+      </g>
+
+      <!-- Right leaf -->
+      <path d="M512 420
+               C566 350 670 322 754 336
+               C814 346 836 382 818 420
+               C790 480 688 520 594 512
+               C540 508 512 476 512 420Z"
+            fill="url(#leafGradMatte)"/>
+
+      <!-- Right leaf inner shading -->
+      <path d="M512 420
+               C554 372 632 352 704 360
+               C756 366 776 388 764 412
+               C744 452 668 476 596 472
+               C552 470 524 450 512 420Z"
+            fill="#0A2B1D" opacity="0.08"/>
+    </g>
+
+    <!-- Stem (matte, no shiny stripe) -->
+    <g>
+      <path d="M498 438
+               C490 520 490 612 498 698
+               C502 742 520 756 538 748
+               C560 738 566 714 564 698
+               C556 612 556 520 564 438
+               C566 414 550 398 530 398
+               C512 398 500 414 498 438Z"
+            fill="url(#stemGradMatte)"/>
+      <!-- Gentle side shade -->
+      <path d="M530 398
+               C550 398 566 414 564 438
+               C556 520 556 612 564 698
+               C566 714 560 738 538 748
+               C530 752 522 752 512 748
+               L512 400
+               C518 399 524 398 530 398Z"
+            fill="#083021" opacity="0.10"/>
+    </g>
+
+    <!-- Soil mound (remove rim sheen; keep small texture dots) -->
+    <g>
+      <path d="M318 820
+               C330 724 402 674 512 674
+               C622 674 694 724 706 820
+               C710 854 686 876 650 876
+               L374 876
+               C338 876 314 854 318 820Z"
+            fill="url(#soilGradMatte)"/>
+
+      <g opacity="0.16" fill="#1E0F0B">
+        <circle cx="440" cy="798" r="8"/>
+        <circle cx="520" cy="810" r="7"/>
+        <circle cx="600" cy="796" r="9"/>
+        <circle cx="560" cy="840" r="6"/>
+        <circle cx="470" cy="844" r="6"/>
+      </g>
+
+      <!-- Soft matte highlight band (very subtle) -->
+      <path d="M362 808
+               C378 744 428 718 512 718
+               C596 718 646 744 662 808
+               C664 818 658 824 648 824
+               L376 824
+               C366 824 360 818 362 808Z"
+            fill="#FFFFFF" opacity="0.06"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,23 @@
+{
+  "name": "@repo/companion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch src/main.ts",
+    "start": "bun src/main.ts",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@repo/kb-shared": "workspace:*",
+    "@repo/kb": "workspace:*",
+    "@repo/ingestion": "workspace:*",
+    "@repo/search": "workspace:*",
+    "@repo/kb-agent": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.6",
+    "typescript": "5.9.3"
+  }
+}
