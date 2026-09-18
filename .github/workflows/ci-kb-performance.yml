@@ -1,20 +1,6 @@
 name: KB performance
 
 on:
-  pull_request:
-    paths:
-      - 'apps/companion/**'
-      - 'apps/web/src/components/kb/**'
-      - 'apps/web/src/lib/kb/**'
-      - 'apps/web/src/app/kb/**'
-      - 'packages/kb/**'
-      - 'packages/shared/**'
-      - 'packages/search/**'
-      - 'packages/ingestion/**'
-      - 'scripts/kb-*.ts'
-      - 'package.json'
-      - 'bun.lock'
-      - '.github/workflows/ci-kb-performance.yml'
   workflow_dispatch:
 
 permissions:

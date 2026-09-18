@@ -4,6 +4,8 @@ A local-first knowledge workspace built on [web-app-starter](https://github.com/
 
 **Markdown is the durable source of truth.** Sources, timestamped transcripts, reflections, knowledge notes, proposals, encounter history, and synthesis audits live in your vault. SQLite search indexes can be rebuilt. Pi receives only application-specific read/search/submit tools and cannot write the vault.
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the PR workflow and required validation.
+
 ## Run locally
 
 Requires Bun 1.3.6+, Node 22.19+, Python 3.9+, and the `ps`, `pgrep`, and `lsof` utilities.

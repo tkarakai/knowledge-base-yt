@@ -1,0 +1,71 @@
+name: Commonplace validation
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kb-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Commonplace validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bun
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Development process isolation
+        run: bun run test:dev-scripts
+      - name: KB lint and types
+        run: |
+          bun run lint:kb
+          bun run typecheck:kb
+      - name: Web lint and types
+        run: |
+          bun run --cwd apps/web lint
+          bun run --cwd apps/web typecheck
+      - name: KB and web unit tests
+        run: |
+          bun run test:kb
+          bun run --cwd apps/web test
+          bun run --cwd apps/web test:unit
+      - name: Retained backend regression tests
+        run: bun run --cwd packages/backend test:convex
+      - name: Production web build
+        run: bun run build:kb
+      - uses: ./.github/actions/setup-playwright
+      - name: Workspace browser journey and scale budgets
+        run: bun run test:kb:perf:browser
+      - name: History extension browser journey
+        run: bun run test:history:e2e
+      - name: Storage and HTTP scale budgets
+        run: bun run test:kb:perf
+      - name: Preserve browser and performance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: commonplace-validation
+          path: |
+            .kb-local/qa/
+            .kb-local/history-e2e/
+            .kb-local/performance/
+          include-hidden-files: true
+          if-no-files-found: ignore
+          retention-days: 7
+      # Browser tests use disposable vaults and fixture model/YouTube providers.
+      # Live inference and authenticated caption retrieval are operator checks.

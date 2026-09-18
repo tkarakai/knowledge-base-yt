@@ -1,5 +1,7 @@
 # Project Conventions for AI Agents
 
+Follow [CONTRIBUTING.md](CONTRIBUTING.md) for feature branches, pull requests, CI, and squash or rebase merges. Do not commit or push directly to `main`.
+
 This document provides project-specific guidance for AI agents working on this codebase. **Topic-specific guides** are linked at the bottom — read them when working on those areas.
 
 ## Project Overview
