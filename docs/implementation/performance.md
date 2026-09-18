@@ -9,11 +9,11 @@ bun run test:kb:perf
 bun run test:kb:perf:browser
 ```
 
-The `KB performance` GitHub Actions workflow runs these checks on relevant pull requests and preserves timing reports/screenshots for 14 days. It can also be triggered manually.
+The required `Commonplace validation` GitHub Actions workflow runs these checks on every pull request and preserves timing reports/screenshots for seven days. The standalone `KB performance` workflow remains available for manual development-server investigations.
 
 Both use disposable synthetic vaults and injected providers, never the personal vault or live YouTube. The HTTP benchmark covers 2,500 and 10,000 videos while a deterministic, two-worker metadata backfill is active. It measures full response-body latency for pages, grouped substring search, details, knowledge, proposals, timeline, search, progress, settings, and reflection writes. It also checks that backfill actually overlaps the measured requests and that hot-path file reads stay bounded. `KB_PERF_SIZES=5000,20000 bun run test:kb:perf` overrides fixture sizes for investigation.
 
-The browser check uses Chromium and the real Next proxy/companion against 2,500 and 10,000 extra sources. It checks first-page display, five pagination/search interactions per size (reporting p50/p95), full-library substring search, and a maximum of 50 rendered video rows. Next runs in development mode, so these timings include development overhead; they are not production Core Web Vitals.
+The browser check uses Chromium and the real Next proxy/companion against 2,500 and 10,000 extra sources. It checks first-page display, five pagination/search interactions per size (reporting p50/p95), full-library substring search, and a maximum of 50 rendered video rows. CI uses the production build so compilation and development instrumentation do not distort the budget. To reproduce that mode, run `bun run build:kb` followed by `KB_E2E_PRODUCTION=1 bun run test:kb:perf:browser`. The local default uses the development server; each report records its runtime. These synthetic timings are not production Core Web Vitals.
 
 Reports are written to `.kb-local/performance/latest.json` and `browser.json` (ignored by Git). Preserve these as CI artifacts or compare them before/after a change. Use the same machine/runtime for comparisons; timings are machine dependent. Absolute budgets deliberately allow headroom for shared runners:
 

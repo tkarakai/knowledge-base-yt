@@ -157,7 +157,7 @@ const web = Bun.spawn(
   [
     process.execPath,
     "node_modules/next/dist/bin/next",
-    "dev",
+    process.env.KB_E2E_PRODUCTION === "1" ? "start" : "dev",
     "--hostname",
     "127.0.0.1",
     "--port",
@@ -643,7 +643,7 @@ try {
       JSON.stringify(
         {
           at: new Date().toISOString(),
-          runtime: "Next dev + headless Chromium",
+          runtime: `Next ${process.env.KB_E2E_PRODUCTION === "1" ? "production" : "dev"} + headless Chromium`,
           results,
         },
         null,

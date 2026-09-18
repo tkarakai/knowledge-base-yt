@@ -23,7 +23,7 @@ The workflow follows `lifeor2-client`: zero general approvals, with code-owner r
 - Retained Convex backend regression tests and the production web build.
 - The KB browser journey with scale budgets, the real browser-extension journey, and storage/API performance checks.
 
-Tests use temporary vaults and fixture YouTube/model providers; no Google account, production credentials, local vault, or running Convex deployment is needed. Live inference quality and authenticated caption retrieval remain separate operator checks. See [transcripts and diagnostics](docs/implementation/transcripts-and-traces.md).
+Tests use temporary vaults and fixture YouTube/model providers; no Google account, production credentials, local vault, or running Convex deployment is needed. CI runs browser performance checks against the production build (`KB_E2E_PRODUCTION=1`); local browser checks default to the development server. Live inference quality and authenticated caption retrieval remain separate operator checks. See [transcripts and diagnostics](docs/implementation/transcripts-and-traces.md).
 
 The inherited Security workflow runs as additional checks. The six inherited app/shared CI workflows and the standalone KB performance workflow are manual-only; Commonplace validation covers the active product. Reusable starter workflows remain callable. All deployment workflows are manual-only and must be adapted to this validation check and configured with deployment credentials before use. Merging a PR does not automatically deploy.
 
@@ -50,3 +50,5 @@ gh api repos/tkarakai/knowledge-base-yt/rulesets
 ```
 
 For the ruleset, use `POST repos/tkarakai/knowledge-base-yt/rulesets` with `--input .github/main-ruleset.json` on first setup. On subsequent updates, use `PUT repos/tkarakai/knowledge-base-yt/rulesets/<id>` with the ID returned by the listing above; do not create duplicate rulesets.
+
+Dependency review also requires GitHub's dependency graph. The graph and vulnerability alerts are enabled; to reapply, run `gh api --method PUT repos/tkarakai/knowledge-base-yt/vulnerability-alerts`. This does not enable automatic dependency-update PRs.

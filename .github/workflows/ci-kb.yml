@@ -51,6 +51,8 @@ jobs:
       - uses: ./.github/actions/setup-playwright
       - name: Workspace browser journey and scale budgets
         run: bun run test:kb:perf:browser
+        env:
+          KB_E2E_PRODUCTION: '1'
       - name: History extension browser journey
         run: bun run test:history:e2e
       - name: Storage and HTTP scale budgets
