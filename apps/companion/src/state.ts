@@ -129,7 +129,9 @@ export class State {
             const text = string(config[field], field, true);
             if (field !== "apiKey" || text) next[key][field] = text;
           }
-        if (config.contextWindow !== undefined) {
+        if (config.contextWindow === null) {
+          delete next[key].contextWindow;
+        } else if (config.contextWindow !== undefined) {
           if (
             !Number.isInteger(config.contextWindow) ||
             Number(config.contextWindow) < 4096 ||
@@ -137,6 +139,18 @@ export class State {
           )
             throw new ApiError(400, "Invalid context window");
           next[key].contextWindow = Number(config.contextWindow);
+        }
+        for (const [field, min, max] of [
+          ["timeoutSeconds", 10, 600],
+          ["maxOutputTokens", 256, 32768],
+        ] as const) {
+          if (config[field] === null) delete next[key][field];
+          else if (config[field] !== undefined) {
+            const value = Number(config[field]);
+            if (!Number.isInteger(config[field]) || value < min || value > max)
+              throw new ApiError(400, `Invalid ${field}`);
+            next[key][field] = value;
+          }
         }
         if (next[key].baseUrl) {
           let url: URL;
@@ -180,6 +194,8 @@ export class State {
   }
   redacted(): AppSettings {
     const next = structuredClone(this.settings);
+    next.inference.apiKeyConfigured = !!next.inference.apiKey;
+    next.embeddings.apiKeyConfigured = !!next.embeddings.apiKey;
     delete next.inference.apiKey;
     delete next.embeddings.apiKey;
     return next;

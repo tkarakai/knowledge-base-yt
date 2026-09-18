@@ -216,10 +216,14 @@ export interface TimelineEvent {
     | "integrated";
 }
 export interface ModelConfig {
+  /** Response-only indicator; the saved API key is never returned to the UI. */
+  apiKeyConfigured?: boolean;
   baseUrl: string;
   model: string;
   apiKey?: string;
   contextWindow?: number;
+  timeoutSeconds?: number;
+  maxOutputTokens?: number;
 }
 export interface AppSettings {
   vaultPath: string;
@@ -242,6 +246,18 @@ export interface Job {
   createdAt: string;
   updatedAt: string;
   error?: string;
+  errorCode?: string;
+  traceId?: string;
+}
+export interface RunTraceEvent {
+  at: string;
+  type: string;
+  data: unknown;
+}
+export interface AgentRunOptions {
+  trace?: (type: string, data: unknown) => Promise<void>;
+  /** Injectable budgets for deterministic failure tests. */
+  limits?: { timeoutMs?: number; turns?: number; tools?: number };
 }
 export interface SourceDetail {
   source: Source;

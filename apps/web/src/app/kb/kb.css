@@ -1504,6 +1504,9 @@
   padding: 22px 0;
   text-align: right;
 }
+.kb-model-connection {
+  margin-top: 16px;
+}
 .kb-settings-save .kb-notice {
   text-align: left;
 }
@@ -2428,3 +2431,6 @@
 .kb-settings-section > details {
   min-width: 0;
 }
+.kb-trace { margin-top: 12px; min-width: 0; }
+.kb-trace summary { cursor: pointer; overflow-wrap: anywhere; padding: 6px 0; }
+.kb-trace pre { max-height: 420px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; padding: 12px; background: var(--kb-surface, #f5f3ed); }

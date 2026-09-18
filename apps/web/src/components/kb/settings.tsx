@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { PerformanceSettings } from "./performance-settings";
 import { HistoryConnectionSettings } from "./history-connection";
+import { JobTrace } from "./job-trace";
 import {
   Check,
   Database,
@@ -141,6 +142,7 @@ export function SettingsView({ onSaved }: { onSaved: () => void }) {
                         {job.sourceId && ` · ${job.sourceId}`}
                       </span>
                       {job.error && <p className="kb-job-error">{job.error}</p>}
+                      <JobTrace job={job} />
                     </div>
                   ))}
               </div>
@@ -184,14 +186,19 @@ function SettingsForm({
       onSubmit={(event) => {
         event.preventDefault();
         void action.run(async () => {
-          await api<AppSettings>("settings", "PUT", {
-            inference,
+          const saved = await api<AppSettings>("settings", "PUT", {
+            inference: {
+              ...inference,
+              contextWindow: inference.contextWindow ?? null,
+            },
             embeddings,
             network,
             gitAutoCommit,
           });
-          setInference((value) => ({ ...value, apiKey: "" }));
-          setEmbeddings((value) => ({ ...value, apiKey: "" }));
+          setInference({ ...saved.inference, apiKey: "" });
+          setEmbeddings({ ...saved.embeddings, apiKey: "" });
+          setNetwork(saved.network);
+          setGitAutoCommit(saved.gitAutoCommit);
           onSaved();
         }, "Workspace settings saved.");
       }}
@@ -335,10 +342,14 @@ function ModelFields({
   value,
   onChange,
 }: {
-  name: string;
+  name: "inference" | "embeddings";
   value: ModelConfig;
   onChange: (value: ModelConfig) => void;
 }) {
+  const connection = useAction();
+  const [checkedValues, setCheckedValues] = useState<string | null>(null);
+  const currentValues = JSON.stringify(value);
+  const modelLabel = name === "inference" ? "reasoning" : "embedding";
   return (
     <div className="kb-model-fields">
       <label htmlFor={`kb-${name}-url`}>Base URL</label>
@@ -370,11 +381,18 @@ function ModelFields({
         type="password"
         autoComplete="new-password"
         value={value.apiKey ?? ""}
-        placeholder="Leave blank to keep the existing key"
+        placeholder={
+          value.apiKeyConfigured
+            ? "••••••••••••"
+            : "Enter an API key if required"
+        }
+        aria-describedby={`kb-${name}-key-status`}
         onChange={(event) => onChange({ ...value, apiKey: event.target.value })}
       />
-      <p className="kb-help">
-        Keys are kept by the companion and are never returned with settings.
+      <p className="kb-help" id={`kb-${name}-key-status`} role="status">
+        {value.apiKeyConfigured
+          ? "API key saved. It stays hidden after reload. Leave this field blank to keep it, or enter a replacement and save settings."
+          : "No API key saved. If your endpoint requires one, enter it and save settings."}
       </p>
       {name === "inference" && (
         <>
@@ -385,6 +403,7 @@ function ModelFields({
             id="kb-context-window"
             type="number"
             min={4096}
+            max={2_000_000}
             step={1}
             value={value.contextWindow ?? ""}
             onChange={(event) =>
@@ -396,8 +415,84 @@ function ModelFields({
               })
             }
           />
+          <p className="kb-help">
+            Match the context window configured on your model server. Traces
+            show estimated request size and reported token usage.
+          </p>
+          <label htmlFor="kb-output-tokens">Maximum output tokens</label>
+          <input
+            id="kb-output-tokens"
+            type="number"
+            min={256}
+            max={32768}
+            step={1}
+            value={value.maxOutputTokens ?? 8192}
+            onChange={(event) =>
+              onChange({
+                ...value,
+                maxOutputTokens: Number(event.target.value),
+              })
+            }
+          />
+          <p className="kb-help">
+            Also capped at one third of the context window to leave room for
+            input.
+          </p>
+          <label htmlFor="kb-timeout-seconds">
+            Synthesis time budget (seconds)
+          </label>
+          <input
+            id="kb-timeout-seconds"
+            type="number"
+            min={10}
+            max={600}
+            step={1}
+            value={value.timeoutSeconds ?? 120}
+            onChange={(event) =>
+              onChange({ ...value, timeoutSeconds: Number(event.target.value) })
+            }
+          />
+          <p className="kb-help">
+            Covers all model turns in a run. A successful connection check tests
+            a short reply; synthesis additionally requires tool calling and a
+            valid proposal.
+          </p>
         </>
       )}
+      <div className="kb-model-connection">
+        <button
+          type="button"
+          className="kb-button kb-small"
+          aria-label={`Check ${modelLabel} model connection`}
+          disabled={
+            connection.busy || !value.baseUrl.trim() || !value.model.trim()
+          }
+          onClick={() => {
+            setCheckedValues(currentValues);
+            void connection.run(
+              async () => {
+                await api(`settings/${name}/check`, "POST", {
+                  baseUrl: value.baseUrl,
+                  model: value.model,
+                  apiKey: value.apiKey ?? "",
+                });
+              },
+              `${name === "inference" ? "Reasoning" : "Embedding"} model connected. A test ${name === "inference" ? "reply" : "embedding"} was received.`,
+            );
+          }}
+        >
+          <RefreshCw
+            size={14}
+            className={connection.busy ? "kb-spin" : undefined}
+          />
+          {connection.busy ? "Checking…" : "Check connection"}
+        </button>
+        <p className="kb-help">
+          Sends a short test using these fields and your saved key if left
+          blank. Changes are saved only with Save settings.
+        </p>
+        {checkedValues === currentValues && <Feedback {...connection} />}
+      </div>
     </div>
   );
 }

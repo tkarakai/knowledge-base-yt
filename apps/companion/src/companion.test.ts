@@ -13,6 +13,7 @@ import {
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createCompanion, commitAccepted } from "./index";
+import { SynthesisError } from "@repo/kb-agent";
 import type { SynthesisProposal } from "@repo/kb-shared";
 const token = "test-companion-token-32-characters";
 const sourceId = "youtube:dQw4w9WgXcQ";
@@ -23,10 +24,13 @@ afterEach(async () => {
   for (const root of roots.splice(0))
     await rm(root, { recursive: true, force: true });
 });
-async function setup() {
+async function setup(
+  synthesize?: Parameters<typeof createCompanion>[0]["synthesize"],
+) {
   const root = await mkdtemp(join(await realpath(tmpdir()), "companion-test-"));
   roots.push(root);
   const app = await createCompanion({
+    synthesize,
     vaultPath: root,
     token,
     media: { background: false },
@@ -107,6 +111,189 @@ function proposal(
   };
 }
 describe("companion HTTP and integration", () => {
+  test("model connection checks use saved or draft credentials without saving and respect network permissions", async () => {
+    const app = await setup();
+    const calls: Array<{
+      path: string;
+      authorization: string | null;
+      body: Record<string, unknown>;
+    }> = [];
+    let status = 200;
+    const provider = Bun.serve({
+      hostname: "127.0.0.1",
+      port: 0,
+      async fetch(request) {
+        const path = new URL(request.url).pathname;
+        calls.push({
+          path,
+          authorization: request.headers.get("authorization"),
+          body: (await request.json()) as Record<string, unknown>,
+        });
+        if (status !== 200)
+          return Response.json(
+            { error: "saved-secret must never reach the browser" },
+            { status },
+          );
+        return Response.json(
+          path.endsWith("/embeddings")
+            ? { data: [{ embedding: [0.1, 0.2, 0.3] }] }
+            : { choices: [{ message: { role: "assistant", content: "OK" } }] },
+        );
+      },
+    });
+    try {
+      const config = {
+        baseUrl: `http://127.0.0.1:${provider.port}/v1`,
+        model: "saved-model",
+        apiKey: "saved-secret",
+      };
+      await app.state.update({ inference: config, embeddings: config });
+      const before = structuredClone(app.state.settings);
+      expect(
+        (
+          await request(app, "/settings/inference/check", "POST", {
+            apiKey: "",
+            model: "draft-model",
+          })
+        ).status,
+      ).toBe(200);
+      expect(calls[0]).toMatchObject({
+        path: "/v1/chat/completions",
+        authorization: "Bearer saved-secret",
+        body: {
+          model: "draft-model",
+          messages: [{ role: "user", content: "Reply with OK." }],
+        },
+      });
+      expect(
+        (await request(app, "/settings/embeddings/check", "POST", {})).status,
+      ).toBe(409);
+      expect(calls).toHaveLength(1);
+      expect(app.state.settings).toEqual(before);
+      expect(
+        JSON.parse(
+          await readFile(join(app.vault.root, ".kb/settings.json"), "utf8"),
+        ),
+      ).toEqual(before);
+
+      await app.state.update({ network: { embeddings: true } });
+      expect(
+        (
+          await request(app, "/settings/embeddings/check", "POST", {
+            apiKey: "replacement-secret",
+          })
+        ).status,
+      ).toBe(200);
+      expect(calls[1]).toMatchObject({
+        path: "/v1/embeddings",
+        authorization: "Bearer replacement-secret",
+        body: { model: "saved-model", input: ["Connection test."] },
+      });
+      expect(app.state.settings.embeddings.apiKey).toBe("saved-secret");
+      for (const failure of [401, 403, 404, 429, 500]) {
+        status = failure;
+        const response = await request(
+          app,
+          "/settings/inference/check",
+          "POST",
+          {},
+        );
+        expect(response.status).toBe(502);
+        const text = await response.text();
+        expect(text).toContain(`HTTP ${failure}`);
+        expect(text).not.toContain("saved-secret");
+      }
+      const count = calls.length;
+      expect(
+        (
+          await request(app, "/settings/inference/check", "POST", {
+            baseUrl: "file:///tmp/key",
+          })
+        ).status,
+      ).toBe(400);
+      expect(
+        (await request(app, "/settings/inference/check", "POST", { model: "" }))
+          .status,
+      ).toBe(400);
+      expect(calls).toHaveLength(count);
+    } finally {
+      provider.stop(true);
+    }
+  });
+
+  test("all workspace settings and hidden keys survive reload and restart", async () => {
+    const app = await setup();
+    const values = {
+      inference: {
+        baseUrl: "https://reasoning.example/v1",
+        model: "reasoning-model",
+        apiKey: "reasoning-secret",
+        contextWindow: 32768,
+      },
+      embeddings: {
+        baseUrl: "https://embeddings.example/v1",
+        model: "embedding-model",
+        apiKey: "embedding-secret",
+      },
+      network: { youtube: false, inference: false, embeddings: true },
+      gitAutoCommit: true,
+    };
+    const saved = await request(app, "/settings", "PUT", values);
+    expect(saved.status).toBe(200);
+    const publicSettings = await saved.json();
+    for (const key of ["inference", "embeddings"] as const) {
+      expect(publicSettings[key].apiKeyConfigured).toBe(true);
+      expect(publicSettings[key].apiKey).toBeUndefined();
+    }
+    expect(await (await request(app, "/settings")).json()).toEqual(
+      publicSettings,
+    );
+
+    // The UI sends empty password fields when saving unrelated changes.
+    const preserved = await request(app, "/settings", "PUT", {
+      ...publicSettings,
+      inference: { ...publicSettings.inference, apiKey: "" },
+      embeddings: { ...publicSettings.embeddings, apiKey: "" },
+    });
+    expect(preserved.status).toBe(200);
+    const restart = await createCompanion({
+      vaultPath: app.vault.root,
+      token,
+      media: { background: false },
+    });
+    apps.push(restart);
+    expect(restart.state.settings).toEqual({
+      ...values,
+      vaultPath: app.vault.root,
+    });
+    expect(await (await request(restart, "/settings")).json()).toEqual(
+      publicSettings,
+    );
+  });
+
+  test("clearing the optional context window persists without clearing the saved key", async () => {
+    const app = await setup();
+    const initial = await (await request(app, "/settings")).json();
+    expect(initial.inference.apiKeyConfigured).toBe(false);
+    expect(initial.embeddings.apiKeyConfigured).toBe(false);
+    await request(app, "/settings", "PUT", {
+      inference: { apiKey: "saved-secret", contextWindow: 32768 },
+    });
+    const response = await request(app, "/settings", "PUT", {
+      inference: { apiKey: "", contextWindow: null },
+    });
+    expect(response.status).toBe(200);
+    expect((await response.json()).inference.contextWindow).toBeUndefined();
+    const restart = await createCompanion({
+      vaultPath: app.vault.root,
+      token,
+      media: { background: false },
+    });
+    apps.push(restart);
+    expect(restart.state.settings.inference.contextWindow).toBeUndefined();
+    expect(restart.state.settings.inference.apiKey).toBe("saved-secret");
+  });
+
   test("token, Origin, Host, traversal and body limits on actual HTTP", async () => {
     const app = await setup();
     expect(
@@ -577,4 +764,82 @@ describe("companion HTTP and integration", () => {
     );
     expect(await git(["show", "HEAD:unrelated.txt"])).toBe("initial");
   });
+});
+
+test("failed synthesis exposes a categorized error and an authenticated retained trace", async () => {
+  const app = await setup(async (_context, _tools, _config, options) => {
+    await options?.trace?.("llm_http_error", {
+      status: 401,
+      body: "Rejected secret-model-value",
+      authorization: "Bearer hidden",
+    });
+    throw new SynthesisError(
+      "PROVIDER_ERROR",
+      "The model provider failed (HTTP 401). See the trace.",
+    );
+  });
+  await ingest(app);
+  await request(app, `/sources/${sourceId}/reflection`, "PUT", {
+    decision: "keep",
+    why: "Useful",
+    reaction: "",
+    questions: "",
+    selectedPassages: [],
+  });
+  await request(app, "/settings", "PUT", {
+    inference: { model: "fixture", apiKey: "secret-model-value" },
+  });
+  const response = await request(
+    app,
+    `/sources/${sourceId}/synthesize`,
+    "POST",
+    {},
+  );
+  expect(response.status).toBe(500);
+  expect((await response.json()).error).toContain("PROVIDER_ERROR");
+  const job = app.state.jobs
+    .slice()
+    .reverse()
+    .find((job) => job.type === "run_synthesis")!;
+  expect(job.state).toBe("failed");
+  expect(job.traceId).toBeTruthy();
+  const traceResponse = await request(app, `/jobs/${job.id}/trace`);
+  expect(traceResponse.status).toBe(200);
+  const trace = await traceResponse.json();
+  expect(
+    trace.events.some(
+      (event: { type: string }) => event.type === "llm_http_error",
+    ),
+  ).toBe(true);
+  expect(JSON.stringify(trace)).not.toContain("secret-model-value");
+  expect(JSON.stringify(trace)).not.toContain("Bearer hidden");
+  expect(
+    (
+      await request(app, `/jobs/${job.id}/trace`, "GET", undefined, {
+        Authorization: "Bearer wrong",
+      })
+    ).status,
+  ).toBe(401);
+  expect((await app.vault.getSource(sourceId))?.status).toBe("kept");
+});
+
+test("failed caption retry keeps the saved transcript and preserves the actionable failure", async () => {
+  const app = await setup();
+  await ingest(app);
+  await request(app, `/sources/${sourceId}/transcript`, "PUT", {
+    text: "00:00 Saved evidence\n00:05 More evidence",
+  });
+  await request(app, `/sources/${sourceId}/transcript/retry`, "POST", {});
+  expect((await app.vault.getTranscript(sourceId))?.segments[0]?.text).toBe(
+    "Saved evidence",
+  );
+  expect((await app.vault.getSource(sourceId))?.transcriptStatus).toBe(
+    "available",
+  );
+  expect(
+    app.state.jobs
+      .slice()
+      .reverse()
+      .find((job) => job.type === "transcript_fetch")?.error,
+  ).toBe("Paste transcript");
 });

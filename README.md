@@ -6,14 +6,15 @@ A local-first knowledge workspace built on [web-app-starter](https://github.com/
 
 ## Run locally
 
-Requires Bun 1.3.6+ and Node 22.19+.
+Requires Bun 1.3.6+, Node 22.19+, Python 3.9+, and the `ps`, `pgrep`, and `lsof` utilities.
 
 ```sh
 bun install
+bun run setup:transcripts
 bun run dev:kb
 ```
 
-Open **http://127.0.0.1:3001/kb**. This starts the Next.js web workspace and the local companion; it does not require a Convex account or cloud model. The original starter apps and Convex backend remain available through the starter scripts, but are not required by this first slice.
+Open the **Knowledge Base** URL printed after Next.js is ready (normally **http://127.0.0.1:3001/kb**). This starts the Next.js web workspace and the local companion; it does not require a Convex account or cloud model. The original starter apps and Convex backend remain available through the starter scripts, but are not required by this first slice.
 
 The default vault is `./vault`, which is ignored by this repository. To choose another directory:
 
@@ -21,7 +22,9 @@ The default vault is `./vault`, which is ignored by this repository. To choose a
 KB_VAULT_PATH=/absolute/path/to/my-vault bun run dev:kb
 ```
 
-Use a real directory, not a symlink. The launcher creates an ephemeral companion authentication token and shares it only between the server processes. Both services bind to loopback. `KB_WEB_PORT` and `KB_COMPANION_PORT` override ports 3001 and 4317. For manual server starts, supply the same strong `KB_COMPANION_TOKEN` to both servers and set `KB_COMPANION_URL` on Next.
+Use a real directory, not a symlink. The launcher creates an ephemeral companion authentication token and shares it only between the server processes. Both services bind to loopback. The launcher chooses free ports starting at 3001 and 4317 and prints both addresses. `KB_WEB_PORT` and `KB_COMPANION_PORT` select exact ports; if occupied, startup fails before launching either service. For manual server starts, supply the same strong `KB_COMPANION_TOKEN` to both servers and set `KB_COMPANION_URL` on Next.
+
+The optional starter launcher (`bun run dev`) records process identities per checkout. Its start/stop commands only stop verified services owned by this checkout, leaving other apps' servers alone. Because the starter web app and KB share a Next.js build directory, `dev:kb` stops this checkout's verified starter web instance before starting. An untracked instance must be stopped from its original terminal; changing ports does not release its build lock. See [development process isolation](docs/starter-readme.md#development-process-isolation) for details. The KB launcher manages its own child processes; stop it with Ctrl+C.
 
 ## First workflow
 
@@ -33,6 +36,10 @@ Use a real directory, not a symlink. The launcher creates an ephemeral companion
 
 YouTube and configured model calls are controlled in Settings. No inference model is selected automatically. API keys remain in local companion settings and are not returned to the browser. Caption availability depends on YouTube and the video's caption access; manual import remains available.
 
+Caption fetching uses a locally installed, pinned yt-dlp extractor. **Retry captions** on previously imported videos to populate missing transcripts. Optional browser-session support and the research behind this choice are in [transcripts and diagnostics](docs/implementation/transcripts-and-traces.md).
+
+Failed model runs now retain communication traces: open **Settings → Recent activity → View communication trace**, or inspect `vault/.kb/traces/<trace-id>.jsonl`. These contain prompts, responses, tool results, validation failures, usage and stop reasons, with credential redaction. They include private source/reflection content; the latest 100 runs are retained. The reasoning settings expose context, output and time budgets.
+
 ## Import your YouTube history
 
 The Chrome/Edge extension imports videos from your signed-in YouTube history into the local inbox, using a **12-calendar-month date window**, with no total video-count limit. It scrolls/paginates until it reaches an older date or the end of the available history.
@@ -40,7 +47,7 @@ The Chrome/Edge extension imports videos from your signed-in YouTube history int
 1. Run `bun run build:extension` and keep `bun run dev:kb` running.
 2. Open `chrome://extensions` (or `edge://extensions`), enable **Developer mode**, choose **Load unpacked**, and select `apps/extension/dist`.
 3. In Commonplace **Settings → YouTube history**, generate a pairing code.
-4. Click the extension in your browser toolbar. Paste the code and connect. The default companion address is `http://127.0.0.1:4317`; use your configured companion port if different.
+4. Click the extension in your browser toolbar. Paste the code and connect. Use the **Companion** address printed by the launcher (normally `http://127.0.0.1:4317`).
 5. Choose **Open YouTube history**, sign in directly on YouTube if needed, and check that the correct account's videos appear. The importer requests the English interface so date headings can be interpreted safely.
 6. Return to the extension tab and select **Import last 12 months**. Keep the YouTube history tab open while it loads older pages. Progress, the oldest date reached, and **Pause / Resume** are in the extension tab.
 
@@ -80,6 +87,7 @@ Back up the Markdown vault. Treat `.kb/settings.json` as private configuration b
 
 ```sh
 bun run test:kb          # vault, ingestion, retrieval, Pi, companion
+bun run test:dev-scripts # starter process isolation across apps and worktrees
 bun run typecheck:kb
 bun run lint:kb
 bun run build:kb         # production Next build with local starter URL defaults

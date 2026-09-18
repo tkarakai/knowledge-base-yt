@@ -3,12 +3,12 @@ import {
   normalizeYouTubeUrl,
   fetchYouTubeMetadata,
   parseUserTranscript,
-  YouTubeCaptionProvider,
 } from "@repo/ingestion";
 import { SearchIndex, type SearchDocument } from "@repo/search";
 import type {
   AgentContext,
   AgentRunResult,
+  AgentRunOptions,
   AgentTools,
   ModelConfig,
   Source,
@@ -28,6 +28,10 @@ import { PerformanceMetrics, metricRoute } from "./performance";
 import { sourcePage } from "./source-list";
 import { SourceMedia, type MediaOptions } from "./media";
 import { commitAccepted } from "./git";
+import { checkModelConnection } from "./model-connection";
+import { CaptionProvider } from "./transcripts";
+import { TraceStore, redact } from "./traces";
+import { SynthesisError } from "@repo/kb-agent";
 export { commitAccepted } from "./git";
 export interface CompanionOptions {
   vaultPath: string;
@@ -38,6 +42,7 @@ export interface CompanionOptions {
     context: AgentContext,
     tools: AgentTools,
     config: ModelConfig,
+    options?: AgentRunOptions,
   ) => Promise<AgentRunResult>;
   transcriptProvider?: {
     fetch(videoId: string, language?: string): Promise<Transcript>;
@@ -117,6 +122,12 @@ export async function createCompanion(options: CompanionOptions) {
   await vault.init();
   const state = new State(vault.root);
   await state.load();
+  const secrets = () => [
+    options.token,
+    state.settings.inference.apiKey ?? "",
+    state.settings.embeddings.apiKey ?? "",
+  ];
+  const traces = new TraceStore(vault.root, secrets);
   const history = new HistoryImport(state, vault);
   for (const interrupted of await vault.listSources())
     if (interrupted.status === "synthesis_pending") {
@@ -216,9 +227,11 @@ export async function createCompanion(options: CompanionOptions) {
   async function runJob<T>(
     type: string,
     sourceId: string | undefined,
-    fn: () => Promise<T>,
+    fn: (trace: (type: string, data: unknown) => Promise<void>) => Promise<T>,
   ): Promise<T> {
+    const trace = await traces.create();
     const job: Job = {
+      traceId: trace.id,
       id: key("job"),
       type,
       sourceId,
@@ -229,20 +242,33 @@ export async function createCompanion(options: CompanionOptions) {
     state.jobs.push(job);
     await state.saveJobs();
     try {
-      const result = await fn();
+      await trace.append("job_started", { jobId: job.id, type, sourceId });
+      const result = await fn(trace.append);
+      await trace.append("job_completed", { jobId: job.id });
       job.state = "completed";
       job.updatedAt = now();
       await state.saveJobs();
       return result;
     } catch (error) {
       job.state = "failed";
-      job.error =
-        error instanceof ApiError
+      job.errorCode =
+        error instanceof SynthesisError
+          ? error.code
+          : error instanceof ApiError
+            ? "REQUEST_ERROR"
+            : "INTERNAL_ERROR";
+      await trace.append("job_failed", { code: job.errorCode, error });
+      const message =
+        error instanceof ApiError || error instanceof SynthesisError
           ? error.message
-          : "Operation failed; review configuration and retry";
+          : "Operation failed. Open its trace in Settings → Recent activity for the underlying error.";
+      job.error = String(redact(message, secrets()));
       job.updatedAt = now();
       await state.saveJobs();
-      throw error;
+      throw new ApiError(
+        error instanceof ApiError ? error.status : 500,
+        `${job.error} [${job.errorCode}; trace ${trace.id}]`,
+      );
     }
   }
   async function source(idValue: string) {
@@ -280,17 +306,29 @@ export async function createCompanion(options: CompanionOptions) {
     });
   }
   async function acquireTranscript(s: Source) {
-    const provider =
-      options.transcriptProvider ??
-      new YouTubeCaptionProvider({
-        networkEnabled: state.settings.network.youtube,
+    const t = await runJob("transcript_fetch", s.id, async (trace) => {
+      const provider =
+        options.transcriptProvider ??
+        new CaptionProvider({
+          networkEnabled: state.settings.network.youtube,
+          trace,
+        });
+      const result = await provider.fetch(s.videoId);
+      await trace("transcript_result", {
+        status: result.status,
+        error: result.error,
+        segments: result.segments.length,
       });
-    const t = await runJob("transcript_fetch", s.id, () =>
-      provider.fetch(s.videoId),
-    );
+      return result;
+    });
     if (t.sourceId !== s.id)
       throw new ApiError(400, "Transcript source mismatch");
-    await vault.saveTranscript(t);
+    const previous = await vault.getTranscript(s.id);
+    if (
+      ["available", "partial"].includes(t.status) ||
+      !previous?.segments.length
+    )
+      await vault.saveTranscript(t);
     if (!["available", "partial"].includes(t.status)) {
       const job = state.jobs
         .slice()
@@ -299,10 +337,19 @@ export async function createCompanion(options: CompanionOptions) {
           (job) => job.type === "transcript_fetch" && job.sourceId === s.id,
         )!;
       job.state = t.status === "failed" ? "failed" : "waiting_for_user";
-      job.error = "Transcript unavailable; retry or import timestamped text";
+      job.error = String(
+        redact(
+          t.error ?? "Transcript unavailable; retry or import timestamped text",
+          secrets(),
+        ),
+      );
+      job.errorCode = "TRANSCRIPT_UNAVAILABLE";
       await state.saveJobs();
     }
-    s.transcriptStatus = t.status;
+    s.transcriptStatus =
+      previous?.segments.length && !t.segments.length
+        ? previous.status
+        : t.status;
     await vault.saveSource(s);
     return t;
   }
@@ -507,6 +554,32 @@ export async function createCompanion(options: CompanionOptions) {
     const method = request.method,
       [resource, item, action, subaction] = parts;
     if (method === "GET") {
+      if (
+        resource === "jobs" &&
+        item &&
+        action === "trace" &&
+        parts.length === 3
+      ) {
+        const job = state.jobs.find((job) => job.id === item);
+        if (!job?.traceId)
+          throw new ApiError(
+            404,
+            "No trace was retained for this job. Retry the operation to capture one.",
+          );
+        try {
+          return {
+            traceId: job.traceId,
+            events: await traces.read(job.traceId),
+          };
+        } catch (error) {
+          if ((error as NodeJS.ErrnoException).code === "ENOENT")
+            throw new ApiError(
+              404,
+              "This trace has expired. The newest 100 traces are retained.",
+            );
+          throw error;
+        }
+      }
       if (
         resource === "sources" &&
         parts.length === 4 &&
@@ -729,7 +802,7 @@ export async function createCompanion(options: CompanionOptions) {
           throw new ApiError(409, "Inference network disabled");
         if (!state.settings.inference.model)
           throw new ApiError(409, "Configure an inference model first");
-        return runJob("run_synthesis", s.id, async () => {
+        return runJob("run_synthesis", s.id, async (trace) => {
           s.status = "synthesis_pending";
           await vault.saveSource(s);
           try {
@@ -748,6 +821,7 @@ export async function createCompanion(options: CompanionOptions) {
                 read: async (value) => vault.getKnowledge(id(value)),
               },
               state.settings.inference,
+              { trace },
             );
             if (
               result.proposal.sourceId !== s.id ||
@@ -819,6 +893,22 @@ export async function createCompanion(options: CompanionOptions) {
       await rebuild();
       return { id: document.id };
     }
+    if (
+      method === "POST" &&
+      resource === "settings" &&
+      action === "check" &&
+      parts.length === 3 &&
+      (item === "inference" || item === "embeddings")
+    ) {
+      if (!state.settings.network[item])
+        throw new ApiError(
+          409,
+          `Enable the ${item === "inference" ? "Reasoning" : "Embedding"} endpoint under Network permissions and save settings before checking its connection.`,
+        );
+      const draft = await body(request);
+      const config = state.merge({ [item]: draft })[item];
+      return checkModelConnection(item, config);
+    }
     if (method === "PUT" && resource === "settings" && parts.length === 1) {
       const result = await state.update(await body(request));
       index.configure({
@@ -884,7 +974,9 @@ export async function createCompanion(options: CompanionOptions) {
       if (Number(request.headers.get("content-length")) > MAX_BODY)
         throw new ApiError(413, "Request body exceeds 2 MiB");
       const value =
-        request.method === "GET"
+        request.method === "GET" ||
+        (request.method === "POST" &&
+          /^\/settings\/(inference|embeddings)\/check$/.test(url.pathname))
           ? await route(request, url)
           : await exclusive(() => route(request, url));
       if (value instanceof Response) return value;
@@ -959,7 +1051,13 @@ export async function createCompanion(options: CompanionOptions) {
         hostname: "127.0.0.1",
         port,
         development: false,
-        fetch: fetchHandler,
+        fetch(request, server) {
+          // The synthesis budget handles cancellation; Bun's socket idle limit
+          // must not cut off a configured multi-minute model run first.
+          if (new URL(request.url).pathname.endsWith("/synthesize"))
+            server.timeout(request, 0);
+          return fetchHandler(request);
+        },
         maxRequestBodySize: MAX_BODY,
         idleTimeout: 180,
       });

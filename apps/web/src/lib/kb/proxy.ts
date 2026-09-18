@@ -23,6 +23,7 @@ function allowedRoute(method: string, parts: string[]) {
   const [resource, , operation, action] = parts;
   if (method === "GET")
     return (
+      (parts.length === 3 && resource === "jobs" && parts[2] === "trace") ||
       (parts.length === 2 &&
         resource === "metadata" &&
         parts[1] === "status") ||
@@ -58,6 +59,10 @@ function allowedRoute(method: string, parts: string[]) {
     );
   if (method === "POST")
     return (
+      (parts.length === 3 &&
+        resource === "settings" &&
+        ["inference", "embeddings"].includes(parts[1]) &&
+        operation === "check") ||
       (parts.length === 2 &&
         resource === "metadata" &&
         parts[1] === "refresh") ||
@@ -187,6 +192,9 @@ export async function proxyCompanion(
   target.search = url.search;
   try {
     const response = await fetch(target, {
+      // Bun's default socket idle timer is five minutes. The explicit request
+      // deadline below must govern longer configured synthesis budgets.
+      ...{ timeout: false },
       method: request.method,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -197,9 +205,13 @@ export async function proxyCompanion(
       cache: "no-store",
       redirect: "error",
       signal: AbortSignal.timeout(
-        parts.includes("synthesize") || parts.includes("rebuild")
-          ? 180_000
-          : 30_000,
+        parts.includes("synthesize")
+          ? 630_000
+          : parts.includes("rebuild") ||
+              parts.includes("transcript") ||
+              (request.method === "POST" && parts[0] === "sources")
+            ? 180_000
+            : 30_000,
       ),
     });
     if (response.status === 401 || response.status === 403)

@@ -46,6 +46,32 @@ function request(
 }
 
 describe("KB companion proxy", () => {
+  it("allows only the two model connection checks", async () => {
+    for (const model of ["inference", "embeddings"]) {
+      expect(
+        (
+          await proxyCompanion(request("POST", {}, "{}"), [
+            "settings",
+            model,
+            "check",
+          ])
+        ).status,
+      ).toBe(200);
+    }
+    expect(
+      (
+        await proxyCompanion(request("POST", {}, "{}"), [
+          "settings",
+          "other",
+          "check",
+        ])
+      ).status,
+    ).toBe(404);
+    expect(
+      (await proxyCompanion(request("GET"), ["settings", "inference", "check"]))
+        .status,
+    ).toBe(404);
+  });
   it("adds the server token and omits browser cookies and origin", async () => {
     const response = await proxyCompanion(
       request("GET", {
@@ -297,5 +323,20 @@ describe("Markdown proposal diff", () => {
       { kind: "added", text: "edited" },
     ]);
     expect(diff.at(-1)).toEqual({ kind: "same", text: "699" });
+  });
+});
+
+describe("job trace proxy", () => {
+  it("allows authenticated trace reads but no arbitrary trace filesystem access", async () => {
+    expect(
+      (await proxyCompanion(request(), ["jobs", "job:one", "trace"])).status,
+    ).toBe(200);
+    expect(
+      (await proxyCompanion(request(), ["traces", "settings.json"])).status,
+    ).toBe(404);
+    expect(
+      (await proxyCompanion(request(), ["jobs", "../settings", "trace"]))
+        .status,
+    ).toBe(404);
   });
 });

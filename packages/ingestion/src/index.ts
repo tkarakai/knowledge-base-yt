@@ -585,57 +585,7 @@ export class YouTubeCaptionProvider implements TranscriptProvider {
           "requires_user_action",
           "YouTube returned empty captions, possibly requiring browser verification; import a timestamped transcript.",
         );
-      let caption: any;
-      try {
-        caption = JSON.parse(raw);
-      } catch {
-        return failure(
-          "failed",
-          "YouTube returned malformed captions; retry or import a transcript.",
-        );
-      }
-      if (!Array.isArray(caption.events))
-        return failure(
-          "failed",
-          "YouTube returned an unsupported caption format.",
-        );
-      const segments: TranscriptSegment[] = [];
-      for (const event of caption.events) {
-        if (!Array.isArray(event.segs)) continue;
-        if (event.segs.some((s: any) => !s || typeof s.utf8 !== "string"))
-          throw new IngestionError(
-            "Malformed caption text",
-            "INVALID_RESPONSE",
-          );
-        const text = event.segs
-          .map((s: any) => s.utf8)
-          .join("")
-          .trim();
-        if (!text) continue;
-        if (
-          typeof event.tStartMs !== "number" ||
-          !Number.isFinite(event.tStartMs) ||
-          (event.dDurationMs !== undefined &&
-            (typeof event.dDurationMs !== "number" ||
-              !Number.isFinite(event.dDurationMs) ||
-              event.dDurationMs < 0))
-        )
-          throw new IngestionError(
-            "Malformed caption timestamps",
-            "INVALID_RESPONSE",
-          );
-        segments.push({
-          start: event.tStartMs / 1000,
-          end: (event.tStartMs + (event.dDurationMs ?? 0)) / 1000,
-          text,
-        });
-      }
-      if (!segments.length)
-        return failure(
-          "unavailable",
-          "No caption text was returned; import a timestamped transcript.",
-        );
-      validateSegments(segments);
+      const segments = parseYouTubeJson3(raw);
       return {
         ...base,
         language: track.languageCode,
@@ -655,4 +605,58 @@ export class YouTubeCaptionProvider implements TranscriptProvider {
       );
     }
   }
+}
+
+/** Parse the same timestamped format used by YouTube and yt-dlp. */
+export function parseYouTubeJson3(raw: string): TranscriptSegment[] {
+  if (Buffer.byteLength(raw) > MAX_IMPORT_BYTES)
+    throw new IngestionError("Caption response exceeds 2 MiB", "TOO_LARGE");
+  let caption: {
+    events?: Array<{
+      tStartMs?: number;
+      dDurationMs?: number;
+      segs?: Array<{ utf8: string }>;
+    }>;
+  };
+  try {
+    caption = JSON.parse(raw);
+  } catch {
+    throw new IngestionError(
+      "YouTube returned malformed caption JSON",
+      "INVALID_RESPONSE",
+    );
+  }
+  if (!caption || !Array.isArray(caption.events))
+    throw new IngestionError(
+      "YouTube returned an unsupported caption format",
+      "INVALID_RESPONSE",
+    );
+  const segments: TranscriptSegment[] = [];
+  for (const event of caption.events) {
+    if (!event || !Array.isArray(event.segs)) continue;
+    if (event.segs.some((s) => !s || typeof s.utf8 !== "string"))
+      throw new IngestionError("Malformed caption text", "INVALID_RESPONSE");
+    const text = event.segs
+      .map((s) => s.utf8)
+      .join("")
+      .trim();
+    if (!text) continue;
+    if (
+      typeof event.tStartMs !== "number" ||
+      !Number.isFinite(event.tStartMs) ||
+      (event.dDurationMs !== undefined &&
+        (!Number.isFinite(event.dDurationMs) || event.dDurationMs < 0))
+    )
+      throw new IngestionError(
+        "Malformed caption timestamps",
+        "INVALID_RESPONSE",
+      );
+    segments.push({
+      start: event.tStartMs / 1000,
+      end: (event.tStartMs + (event.dDurationMs ?? 0)) / 1000,
+      text,
+    });
+  }
+  validateSegments(segments);
+  return segments;
 }

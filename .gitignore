@@ -13,6 +13,8 @@ dist
 *.log
 .DS_Store
 .dev-pids
+.dev-processes.json
+.dev-processes-*
 *.tsbuildinfo
 
 # Generated shared assets (copied by scripts/copy-shared-assets.sh)
@@ -46,6 +48,9 @@ apps/*/public/favicon.ico
 .worktrees/
 .security-key
 logs/security/
+
+# Python development-process regression tests
+__pycache__/
 
 # Personal knowledge and local model/companion credentials
 /vault/

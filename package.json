@@ -42,6 +42,7 @@
     "ci:act:offline": "./scripts/ci-local-act.sh -o",
     "infra:setup:staging": "./scripts/infra-setup-staging.sh",
     "ensure-env": "./scripts/ensure-app-env.sh",
+    "test:dev-scripts": "python3 -m unittest discover -s scripts/tests -v",
     "dev:kb": "bun scripts/dev-kb.ts",
     "test:kb": "bun test packages/kb packages/ingestion packages/search packages/agent apps/companion apps/extension/src",
     "typecheck:kb": "bun run --filter @repo/kb --filter @repo/ingestion --filter @repo/search --filter @repo/kb-agent --filter @repo/companion --filter @repo/history-extension typecheck",
@@ -53,7 +54,8 @@
     "lint:kb": "eslint packages/shared/src packages/agent/src packages/kb/src packages/ingestion/src packages/search/src apps/companion/src apps/extension/src apps/extension/build.ts apps/web/src/components/kb apps/web/src/lib/kb apps/web/src/app/kb scripts/dev-kb.ts scripts/kb-e2e.ts scripts/history-e2e.ts scripts/build-kb.ts scripts/kb-perf.ts",
     "build:kb": "bun scripts/build-kb.ts",
     "test:kb:perf": "bun scripts/kb-perf.ts",
-    "test:kb:perf:browser": "KB_PERF_BROWSER=1 bun scripts/kb-e2e.ts"
+    "test:kb:perf:browser": "KB_PERF_BROWSER=1 bun scripts/kb-e2e.ts",
+    "setup:transcripts": "bash scripts/setup-transcripts.sh"
   },
   "overrides": {
     "react": "19.2.3",

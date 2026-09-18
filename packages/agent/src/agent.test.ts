@@ -173,7 +173,10 @@ describe("strict proposals", () => {
   });
 });
 
-function fixtureModel(responses: { name: string; args: unknown }[]) {
+function fixtureModel(
+  responses: ({ name: string; args: unknown } | null)[],
+  finishReason?: string,
+) {
   const requests: Record<string, unknown>[] = [];
   const server = Bun.serve({
     hostname: "127.0.0.1",
@@ -213,7 +216,7 @@ function fixtureModel(responses: { name: string; args: unknown }[]) {
               {
                 index: 0,
                 delta: {},
-                finish_reason: tool ? "tool_calls" : "stop",
+                finish_reason: finishReason ?? (tool ? "tool_calls" : "stop"),
               },
             ],
           }) +
@@ -287,4 +290,222 @@ describe("Pi runtime over OpenAI-compatible HTTP", () => {
       ),
     ).rejects.toThrow("Keep");
   });
+});
+
+describe("synthesis failure diagnostics", () => {
+  test("trace includes payloads, wire response, exact validation failure and final code", async () => {
+    const fixture = fixtureModel([
+      { name: "submit_synthesis", args: { ...valid(), outcome: "no_change" } },
+    ]);
+    const events: { type: string; data: unknown }[] = [];
+    try {
+      await expect(
+        synthesize(context, tools, fixture.config, {
+          trace: async (type, data) => {
+            events.push({ type, data });
+          },
+        }),
+      ).rejects.toMatchObject({ code: "INVALID_PROPOSAL" });
+      expect(events.some((e) => e.type === "llm_request")).toBe(true);
+      expect(events.some((e) => e.type === "llm_wire_response")).toBe(true);
+      expect(JSON.stringify(events)).toContain(
+        "Proposal outcome does not match changes",
+      );
+      expect(JSON.stringify(events)).toContain("INVALID_PROPOSAL");
+    } finally {
+      fixture.server.stop(true);
+    }
+  });
+  test("plain answer gets one explicit submission reminder and can recover", async () => {
+    const fixture = fixtureModel([
+      null,
+      { name: "submit_synthesis", args: valid() },
+    ]);
+    try {
+      const result = await synthesize(context, tools, fixture.config);
+      expect(result.proposal.status).toBe("pending");
+      expect(fixture.requests).toHaveLength(2);
+      expect(JSON.stringify(fixture.requests[1])).toContain(
+        "no valid proposal was submitted",
+      );
+    } finally {
+      fixture.server.stop(true);
+    }
+  });
+  test("no tool submission is distinct from an invalid proposal", async () => {
+    const fixture = fixtureModel([]);
+    try {
+      await expect(
+        synthesize(context, tools, fixture.config),
+      ).rejects.toMatchObject({ code: "NO_SUBMISSION" });
+      expect(fixture.requests).toHaveLength(2);
+    } finally {
+      fixture.server.stop(true);
+    }
+  });
+  test("context accounting includes complete provider payload and rejects before HTTP", async () => {
+    const fixture = fixtureModel([]);
+    try {
+      await expect(
+        synthesize(
+          {
+            ...context,
+            reflection: { ...context.reflection, why: "x".repeat(18000) },
+          },
+          tools,
+          { ...fixture.config, contextWindow: 4096 },
+        ),
+      ).rejects.toMatchObject({ code: "CONTEXT_LIMIT" });
+      expect(fixture.requests).toHaveLength(0);
+    } finally {
+      fixture.server.stop(true);
+    }
+  });
+  test("provider HTTP failure retains body and status without retries", async () => {
+    const events: unknown[] = [];
+    const server = Bun.serve({
+      port: 0,
+      fetch: () =>
+        Response.json({ error: { message: "Unknown model" } }, { status: 404 }),
+    });
+    try {
+      await expect(
+        synthesize(
+          context,
+          tools,
+          { baseUrl: `http://127.0.0.1:${server.port}/v1`, model: "missing" },
+          {
+            trace: async (type, data) => {
+              events.push({ type, data });
+            },
+          },
+        ),
+      ).rejects.toMatchObject({ code: "PROVIDER_ERROR" });
+      expect(JSON.stringify(events)).toContain("Unknown model");
+      expect(JSON.stringify(events)).toContain('"status":404');
+    } finally {
+      server.stop(true);
+    }
+  });
+  test("a stalled response is reported as a run timeout", async () => {
+    const server = Bun.serve({
+      port: 0,
+      fetch: () =>
+        new Response(
+          new ReadableStream({
+            start(controller) {
+              controller.enqueue(new TextEncoder().encode(": waiting\n\n"));
+            },
+          }),
+          { headers: { "content-type": "text/event-stream" } },
+        ),
+    });
+    try {
+      await expect(
+        synthesize(
+          context,
+          tools,
+          { baseUrl: `http://127.0.0.1:${server.port}/v1`, model: "slow" },
+          { limits: { timeoutMs: 50 } },
+        ),
+      ).rejects.toMatchObject({ code: "TIMEOUT" });
+    } finally {
+      server.stop(true);
+    }
+  });
+  test("turn limit is distinguished from timeout", async () => {
+    const fixture = fixtureModel([
+      { name: "kb_search", args: { query: "memory" } },
+    ]);
+    try {
+      await expect(
+        synthesize(context, tools, fixture.config, { limits: { turns: 1 } }),
+      ).rejects.toMatchObject({ code: "TURN_LIMIT" });
+    } finally {
+      fixture.server.stop(true);
+    }
+  });
+});
+
+test("output-token limit is distinguished from missing submission", async () => {
+  const fixture = fixtureModel([], "length");
+  try {
+    await expect(
+      synthesize(context, tools, fixture.config),
+    ).rejects.toMatchObject({ code: "OUTPUT_LIMIT" });
+    expect(fixture.requests).toHaveLength(1);
+  } finally {
+    fixture.server.stop(true);
+  }
+});
+
+test("tool budget exhaustion has its own failure code", async () => {
+  const fixture = fixtureModel([
+    { name: "kb_search", args: { query: "memory" } },
+  ]);
+  try {
+    await expect(
+      synthesize(context, tools, fixture.config, { limits: { tools: 0 } }),
+    ).rejects.toMatchObject({ code: "TOOL_LIMIT" });
+  } finally {
+    fixture.server.stop(true);
+  }
+});
+
+test("source search hits are reference material, never presented as editable knowledge", () => {
+  const input = JSON.parse(
+    buildInput({
+      ...context,
+      related: [
+        {
+          id: context.source.id,
+          chunkId: "source-one",
+          title: context.source.title,
+          excerpt: "# Source metadata",
+          path: "sources/youtube/dQw4w9WgXcQ/source.md",
+          type: "source",
+          score: 1,
+          lexicalScore: 1,
+          semanticScore: 0,
+        },
+      ],
+    }),
+  );
+  expect(input.EXISTING_KNOWLEDGE.candidates).toHaveLength(0);
+  expect(input.REFERENCE_MATERIAL.candidates).toHaveLength(1);
+  expect(input.SUBMISSION_FORMAT_EXAMPLE.outcome).toBe("changes");
+  expect(input.SUBMISSION_FORMAT_EXAMPLE.changes[0].operation).toBe(
+    "create_note",
+  );
+  expect(input.SUBMISSION_FORMAT_EXAMPLE.changes[0].before).toBe("");
+});
+
+test("budget failures also report earlier rejected submissions", async () => {
+  const fixture = fixtureModel([
+    { name: "submit_synthesis", args: { ...valid(), outcome: "no_change" } },
+  ]);
+  const events: { type: string; data: unknown }[] = [];
+  try {
+    await expect(
+      synthesize(context, tools, fixture.config, {
+        limits: { turns: 1 },
+        trace: async (type, data) => {
+          events.push({ type, data });
+        },
+      }),
+    ).rejects.toMatchObject({
+      code: "TURN_LIMIT",
+      message: expect.stringContaining("rejected proposal"),
+    });
+    expect(
+      events.find((event) => event.type === "run_failed")?.data,
+    ).toMatchObject({
+      submissionFailures: 1,
+      lastSubmissionError: expect.stringContaining(
+        "Proposal outcome does not match changes",
+      ),
+    });
+  } finally {
+    fixture.server.stop(true);
+  }
 });
