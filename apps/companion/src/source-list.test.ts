@@ -51,3 +51,32 @@ test("group boundaries paginate without losing channel totals or release orderin
   expect(next.groups[0].label).toBe("Channel 1");
   expect(() => sourcePage(sources, new URLSearchParams("page=-1"))).toThrow();
 });
+
+test("in-progress queue filters before pagination and excludes completed stages", () => {
+  const catalog = sources.map((source, i) => ({
+    ...source,
+    status: (i < 125
+      ? "kept"
+      : i < 130
+        ? "synthesis_pending"
+        : i < 140
+          ? "proposal_ready"
+          : "integrated") as Source["status"],
+  }));
+  const result = sourcePage(catalog, new URLSearchParams("tab=kept&page=3"));
+  expect(result.total).toBe(130);
+  expect(result.pages).toBe(3);
+  expect(result.groups.flatMap((g) => g.videos)).toHaveLength(30);
+  expect(
+    result.groups
+      .flatMap((g) => g.videos)
+      .every((s) => ["kept", "synthesis_pending"].includes(s.status)),
+  ).toBe(true);
+  expect(
+    sourcePage(catalog, new URLSearchParams("tab=kept&q=Title 129")).total,
+  ).toBe(1);
+  expect(sourcePage(catalog, new URLSearchParams("tab=all")).total).toBe(2500);
+  expect(() =>
+    sourcePage(catalog, new URLSearchParams("tab=unknown")),
+  ).toThrow();
+});

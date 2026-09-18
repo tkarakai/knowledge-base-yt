@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
 import "./kb.css";
+import "./explorations.css";
 
 export const metadata: Metadata = {
   title: "Commonplace · Your knowledge, considered",

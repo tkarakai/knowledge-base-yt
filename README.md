@@ -42,6 +42,12 @@ Caption fetching uses a locally installed, pinned yt-dlp extractor. **Retry capt
 
 Failed model runs now retain communication traces: open **Settings → Recent activity → View communication trace**, or inspect `vault/.kb/traces/<trace-id>.jsonl`. These contain prompts, responses, tool results, validation failures, usage and stop reasons, with credential redaction. They include private source/reflection content; the latest 100 runs are retained. The reasoning settings expose context, output and time budgets.
 
+## Compare alternative experiences
+
+Choose **Experience lab** in the sidebar, or open **http://127.0.0.1:3001/kb/explore** (use your printed web port). Try **Workbench** for a compact source queue and editor, **Pipeline** for a visible capture-to-knowledge workflow, or **Library** for notes and topic browsing. All three use the same real vault; changes are shared. The original app stays available and remains the default. Mark a favorite to remember your preference in this browser.
+
+See [the UX comparison guide](docs/implementation/ux-explorations.md) for tradeoffs and a suggested evaluation journey.
+
 ## Import your YouTube history
 
 The Chrome/Edge extension imports videos from your signed-in YouTube history into the local inbox, using a **12-calendar-month date window**, with no total video-count limit. It scrolls/paginates until it reaches an older date or the end of the available history.

@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useContext, useEffect, useState } from "react";
+import Link from "./navigation";
+import { ReflectionExtras } from "./explorations/reflection-extras";
 import { MetadataProgressPanel } from "./metadata-progress";
 import { VideoChannel, VideoReleaseDate, VideoThumbnail } from "./video-media";
-import { useRouter } from "next/navigation";
+import { WorkspaceBase, useWorkspaceRouter as useRouter } from "./navigation";
 import {
   ArrowRight,
   Check,
@@ -372,6 +373,18 @@ export function InboxView() {
 
 export function SourceView({ id }: { id: string }) {
   const detail = useResource<SourceDetail>(`sources/${encodeURIComponent(id)}`);
+  const experience = useContext(WorkspaceBase);
+  useEffect(() => {
+    if (
+      experience &&
+      detail.data &&
+      /^#t-[0-9.]+$/.test(window.location.hash)
+    ) {
+      document
+        .getElementById(window.location.hash.slice(1))
+        ?.scrollIntoView({ block: "center" });
+    }
+  }, [experience, detail.data]);
   return (
     <>
       <BackLink href="/kb">Back to inbox</BackLink>
@@ -725,26 +738,30 @@ function SourceContent({
               rows={5}
               placeholder="What clicked, challenged you, or deserves another look?"
             />
-            <label htmlFor="kb-reaction">
-              Your reaction <span>optional</span>
-            </label>
-            <textarea
-              id="kb-reaction"
-              value={reaction}
-              onChange={(event) => setReaction(event.target.value)}
-              rows={3}
-              placeholder="Surprised, convinced, uncertain…"
-            />
-            <label htmlFor="kb-questions">
-              Questions to carry forward <span>optional</span>
-            </label>
-            <textarea
-              id="kb-questions"
-              value={questions}
-              onChange={(event) => setQuestions(event.target.value)}
-              rows={3}
-              placeholder="What would you like to understand next?"
-            />
+            <ReflectionExtras
+              hasContent={!!reflection?.reaction || !!reflection?.questions}
+            >
+              <label htmlFor="kb-reaction">
+                Your reaction <span>optional</span>
+              </label>
+              <textarea
+                id="kb-reaction"
+                value={reaction}
+                onChange={(event) => setReaction(event.target.value)}
+                rows={3}
+                placeholder="Surprised, convinced, uncertain…"
+              />
+              <label htmlFor="kb-questions">
+                Questions to carry forward <span>optional</span>
+              </label>
+              <textarea
+                id="kb-questions"
+                value={questions}
+                onChange={(event) => setQuestions(event.target.value)}
+                rows={3}
+                placeholder="What would you like to understand next?"
+              />
+            </ReflectionExtras>
             <div className="kb-selection-summary">
               <span>
                 {selected.length}{" "}

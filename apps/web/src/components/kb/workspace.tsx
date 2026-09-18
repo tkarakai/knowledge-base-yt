@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   BookOpen,
+  FlaskConical,
   Inbox,
   GitPullRequest,
   Search,
@@ -26,6 +27,10 @@ import {
   TimelineView,
 } from "./library";
 import { SettingsView } from "./settings";
+
+import { ExplorationGallery } from "./explorations/gallery";
+import { ExplorationShell } from "./explorations/shell";
+import { isConcept } from "./explorations/concepts";
 
 const navigation = [
   { href: "/kb", key: "inbox", label: "Inbox", icon: Inbox },
@@ -56,8 +61,14 @@ export function Workspace({ view }: { view: string[] }) {
         ? "knowledge"
         : section;
   const connected = health.data?.ok && !health.error;
+  if (section === "explore" && isConcept(view[1]))
+    return (
+      <ExplorationShell key={view[1]} concept={view[1]} view={view.slice(2)} />
+    );
   let content;
-  if (section === "inbox" && view.length < 2) content = <InboxView />;
+  if (section === "explore" && view.length === 1)
+    content = <ExplorationGallery />;
+  else if (section === "inbox" && view.length < 2) content = <InboxView />;
   else if (section === "sources" && view.length === 2)
     content = <SourceView key={view[1]} id={view[1]} />;
   else if (section === "knowledge" && view.length === 2)
@@ -110,6 +121,19 @@ export function Workspace({ view }: { view: string[] }) {
             </Link>
           ))}
         </nav>
+        <div className="kb-lab-nav">
+          <div className="kb-sidebar-label">EXPLORE</div>
+          <Link
+            href="/kb/explore"
+            className={`kb-nav-link ${section === "explore" ? "is-active" : ""}`}
+            aria-current={section === "explore" ? "page" : undefined}
+            aria-label="Experience lab"
+          >
+            <FlaskConical size={18} />
+            <span>Experience lab</span>
+            <span className="kb-lab-badge">3</span>
+          </Link>
+        </div>
         <div className="kb-sidebar-bottom">
           <div className="kb-margin-note">
             <span>
@@ -173,7 +197,11 @@ export function Workspace({ view }: { view: string[] }) {
             <ArrowUpRight size={13} />
           </Link>
         </div>
-        <main id="kb-main" className="kb-main" tabIndex={-1}>
+        <main
+          id="kb-main"
+          className={`kb-main ${section === "explore" ? "kb-lab-main" : ""}`}
+          tabIndex={-1}
+        >
           {content}
         </main>
         <footer className="kb-footer">

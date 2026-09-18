@@ -25,6 +25,8 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Isolate validation builds from an already-running local workspace.
+  distDir: process.env.KB_NEXT_DIST_DIR || ".next",
   env: {
     ...(gitBranch ? { NEXT_PUBLIC_GIT_BRANCH: gitBranch } : {}),
   },

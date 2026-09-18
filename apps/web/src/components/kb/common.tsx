@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import Link from "next/link";
+import Link from "./navigation";
 import {
   AlertCircle,
   ArrowUpRight,
@@ -72,6 +72,7 @@ export async function api<T>(
 
 export function useResource<T>(path: string | null) {
   const [data, setData] = useState<T | null>(null);
+  const [dataPath, setDataPath] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [revision, setRevision] = useState(0);
@@ -86,7 +87,10 @@ export function useResource<T>(path: string | null) {
     setError(null);
     api<T>(path, "GET", undefined, controller.signal)
       .then((value) => {
-        if (!controller.signal.aborted) setData(value);
+        if (!controller.signal.aborted) {
+          setData(value);
+          setDataPath(path);
+        }
       })
       .catch((reason: unknown) => {
         if (!controller.signal.aborted)
@@ -101,7 +105,13 @@ export function useResource<T>(path: string | null) {
       });
     return () => controller.abort();
   }, [path, revision]);
-  return { data, error, loading, reload };
+  return {
+    data,
+    error,
+    loading,
+    reload,
+    refreshing: loading && data !== null && dataPath === path,
+  };
 }
 
 export function useAction() {

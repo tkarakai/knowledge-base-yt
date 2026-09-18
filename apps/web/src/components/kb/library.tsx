@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "./navigation";
 import {
   ArrowRight,
   BookOpen,
@@ -35,11 +35,13 @@ import {
   Markdown,
 } from "./common";
 
-export function KnowledgeView() {
+export function KnowledgeView({
+  initialImportOpen = false,
+}: { initialImportOpen?: boolean } = {}) {
   const notes = useResource<KnowledgeNote[]>("knowledge");
   const action = useAction();
   const [filter, setFilter] = useState("");
-  const [importOpen, setImportOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(initialImportOpen);
   const [title, setTitle] = useState("");
   const [markdown, setMarkdown] = useState("");
   const [filename, setFilename] = useState("");

@@ -1,6 +1,7 @@
 /** End-to-end acceptance fixture. Real browser, Next proxy, companion, vault and Pi;
  * only external YouTube/model servers are replaced by deterministic local providers. */
 import { chromium, expect } from "@playwright/test";
+import { experienceJourney } from "../apps/web/qa/e2e/kb-ux-journey";
 import { mkdtemp, mkdir, rm } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { tmpdir } from "node:os";
@@ -198,9 +199,10 @@ try {
   if (!ready)
     throw new Error(`Next failed to become ready; inspect ${logPath}`);
   browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({
+  const context = await browser.newContext({
     viewport: { width: 1440, height: 1050 },
   });
+  const page = await context.newPage();
   const browserErrors: string[] = [];
   page.on("pageerror", (error) => browserErrors.push(error.message));
   await page.goto(`${base}/kb`);
@@ -652,6 +654,18 @@ try {
     );
     console.log("Browser performance:", JSON.stringify(results));
   }
+  await experienceJourney({
+    page,
+    base,
+    screenshots,
+    prepare: (concept) => {
+      proposal.summary = `${concept} connections`;
+      proposal.changes[0].knowledgeId = `knowledge:ux-${concept}`;
+      proposal.changes[0].title = `${concept} memory`;
+      proposal.changes[1].knowledgeId = `knowledge:ux-${concept}-indexes`;
+    },
+  });
+  expect(browserErrors).toEqual([]);
   // Restart and destroy the derived index: Markdown still contains the reviewed result.
   server.stop(true);
   app.close();

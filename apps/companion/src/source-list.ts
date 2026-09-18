@@ -11,7 +11,7 @@ export function sourcePage(
   if (
     !Number.isSafeInteger(requested) ||
     requested < 1 ||
-    !["inbox", "later", "all"].includes(tab)
+    !["inbox", "later", "all", "kept"].includes(tab)
   )
     throw new ApiError(400, "Invalid video page");
   const counts = { inbox: 0, later: 0, all: sources.length };
@@ -20,7 +20,10 @@ export function sourcePage(
     if (source.status === "deferred") counts.later++;
     return (
       tab === "all" ||
-      source.status === (tab === "later" ? "deferred" : "ready_for_reflection")
+      (tab === "kept"
+        ? ["kept", "synthesis_pending"].includes(source.status)
+        : source.status ===
+          (tab === "later" ? "deferred" : "ready_for_reflection"))
     );
   });
   const groups = videoGroups(
